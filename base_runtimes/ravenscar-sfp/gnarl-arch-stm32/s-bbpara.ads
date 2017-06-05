@@ -74,6 +74,8 @@ package System.BB.Parameters is
 
    HSI_Clock : constant := 16_000_000;
 
+   MSI_Clock : constant :=  4_000_000; --  Default. Can be trimmed.
+
    Has_FPU : constant Boolean := True;
    --  Set to true if core has a FPU
 

@@ -72,6 +72,8 @@ package System.BB.Parameters is
 
    HSE_Clock : constant := Board_Parameters.HSE_Clock_Frequency;
 
+   MSI_Clock : constant :=  4_000_000; --  Default. Can be trimmed.
+
    HSI_Clock : constant := 16_000_000;
 
    Has_FPU : constant Boolean := True;

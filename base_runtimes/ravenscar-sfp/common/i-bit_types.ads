@@ -50,6 +50,8 @@ package Interfaces.Bit_Types is
      with Size => 6;
    type UInt7 is mod 2**7
      with Size => 7;
+   type UInt8 is mod 2**8  --  Pull this when svd2ada auto gens byte,short,word
+     with Size => 8;
    type UInt9 is mod 2**9
      with Size => 9;
    type UInt10 is mod 2**10
@@ -64,6 +66,8 @@ package Interfaces.Bit_Types is
      with Size => 14;
    type UInt15 is mod 2**15
      with Size => 15;
+   type UInt16 is mod 2**16
+     with Size => 16;
    type UInt17 is mod 2**17
      with Size => 17;
    type UInt18 is mod 2**18
@@ -94,5 +98,7 @@ package Interfaces.Bit_Types is
      with Size => 30;
    type UInt31 is mod 2**31
      with Size => 31;
+   type UInt32 is mod 2**32
+     with Size => 32;
 
 end Interfaces.Bit_Types;
