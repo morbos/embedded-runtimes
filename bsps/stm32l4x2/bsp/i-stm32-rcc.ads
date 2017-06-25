@@ -105,9 +105,9 @@ package Interfaces.STM32.RCC is
       Reserved_28_31 at 0 range 28 .. 31;
    end record;
 
-   subtype ICSCR_MSICAL_Field is Interfaces.Bit_Types.UInt8;
-   subtype ICSCR_MSITRIM_Field is Interfaces.Bit_Types.UInt8;
-   subtype ICSCR_HSICAL_Field is Interfaces.Bit_Types.UInt8;
+   subtype ICSCR_MSICAL_Field is Interfaces.Bit_Types.Byte;
+   subtype ICSCR_MSITRIM_Field is Interfaces.Bit_Types.Byte;
+   subtype ICSCR_HSICAL_Field is Interfaces.Bit_Types.Byte;
    subtype ICSCR_HSITRIM_Field is Interfaces.Bit_Types.UInt5;
 
    --  Internal clock sources calibration register
@@ -183,7 +183,7 @@ package Interfaces.STM32.RCC is
       --  Wakeup from Stop and CSS backup clock selection
       STOPWUCK       : CFGR_STOPWUCK_Field := 16#0#;
       --  unspecified
-      Reserved_16_23 : Interfaces.Bit_Types.UInt8 := 16#0#;
+      Reserved_16_23 : Interfaces.Bit_Types.Byte := 16#0#;
       --  Microcontroller clock output
       MCOSEL         : CFGR_MCOSEL_Field := 16#0#;
       --  unspecified
@@ -288,7 +288,7 @@ package Interfaces.STM32.RCC is
    --  PLLSAI1 configuration register
    type PLLSAI1CFGR_Register is record
       --  unspecified
-      Reserved_0_7   : Interfaces.Bit_Types.UInt8 := 16#0#;
+      Reserved_0_7   : Interfaces.Bit_Types.Byte := 16#0#;
       --  SAI1PLL multiplication factor for VCO
       PLLSAI1N       : PLLSAI1CFGR_PLLSAI1N_Field := 16#10#;
       --  unspecified
@@ -602,7 +602,7 @@ package Interfaces.STM32.RCC is
    --  AHB3 peripheral reset register
    type AHB3RSTR_Register is record
       --  unspecified
-      Reserved_0_7  : Interfaces.Bit_Types.UInt8 := 16#0#;
+      Reserved_0_7  : Interfaces.Bit_Types.Byte := 16#0#;
       --  Quad SPI memory interface reset
       QSPIRST       : AHB3RSTR_QSPIRST_Field := 16#0#;
       --  unspecified
@@ -618,6 +618,7 @@ package Interfaces.STM32.RCC is
    end record;
 
    subtype APB1RSTR1_TIM2RST_Field is Interfaces.Bit_Types.Bit;
+   subtype APB1RSTR1_TIM3RST_Field is Interfaces.Bit_Types.Bit;
    subtype APB1RSTR1_TIM6RST_Field is Interfaces.Bit_Types.Bit;
    subtype APB1RSTR1_TIM7RST_Field is Interfaces.Bit_Types.Bit;
    subtype APB1RSTR1_LCDRST_Field is Interfaces.Bit_Types.Bit;
@@ -641,8 +642,10 @@ package Interfaces.STM32.RCC is
    type APB1RSTR1_Register is record
       --  TIM2 timer reset
       TIM2RST        : APB1RSTR1_TIM2RST_Field := 16#0#;
+      --  TIM3 timer reset
+      TIM3RST        : APB1RSTR1_TIM3RST_Field := 16#0#;
       --  unspecified
-      Reserved_1_3   : Interfaces.Bit_Types.UInt3 := 16#0#;
+      Reserved_2_3   : Interfaces.Bit_Types.UInt2 := 16#0#;
       --  TIM6 timer reset
       TIM6RST        : APB1RSTR1_TIM6RST_Field := 16#0#;
       --  TIM7 timer reset
@@ -695,7 +698,8 @@ package Interfaces.STM32.RCC is
 
    for APB1RSTR1_Register use record
       TIM2RST        at 0 range 0 .. 0;
-      Reserved_1_3   at 0 range 1 .. 3;
+      TIM3RST        at 0 range 1 .. 1;
+      Reserved_2_3   at 0 range 2 .. 3;
       TIM6RST        at 0 range 4 .. 4;
       TIM7RST        at 0 range 5 .. 5;
       Reserved_6_8   at 0 range 6 .. 8;
@@ -925,7 +929,7 @@ package Interfaces.STM32.RCC is
    --  AHB3 peripheral clock enable register
    type AHB3ENR_Register is record
       --  unspecified
-      Reserved_0_7  : Interfaces.Bit_Types.UInt8 := 16#0#;
+      Reserved_0_7  : Interfaces.Bit_Types.Byte := 16#0#;
       --  QSPIEN
       QSPIEN        : AHB3ENR_QSPIEN_Field := 16#0#;
       --  unspecified
@@ -947,7 +951,7 @@ package Interfaces.STM32.RCC is
    subtype APB1ENR1_LCDEN_Field is Interfaces.Bit_Types.Bit;
    subtype APB1ENR1_RTCAPBEN_Field is Interfaces.Bit_Types.Bit;
    subtype APB1ENR1_WWDGEN_Field is Interfaces.Bit_Types.Bit;
-   subtype APB1ENR1_SPI1EN_Field is Interfaces.Bit_Types.Bit;
+   subtype APB1ENR1_SPI2EN_Field is Interfaces.Bit_Types.Bit;
    subtype APB1ENR1_SPI3EN_Field is Interfaces.Bit_Types.Bit;
    subtype APB1ENR1_USART2EN_Field is Interfaces.Bit_Types.Bit;
    subtype APB1ENR1_USART1EN_Field is Interfaces.Bit_Types.Bit;
@@ -985,8 +989,8 @@ package Interfaces.STM32.RCC is
       WWDGEN         : APB1ENR1_WWDGEN_Field := 16#0#;
       --  unspecified
       Reserved_12_13 : Interfaces.Bit_Types.UInt2 := 16#0#;
-      --  SPI1 clock enable
-      SPI1EN         : APB1ENR1_SPI1EN_Field := 16#0#;
+      --  SPI2 clock enable
+      SPI2EN         : APB1ENR1_SPI2EN_Field := 16#0#;
       --  SPI3 clock enable
       SPI3EN         : APB1ENR1_SPI3EN_Field := 16#0#;
       --  unspecified
@@ -1036,7 +1040,7 @@ package Interfaces.STM32.RCC is
       RTCAPBEN       at 0 range 10 .. 10;
       WWDGEN         at 0 range 11 .. 11;
       Reserved_12_13 at 0 range 12 .. 13;
-      SPI1EN         at 0 range 14 .. 14;
+      SPI2EN         at 0 range 14 .. 14;
       SPI3EN         at 0 range 15 .. 15;
       Reserved_16_16 at 0 range 16 .. 16;
       USART2EN       at 0 range 17 .. 17;
@@ -1278,7 +1282,7 @@ package Interfaces.STM32.RCC is
    --  AHB3 peripheral clocks enable in Sleep and Stop modes register
    type AHB3SMENR_Register is record
       --  unspecified
-      Reserved_0_7  : Interfaces.Bit_Types.UInt8 := 16#1#;
+      Reserved_0_7  : Interfaces.Bit_Types.Byte := 16#1#;
       --  QSPISMEN
       QSPISMEN      : AHB3SMENR_QSPISMEN_Field := 16#1#;
       --  unspecified
@@ -1709,7 +1713,7 @@ package Interfaces.STM32.RCC is
       --  Read-only. HSI48 clock calibration
       HSI48CAL       : CRRCR_HSI48CAL_Field := 16#C#;
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#C00#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#C00#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;

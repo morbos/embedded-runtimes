@@ -452,7 +452,7 @@ package Interfaces.STM32.SYSCFG is
       P31WP at 0 range 31 .. 31;
    end record;
 
-   subtype SKR_KEY_Field is Interfaces.Bit_Types.UInt8;
+   subtype SKR_KEY_Field is Interfaces.Bit_Types.Byte;
 
    --  SKR
    type SKR_Register is record

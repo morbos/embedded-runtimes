@@ -163,7 +163,7 @@ package Interfaces.STM32.PWR is
       --  Enable internal wakeup line
       EWF            : CR3_EWF_Field := 16#1#;
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -276,7 +276,7 @@ package Interfaces.STM32.PWR is
       --  Read-only. Wakeup flag internal
       WUFI           : SR1_WUFI_Field;
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16;
+      Reserved_16_31 : Interfaces.Bit_Types.Short;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -324,7 +324,7 @@ package Interfaces.STM32.PWR is
    --  Power status register 2
    type SR2_Register is record
       --  unspecified
-      Reserved_0_7   : Interfaces.Bit_Types.UInt8;
+      Reserved_0_7   : Interfaces.Bit_Types.Byte;
       --  Read-only. Low-power regulator started
       REGLPS         : SR2_REGLPS_Field;
       --  Read-only. Low-power regulator flag
@@ -336,7 +336,7 @@ package Interfaces.STM32.PWR is
       --  Read-only. Peripheral voltage monitoring output: VDDUSB vs. 1.2 V
       PVMO           : SR2_PVMO_Field;
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16;
+      Reserved_16_31 : Interfaces.Bit_Types.Short;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -415,7 +415,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PU as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PU as an array
             Arr : PUCRA_PU_Field_Array;
@@ -433,7 +433,7 @@ package Interfaces.STM32.PWR is
       --  Port A pull-up bit y (y=0..15)
       PU             : PUCRA_PU_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -457,7 +457,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PD as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PD as an array
             Arr : PDCRA_PD_Field_Array;
@@ -475,7 +475,7 @@ package Interfaces.STM32.PWR is
       --  Port A pull-down bit y (y=0..15)
       PD             : PDCRA_PD_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -499,7 +499,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PU as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PU as an array
             Arr : PUCRB_PU_Field_Array;
@@ -517,7 +517,7 @@ package Interfaces.STM32.PWR is
       --  Port B pull-up bit y (y=0..15)
       PU             : PUCRB_PU_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -541,7 +541,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PD as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PD as an array
             Arr : PDCRB_PD_Field_Array;
@@ -559,7 +559,7 @@ package Interfaces.STM32.PWR is
       --  Port B pull-down bit y (y=0..15)
       PD             : PDCRB_PD_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -583,7 +583,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PU as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PU as an array
             Arr : PUCRC_PU_Field_Array;
@@ -601,7 +601,7 @@ package Interfaces.STM32.PWR is
       --  Port C pull-up bit y (y=0..15)
       PU             : PUCRC_PU_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -625,7 +625,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PD as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PD as an array
             Arr : PDCRC_PD_Field_Array;
@@ -643,7 +643,7 @@ package Interfaces.STM32.PWR is
       --  Port C pull-down bit y (y=0..15)
       PD             : PDCRC_PD_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -667,7 +667,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PU as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PU as an array
             Arr : PUCRD_PU_Field_Array;
@@ -685,7 +685,7 @@ package Interfaces.STM32.PWR is
       --  Port D pull-up bit y (y=0..15)
       PU             : PUCRD_PU_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -709,7 +709,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PD as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PD as an array
             Arr : PDCRD_PD_Field_Array;
@@ -727,7 +727,7 @@ package Interfaces.STM32.PWR is
       --  Port D pull-down bit y (y=0..15)
       PD             : PDCRD_PD_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -751,7 +751,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PU as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PU as an array
             Arr : PUCRE_PU_Field_Array;
@@ -769,7 +769,7 @@ package Interfaces.STM32.PWR is
       --  Port E pull-up bit y (y=0..15)
       PU             : PUCRE_PU_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -793,7 +793,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PD as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PD as an array
             Arr : PDCRE_PD_Field_Array;
@@ -811,7 +811,7 @@ package Interfaces.STM32.PWR is
       --  Port E pull-down bit y (y=0..15)
       PD             : PDCRE_PD_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -835,7 +835,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PU as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PU as an array
             Arr : PUCRF_PU_Field_Array;
@@ -853,7 +853,7 @@ package Interfaces.STM32.PWR is
       --  Port F pull-up bit y (y=0..15)
       PU             : PUCRF_PU_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -877,7 +877,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PD as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PD as an array
             Arr : PDCRF_PD_Field_Array;
@@ -895,7 +895,7 @@ package Interfaces.STM32.PWR is
       --  Port F pull-down bit y (y=0..15)
       PD             : PDCRF_PD_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -919,7 +919,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PU as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PU as an array
             Arr : PUCRG_PU_Field_Array;
@@ -937,7 +937,7 @@ package Interfaces.STM32.PWR is
       --  Port G pull-up bit y (y=0..15)
       PU             : PUCRG_PU_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -961,7 +961,7 @@ package Interfaces.STM32.PWR is
       case As_Array is
          when False =>
             --  PD as a value
-            Val : Interfaces.Bit_Types.UInt16;
+            Val : Interfaces.Bit_Types.Short;
          when True =>
             --  PD as an array
             Arr : PDCRG_PD_Field_Array;
@@ -979,7 +979,7 @@ package Interfaces.STM32.PWR is
       --  Port G pull-down bit y (y=0..15)
       PD             : PDCRG_PD_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#0#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;

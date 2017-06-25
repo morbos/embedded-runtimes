@@ -136,7 +136,7 @@ package Interfaces.STM32.Flash is
    subtype CR_PG_Field is Interfaces.Bit_Types.Bit;
    subtype CR_PER_Field is Interfaces.Bit_Types.Bit;
    subtype CR_MER1_Field is Interfaces.Bit_Types.Bit;
-   subtype CR_PNB_Field is Interfaces.Bit_Types.UInt8;
+   subtype CR_PNB_Field is Interfaces.Bit_Types.Byte;
    subtype CR_BKER_Field is Interfaces.Bit_Types.Bit;
    subtype CR_MER2_Field is Interfaces.Bit_Types.Bit;
    subtype CR_START_Field is Interfaces.Bit_Types.Bit;
@@ -252,7 +252,7 @@ package Interfaces.STM32.Flash is
       ECCD           at 0 range 31 .. 31;
    end record;
 
-   subtype OPTR_RDP_Field is Interfaces.Bit_Types.UInt8;
+   subtype OPTR_RDP_Field is Interfaces.Bit_Types.Byte;
    subtype OPTR_BOR_LEV_Field is Interfaces.Bit_Types.UInt3;
    subtype OPTR_nRST_STOP_Field is Interfaces.Bit_Types.Bit;
    subtype OPTR_nRST_STDBY_Field is Interfaces.Bit_Types.Bit;
@@ -326,14 +326,14 @@ package Interfaces.STM32.Flash is
       Reserved_26_31 at 0 range 26 .. 31;
    end record;
 
-   subtype PCROP1SR_PCROP1_STRT_Field is Interfaces.Bit_Types.UInt16;
+   subtype PCROP1SR_PCROP1_STRT_Field is Interfaces.Bit_Types.Short;
 
    --  Flash Bank 1 PCROP Start address register
    type PCROP1SR_Register is record
       --  Bank 1 PCROP area start offset
       PCROP1_STRT    : PCROP1SR_PCROP1_STRT_Field := 16#0#;
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#FFFF#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#FFFF#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -343,7 +343,7 @@ package Interfaces.STM32.Flash is
       Reserved_16_31 at 0 range 16 .. 31;
    end record;
 
-   subtype PCROP1ER_PCROP1_END_Field is Interfaces.Bit_Types.UInt16;
+   subtype PCROP1ER_PCROP1_END_Field is Interfaces.Bit_Types.Short;
    subtype PCROP1ER_PCROP_RDP_Field is Interfaces.Bit_Types.Bit;
 
    --  Flash Bank 1 PCROP End address register
@@ -364,19 +364,19 @@ package Interfaces.STM32.Flash is
       PCROP_RDP      at 0 range 31 .. 31;
    end record;
 
-   subtype WRP1AR_WRP1A_STRT_Field is Interfaces.Bit_Types.UInt8;
-   subtype WRP1AR_WRP1A_END_Field is Interfaces.Bit_Types.UInt8;
+   subtype WRP1AR_WRP1A_STRT_Field is Interfaces.Bit_Types.Byte;
+   subtype WRP1AR_WRP1A_END_Field is Interfaces.Bit_Types.Byte;
 
    --  Flash Bank 1 WRP area A address register
    type WRP1AR_Register is record
       --  Bank 1 WRP first area tart offset
       WRP1A_STRT     : WRP1AR_WRP1A_STRT_Field := 16#0#;
       --  unspecified
-      Reserved_8_15  : Interfaces.Bit_Types.UInt8 := 16#FF#;
+      Reserved_8_15  : Interfaces.Bit_Types.Byte := 16#FF#;
       --  Bank 1 WRP first area A end offset
       WRP1A_END      : WRP1AR_WRP1A_END_Field := 16#0#;
       --  unspecified
-      Reserved_24_31 : Interfaces.Bit_Types.UInt8 := 16#FF#;
+      Reserved_24_31 : Interfaces.Bit_Types.Byte := 16#FF#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -388,19 +388,19 @@ package Interfaces.STM32.Flash is
       Reserved_24_31 at 0 range 24 .. 31;
    end record;
 
-   subtype WRP1BR_WRP1B_END_Field is Interfaces.Bit_Types.UInt8;
-   subtype WRP1BR_WRP1B_STRT_Field is Interfaces.Bit_Types.UInt8;
+   subtype WRP1BR_WRP1B_END_Field is Interfaces.Bit_Types.Byte;
+   subtype WRP1BR_WRP1B_STRT_Field is Interfaces.Bit_Types.Byte;
 
    --  Flash Bank 1 WRP area B address register
    type WRP1BR_Register is record
       --  Bank 1 WRP second area B start offset
       WRP1B_END      : WRP1BR_WRP1B_END_Field := 16#0#;
       --  unspecified
-      Reserved_8_15  : Interfaces.Bit_Types.UInt8 := 16#FF#;
+      Reserved_8_15  : Interfaces.Bit_Types.Byte := 16#FF#;
       --  Bank 1 WRP second area B end offset
       WRP1B_STRT     : WRP1BR_WRP1B_STRT_Field := 16#0#;
       --  unspecified
-      Reserved_24_31 : Interfaces.Bit_Types.UInt8 := 16#FF#;
+      Reserved_24_31 : Interfaces.Bit_Types.Byte := 16#FF#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -412,14 +412,14 @@ package Interfaces.STM32.Flash is
       Reserved_24_31 at 0 range 24 .. 31;
    end record;
 
-   subtype PCROP2SR_PCROP2_STRT_Field is Interfaces.Bit_Types.UInt16;
+   subtype PCROP2SR_PCROP2_STRT_Field is Interfaces.Bit_Types.Short;
 
    --  Flash Bank 2 PCROP Start address register
    type PCROP2SR_Register is record
       --  Bank 2 PCROP area start offset
       PCROP2_STRT    : PCROP2SR_PCROP2_STRT_Field := 16#0#;
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#FFFF#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#FFFF#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -429,14 +429,14 @@ package Interfaces.STM32.Flash is
       Reserved_16_31 at 0 range 16 .. 31;
    end record;
 
-   subtype PCROP2ER_PCROP2_END_Field is Interfaces.Bit_Types.UInt16;
+   subtype PCROP2ER_PCROP2_END_Field is Interfaces.Bit_Types.Short;
 
    --  Flash Bank 2 PCROP End address register
    type PCROP2ER_Register is record
       --  Bank 2 PCROP area end offset
       PCROP2_END     : PCROP2ER_PCROP2_END_Field := 16#0#;
       --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.UInt16 := 16#FFFF#;
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#FFFF#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -446,19 +446,19 @@ package Interfaces.STM32.Flash is
       Reserved_16_31 at 0 range 16 .. 31;
    end record;
 
-   subtype WRP2AR_WRP2A_STRT_Field is Interfaces.Bit_Types.UInt8;
-   subtype WRP2AR_WRP2A_END_Field is Interfaces.Bit_Types.UInt8;
+   subtype WRP2AR_WRP2A_STRT_Field is Interfaces.Bit_Types.Byte;
+   subtype WRP2AR_WRP2A_END_Field is Interfaces.Bit_Types.Byte;
 
    --  Flash Bank 2 WRP area A address register
    type WRP2AR_Register is record
       --  Bank 2 WRP first area A start offset
       WRP2A_STRT     : WRP2AR_WRP2A_STRT_Field := 16#0#;
       --  unspecified
-      Reserved_8_15  : Interfaces.Bit_Types.UInt8 := 16#FF#;
+      Reserved_8_15  : Interfaces.Bit_Types.Byte := 16#FF#;
       --  Bank 2 WRP first area A end offset
       WRP2A_END      : WRP2AR_WRP2A_END_Field := 16#0#;
       --  unspecified
-      Reserved_24_31 : Interfaces.Bit_Types.UInt8 := 16#FF#;
+      Reserved_24_31 : Interfaces.Bit_Types.Byte := 16#FF#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -470,19 +470,19 @@ package Interfaces.STM32.Flash is
       Reserved_24_31 at 0 range 24 .. 31;
    end record;
 
-   subtype WRP2BR_WRP2B_STRT_Field is Interfaces.Bit_Types.UInt8;
-   subtype WRP2BR_WRP2B_END_Field is Interfaces.Bit_Types.UInt8;
+   subtype WRP2BR_WRP2B_STRT_Field is Interfaces.Bit_Types.Byte;
+   subtype WRP2BR_WRP2B_END_Field is Interfaces.Bit_Types.Byte;
 
    --  Flash Bank 2 WRP area B address register
    type WRP2BR_Register is record
       --  Bank 2 WRP second area B start offset
       WRP2B_STRT     : WRP2BR_WRP2B_STRT_Field := 16#0#;
       --  unspecified
-      Reserved_8_15  : Interfaces.Bit_Types.UInt8 := 16#FF#;
+      Reserved_8_15  : Interfaces.Bit_Types.Byte := 16#FF#;
       --  Bank 2 WRP second area B end offset
       WRP2B_END      : WRP2BR_WRP2B_END_Field := 16#0#;
       --  unspecified
-      Reserved_24_31 : Interfaces.Bit_Types.UInt8 := 16#FF#;
+      Reserved_24_31 : Interfaces.Bit_Types.Byte := 16#FF#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -503,11 +503,11 @@ package Interfaces.STM32.Flash is
       --  Access control register
       ACR      : aliased ACR_Register;
       --  Power down key register
-      PDKEYR   : aliased Interfaces.Bit_Types.UInt32;
+      PDKEYR   : aliased Interfaces.Bit_Types.Word;
       --  Flash key register
-      KEYR     : aliased Interfaces.Bit_Types.UInt32;
+      KEYR     : aliased Interfaces.Bit_Types.Word;
       --  Option byte key register
-      OPTKEYR  : aliased Interfaces.Bit_Types.UInt32;
+      OPTKEYR  : aliased Interfaces.Bit_Types.Word;
       --  Status register
       SR       : aliased SR_Register;
       --  Flash control register
