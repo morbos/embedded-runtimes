@@ -361,12 +361,12 @@ package body System.BB.CPU_Primitives is
          --  need to restore the floating point context.
 
          (if No_Floating_Point then ""     -- No FP context to restore
-          else
+         else
             "tst  r12, #1"            & NL &  -- if FPCA was set,
             "itte  ne"                & NL &  -- then
             "subne r12, #1"           & NL &  --   remove flag from PSP
             "vldmiane r12!,{s16-s31}" & NL &  --   Restore FP context
-            "addeq lr, #16"           & NL) & -- else clear FPCA flag in LR
+             "addeq lr, #16"           & NL) & -- else clear FPCA flag in LR
 
          --  Finally, update PSP and perform the exception return
 
