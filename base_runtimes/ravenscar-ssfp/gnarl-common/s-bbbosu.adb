@@ -41,7 +41,7 @@ package body System.BB.Board_Support is
    --  See vector definitions in ARMv7-M version of System.BB.CPU_Primitives.
    --  Defined by ARMv7-M specifications.
 
-   First_IRQ : constant Interrupt_ID := 0;
+   First_IRQ : constant Interrupt_ID := 2;
    --  This corresponds to the first IRQ number (handled by the NVIC). This
    --  offset is present so that the Sys_Tick exception can be handled like
    --  other interrupts, and because interrupt id 0 is reserved.

@@ -2,12 +2,11 @@ with "target_options.gpr";
 
 project Runtime_Build is
 
-   type RTS_Kind is ("ravenscar-sfp", "ravenscar-ssfp", "ravenscar-full");
-   RTS : RTS_Kind := External ("RTS", "ravenscar-ssfp");
+   type RTS_Kind is ("ravenscar-sfp", "ravenscar-full");
+--   RTS : RTS_Kind := External ("RTS", "ravenscar-sfp");
+   RTS : RTS_Kind := External ("RTS", "ravenscar-full");
 
    case RTS is
-      when "ravenscar-ssfp" =>
-         for Languages use ("Ada", "Asm_Cpp");
       when "ravenscar-sfp" =>
          for Languages use ("Ada", "Asm_Cpp");
       when "ravenscar-full" =>
@@ -25,23 +24,15 @@ project Runtime_Build is
          for Library_Dir use "sfp/adalib";
          for Object_Dir use "sfp/obj";
 
-         for Source_Dirs use ("../bsps/stm32f1/bsp",
+         for Source_Dirs use ("../bsps/stm32l4x3/bsp",
                               "../base_runtimes/ravenscar-sfp/arch",
                               "../base_runtimes/ravenscar-sfp/common");
-         for Runtime ("Ada") use Project'Project_Dir & "sfp";
-      when "ravenscar-ssfp"  =>
-         for Library_Dir use "ssfp/adalib";
-         for Object_Dir use "ssfp/obj";
-
-         for Source_Dirs use ("../bsps/stm32f1/bsp",
-                              "../base_runtimes/ravenscar-ssfp/arch",
-                              "../base_runtimes/ravenscar-ssfp/common");
          for Runtime ("Ada") use Project'Project_Dir & "sfp";
       when "ravenscar-full" =>
          for Library_Dir use "full/adalib";
          for Object_Dir use "full/obj";
 
-         for Source_Dirs use ("../bsps/stm32f1/bsp",
+         for Source_Dirs use ("../bsps/stm32l4x3/bsp",
                               "../base_runtimes/ravenscar-full/arch",
                               "../base_runtimes/ravenscar-full/common",
                               "../base_runtimes/ravenscar-full/math");

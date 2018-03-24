@@ -24,7 +24,10 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  Minimal version of Text_IO body for use on STM32F4xxx, using USART1
+--  Minimal version of Text_IO body for use on STM32F7x, using USART6.
+--  Serial interface is available via the arduino port of the board:
+--  PIN D4 (PB7 GPIO): USART1_TX
+--  PIN D5 (PB6 GPIO): USART1_RX
 
 with Interfaces; use Interfaces;
 
@@ -34,45 +37,8 @@ with Interfaces.STM32.GPIO;  use Interfaces.STM32.GPIO;
 with Interfaces.STM32.USART; use Interfaces.STM32.USART;
 with System.STM32;           use System.STM32;
 with System.BB.Parameters;
-with Ada.Unchecked_Conversion;
 
 package body System.Text_IO is
-
-   type GPIO_Cnf_Input is
-     (Cnf_Analogue, Cnf_Floating, Cnf_Input, Cnf_Reserved);
-
-   for GPIO_Cnf_Input use
-     (Cnf_Analogue => 2#0000#,
-      Cnf_Floating => 2#0100#,
-      Cnf_Input    => 2#1000#,
-      Cnf_Reserved => 2#1100#);
-   --  when Mode = 0
-
-   type GPIO_Cnf_Output is
-     (Cnf_Push_Pull,
-      Cnf_Open_Drain,
-      Cnf_AF_Push_Pull,
-      Cnf_AF_Open_Drain);
-
-   for GPIO_Cnf_Output use
-     (Cnf_Push_Pull      => 2#0000#,
-      Cnf_Open_Drain     => 2#0100#,
-      Cnf_AF_Push_Pull   => 2#1000#,
-      Cnf_AF_Open_Drain  => 2#1100#);
-   --  when Mode /= 0
-
-   type GPIO_Mode is
-     (Mode_Input,
-      Mode_Output_10MHz,
-      Mode_Output_2MHz,
-      Mode_Output_50MHz)
-     with Size => 4;
-
-   pragma Unreferenced (Mode_Output_10MHz);
-   pragma Unreferenced (Mode_Output_2MHz);
-
-   function To_UInt4 is new Ada.Unchecked_Conversion (GPIO_Mode, UInt4);
-   function To_UInt4 is new Ada.Unchecked_Conversion (GPIO_Cnf_Output, UInt4);
 
    Baudrate : constant := 115_200;
    --  Bitrate to use
@@ -82,24 +48,26 @@ package body System.Text_IO is
    ----------------
 
    procedure Initialize is
+      use System.BB.Parameters;
+
       APB_Clock    : constant Positive := Positive (STM32.System_Clocks.PCLK2);
-      Int_Divider  : constant Positive := (APB_Clock / (16 * Baudrate)) * 100;
-      Frac_Divider : constant Natural := Int_Divider rem 100;
+      Divider      : constant Word := (Word (APB_Clock) / Word (Baudrate));
+
    begin
       Initialized := True;
 
       RCC_Periph.APB2ENR.USART1EN := 1;
-      RCC_Periph.APB2ENR.IOPAEN := 1;
+      RCC_Periph.AHB2ENR.GPIOAEN  := 1;
 
-      GPIOA_Periph.CRH.Arr (9 - 8) := To_UInt4 (Cnf_AF_Push_Pull) or
-                                      To_UInt4 (Mode_Output_50MHz);
-
-      GPIOA_Periph.CRH.Arr (10 - 8) := To_UInt4 (Cnf_AF_Push_Pull) or
-                                       To_UInt4 (Mode_Input);
+      GPIOA_Periph.MODER.Arr     (9 .. 10) := (Mode_AF,     Mode_AF);
+      GPIOA_Periph.OSPEEDR.Arr   (9 .. 10) := (Speed_50MHz, Speed_50MHz);
+      GPIOA_Periph.OTYPER.OT.Arr (9 .. 10) := (Push_Pull,   Push_Pull);
+      GPIOA_Periph.PUPDR.Arr     (9 .. 10) := (Pull_Up,     Pull_Up);
+      GPIOA_Periph.AFRH.Arr      (9 .. 10) := (AF_USART1, AF_USART1);
 
       USART1_Periph.BRR :=
-        (DIV_Fraction => UInt4  (((Frac_Divider * 16 + 50) / 100) mod 16),
-         DIV_Mantissa => UInt12 (Int_Divider / 100),
+        (DIV_Fraction => UInt4  (Divider and 16#f#),
+         DIV_Mantissa => UInt12 (Shift_Right (Divider, 4)),
          others => <>);
       USART1_Periph.CR1 :=
         (UE => 1,
@@ -108,7 +76,6 @@ package body System.Text_IO is
          others => <>);
       USART1_Periph.CR2 := (others => <>);
       USART1_Periph.CR3 := (others => <>);
-
    end Initialize;
 
    -----------------
@@ -116,20 +83,20 @@ package body System.Text_IO is
    -----------------
 
    function Is_Tx_Ready return Boolean is
-      (USART1_Periph.SR.TC = 1);
+     (USART1_Periph.ISR.TC = 1);
 
    -----------------
    -- Is_Rx_Ready --
    -----------------
 
    function Is_Rx_Ready return Boolean is
-      (USART1_Periph.SR.RXNE = 1);
+     (USART1_Periph.ISR.RXNE = 1);
 
    ---------
    -- Get --
    ---------
 
-   function Get return Character is (Character'Val (USART1_Periph.DR.DR));
+   function Get return Character is (Character'Val (USART1_Periph.RDR.RDR));
 
    ---------
    -- Put --
@@ -137,7 +104,7 @@ package body System.Text_IO is
 
    procedure Put (C : Character) is
    begin
-      USART1_Periph.DR.DR := Character'Pos (C);
+      USART1_Periph.TDR.TDR := Character'Pos (C);
    end Put;
 
    ----------------------------
