@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  S p e c                                 --
 --                                                                          --
---          Copyright (C) 1992-2016, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2018, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -43,11 +48,12 @@ pragma Restrictions (No_Elaboration_Code);
 with Ada.Exceptions;
 with Ada.Unchecked_Conversion;
 
-with System.Storage_Elements;
+with System.Multiprocessors;
 with System.Parameters;
+with System.Secondary_Stack;
+with System.Storage_Elements;
 with System.Task_Info;
 with System.Task_Primitives;
-with System.Multiprocessors;
 
 package System.Tasking is
    pragma Preelaborate;
@@ -156,6 +162,12 @@ package System.Tasking is
    pragma Unreferenced (Asynchronous_Hold);
    pragma Unreferenced (Interrupt_Server_Blocked_On_Event_Flag);
 
+   type Call_Modes is
+      (Simple_Call, Conditional_Call, Asynchronous_Call, Timed_Call);
+
+   pragma Unreferenced
+     (Simple_Call, Conditional_Call, Asynchronous_Call, Timed_Call);
+
    -------------------------------
    -- Entry related definitions --
    -------------------------------
@@ -183,6 +195,13 @@ package System.Tasking is
 
    type Entry_Call_Link is access all Entry_Call_Record;
 
+   --  Data structure to store the queue of entries. This structure is
+   --  present for each entry of a protected object.
+   type Entry_Queue is record
+      Head : Entry_Call_Link;
+      Tail : Entry_Call_Link;
+   end record;
+
    ----------------------------------
    -- Entry_Call_Record definition --
    ----------------------------------
@@ -199,7 +218,10 @@ package System.Tasking is
       --  being aborted.
 
       Next : Entry_Call_Link;
+      Prev : Entry_Call_Link;
       --  Entry_Call List
+
+      E : Entry_Index;
    end record;
    pragma Suppress_Initialization (Entry_Call_Record);
 
@@ -270,8 +292,8 @@ package System.Tasking is
       Pri_Stack_Info : aliased Stack_Info;
       --  Stack address and size of the task
 
-      Sec_Stack_Addr : Address;
-      --  Address of currently allocated secondary stack
+      Sec_Stack_Ptr : System.Secondary_Stack.SS_Stack_Ptr;
+      --  Pointer of currently allocated secondary stack
 
       Current_Excep : aliased Ada.Exceptions.Exception_Occurrence;
       --  Exception occurrence that contains the information for the current
@@ -382,13 +404,9 @@ package System.Tasking is
    -- Secondary Stack Manipulation --
    ----------------------------------
 
-   function Get_Sec_Stack return Address;
+   function Get_Sec_Stack return System.Secondary_Stack.SS_Stack_Ptr;
    pragma Export (C, Get_Sec_Stack, "__gnat_get_secondary_stack");
-   --  Return the address of the task specific secondary stack, as expected by
-   --  System.Secondary_Stack.
-
-   procedure Set_Sec_Stack (Stk : Address);
-   --  Set the task specific secondary stack, as expected by
+   --  Return the address of the task-specific secondary stack, as expected by
    --  System.Secondary_Stack.
 
    ----------------------------------------
@@ -422,15 +440,15 @@ package System.Tasking is
    --  System.Tasking.Initialization being present, as was done before.
 
    procedure Initialize_ATCB
-     (Task_Entry_Point : Task_Procedure_Access;
-      Task_Arg         : System.Address;
-      Base_Priority    : Extended_Priority;
-      Base_CPU         : System.Multiprocessors.CPU_Range;
-      Task_Info        : System.Task_Info.Task_Info_Type;
-      Stack_Address    : System.Address;
-      Stack_Size       : System.Parameters.Size_Type;
-      T                : Task_Id;
-      Success          : out Boolean);
+     (Task_Entry_Point     : Task_Procedure_Access;
+      Task_Arg             : System.Address;
+      Base_Priority        : Extended_Priority;
+      Base_CPU             : System.Multiprocessors.CPU_Range;
+      Task_Info            : System.Task_Info.Task_Info_Type;
+      Stack_Address        : System.Address;
+      Stack_Size           : System.Parameters.Size_Type;
+      T                    : Task_Id;
+      Success              : out Boolean);
    --  Initialize fields of a TCB and link into global TCB structures
    --  Call this only with abort deferred and holding All_Tasks_L.
 

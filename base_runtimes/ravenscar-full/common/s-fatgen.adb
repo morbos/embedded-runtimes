@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 1992-2015, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2018, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -79,7 +84,7 @@ package body System.Fat_Gen is
    --  the sign of the exponent. The absolute value of Frac is in the range
    --  0.0 <= Frac < 1.0. If Frac = 0.0 or -0.0, then Expo is always zero.
 
-   function Gradual_Scaling  (Adjustment : UI) return T;
+   function Gradual_Scaling (Adjustment : UI) return T;
    --  Like Scaling with a first argument of 1.0, but returns the smallest
    --  denormal rather than zero when the adjustment is smaller than
    --  Machine_Emin. Used for Succ and Pred.
@@ -363,7 +368,7 @@ package body System.Fat_Gen is
       Result := Truncation (abs X);
       Tail   := abs X - Result;
 
-      if Tail >= 0.5  then
+      if Tail >= 0.5 then
          Result := Result + 1.0;
       end if;
 
@@ -389,7 +394,7 @@ package body System.Fat_Gen is
 
    function Model (X : T) return T is
    begin
-      return Machine (X);
+      return T'Machine (X);
    end Model;
 
    ----------
@@ -410,16 +415,7 @@ package body System.Fat_Gen is
 
       elsif X = T'First then
 
-         --  If not generating infinities, we raise a constraint error
-
-         if T'Machine_Overflows then
-            raise Constraint_Error with "Pred of largest negative number";
-
-         --  Otherwise generate a negative infinity
-
-         else
-            return X / (X - X);
-         end if;
+         raise Constraint_Error with "Pred of largest negative number";
 
       --  For infinities, return unchanged
 
@@ -548,7 +544,7 @@ package body System.Fat_Gen is
       Result := Truncation (abs X);
       Tail   := abs X - Result;
 
-      if Tail >= 0.5  then
+      if Tail >= 0.5 then
          Result := Result + 1.0;
       end if;
 
@@ -666,14 +662,9 @@ package body System.Fat_Gen is
 
          --  If not generating infinities, we raise a constraint error
 
-         if T'Machine_Overflows then
-            raise Constraint_Error with "Succ of largest negative number";
+         raise Constraint_Error with "Succ of largest positive number";
 
          --  Otherwise generate a positive infinity
-
-         else
-            return X / (X - X);
-         end if;
 
       --  For infinities, return unchanged
 
@@ -721,11 +712,11 @@ package body System.Fat_Gen is
    --  This works provided that the intermediate result (RM1 + N) does not
    --  have extra precision (which is why we call Machine). When we compute
    --  RM1 + N, the exponent of N will be normalized and the mantissa shifted
-   --  shifted appropriately so the lower order bits, which cannot contribute
-   --  to the integer part of N, fall off on the right. When we subtract RM1
-   --  again, the significant bits of N are shifted to the left, and what we
-   --  have is an integer, because only the first e bits are different from
-   --  zero (assuming binary radix here).
+   --  appropriately so the lower order bits, which cannot contribute to the
+   --  integer part of N, fall off on the right. When we subtract RM1 again,
+   --  the significant bits of N are shifted to the left, and what we have is
+   --  an integer, because only the first e bits are different from zero
+   --  (assuming binary radix here).
 
    function Truncation (X : T) return T is
       Result : T;
@@ -734,10 +725,11 @@ package body System.Fat_Gen is
       Result := abs X;
 
       if Result >= Radix_To_M_Minus_1 then
-         return Machine (X);
+         return T'Machine (X);
 
       else
-         Result := Machine (Radix_To_M_Minus_1 + Result) - Radix_To_M_Minus_1;
+         Result :=
+           T'Machine (Radix_To_M_Minus_1 + Result) - Radix_To_M_Minus_1;
 
          if Result > abs X then
             Result := Result - 1.0;
@@ -770,7 +762,7 @@ package body System.Fat_Gen is
       Result := Truncation (Abs_X);
       Tail   := Abs_X - Result;
 
-      if Tail > 0.5  then
+      if Tail > 0.5 then
          Result := Result + 1.0;
 
       elsif Tail = 0.5 then

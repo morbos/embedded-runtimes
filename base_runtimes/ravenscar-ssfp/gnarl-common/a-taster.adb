@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---         Copyright (C) 2005-2014, Free Software Foundation, Inc.          --
+--         Copyright (C) 2005-2018, Free Software Foundation, Inc.          --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -42,18 +47,16 @@ with System.Task_Primitives.Operations;
 --           Set_Priority
 --           Get_Priority
 
-with Unchecked_Conversion;
+with Ada.Unchecked_Conversion;
 
 package body Ada.Task_Termination is
 
    use System.Task_Primitives.Operations;
 
-   use type Ada.Task_Identification.Task_Id;
-
-   function To_TT is new Unchecked_Conversion
+   function To_TT is new Ada.Unchecked_Conversion
      (System.Tasking.Termination_Handler, Termination_Handler);
 
-   function To_ST is new Unchecked_Conversion
+   function To_ST is new Ada.Unchecked_Conversion
      (Termination_Handler, System.Tasking.Termination_Handler);
 
    -----------------------------------

@@ -123,6 +123,7 @@ XN	= (1 << 28)
 Region_Enable =	1
 Full_Access = 0x3
 
+#if 0
 	@ Region 0 - flash
         mov     r2, #0
 	str	r2,[r1,#0x98]	@ region index0
@@ -131,7 +132,7 @@ Full_Access = 0x3
 	@@ Flash is allowed to exec
         ldr     r2,=(Full_Access << 24) | (Region_128K << 1) | Region_Enable
 	str	r2,[r1,#0xa0]
-
+#endif
 	@ Region 1 - flash
         mov     r2, #1
 	str	r2,[r1,#0x98]	@ region index1

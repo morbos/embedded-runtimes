@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---          Copyright (C) 1992-2013, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2018, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -51,7 +56,8 @@ package Interfaces.C.Extensions is
 
    --  C bool
 
-   subtype bool is plain_char;
+   type bool is new Boolean;
+   pragma Convention (C, bool);
 
    --  64-bit integer types
 
@@ -66,6 +72,15 @@ package Interfaces.C.Extensions is
    end record;
    pragma Convention (C_Pass_By_Copy, Signed_128);
    for Signed_128'Alignment use unsigned_long_long'Alignment * 2;
+
+   --  128-bit floating-point type available on x86:
+   --  typedef long_double float_128 __attribute__ ((mode (TF)));
+
+   type Float_128 is record
+      low, high : unsigned_long_long;
+   end record;
+   pragma Convention (C_Pass_By_Copy, Float_128);
+   for Float_128'Alignment use unsigned_long_long'Alignment * 2;
 
    --  Types for bitfields
 

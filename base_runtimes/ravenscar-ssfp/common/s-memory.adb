@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 2001-2011, Free Software Foundation, Inc.         --
+--           Copyright (C) 2013-2018, Free Software Foundation, Inc.        --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -24,28 +29,31 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  Simple implementation for use with ZFP
+--  Simple implementation for use with Ravenscar Minimal. This implementation
+--  is based on a simple static buffer (whose bounds are defined in the linker
+--  script), and allocation is performed through a protected object to
+--  protect against concurrency.
+
+pragma Restrictions (No_Elaboration_Code);
+--  This unit may be linked without being with'ed, so we need to ensure
+--  there is no elaboration code (since this code might not be executed).
 
 with System.Storage_Elements;
-with Unchecked_Conversion;
 
 package body System.Memory is
+   use System.Storage_Elements;
 
-   package SSE renames System.Storage_Elements;
+   Heap_Start : Character;
+   for Heap_Start'Alignment use Standard'Maximum_Alignment;
+   pragma Import (C, Heap_Start, "__heap_start");
+   --  The address of the variable is the start of the heap
 
-   Default_Size : constant := 1 * 1_024;
+   Heap_End : Character;
+   pragma Import (C, Heap_End, "__heap_end");
+   --  The address of the variable is the end of the heap
 
-   type Mark_Id is new SSE.Integer_Address;
-
-   type Memory is array (Mark_Id range <>) of SSE.Storage_Element;
-   for Memory'Alignment use Standard'Maximum_Alignment;
-
-   Mem : Memory (1 .. Default_Size);
-
-   Top : Mark_Id := Mem'First;
-
-   function To_Mark_Id is new Unchecked_Conversion
-     (size_t, Mark_Id);
+   Top : aliased Address := Heap_Start'Address;
+   --  First not used address (always aligned to the maximum alignment).
 
    ----------------
    -- For C code --
@@ -64,29 +72,65 @@ package body System.Memory is
    -- Alloc --
    -----------
 
-   function Alloc (Size : size_t) return System.Address is
-      Max_Align : constant Mark_Id := Mark_Id (Standard'Maximum_Alignment);
-      Max_Size  : Mark_Id :=
-                    ((To_Mark_Id (Size) + Max_Align - 1) / Max_Align) *
-                                                                Max_Align;
-      Location  : constant Mark_Id := Top;
+   function Alloc (Size : size_t) return System.Address
+   is
+      function Compare_And_Swap
+        (Ptr     : access Address;
+         Old_Val : Integer_Address;
+         New_Val : Integer_Address) return Boolean;
+      pragma Import (Intrinsic, Compare_And_Swap,
+                     "__sync_bool_compare_and_swap_" &
+                       (case System.Word_Size is
+                          when 32 => "4",
+                          when 64 => "8",
+                          when others => "unexpected"));
+      Max_Align : constant := Standard'Maximum_Alignment;
+      Max_Size  : Storage_Count;
+      Res       : Address;
 
    begin
-      if Max_Size = 0 then
+      if Size = 0 then
+
+         --  Change size from zero to non-zero. We still want a proper pointer
+         --  for the zero case because pointers to zero length objects have to
+         --  be distinct.
+
          Max_Size := Max_Align;
+
+      else
+         --  Detect overflow in the addition below. Note that we know that
+         --  upper bound of size_t is bigger than the upper bound of
+         --  Storage_Count.
+
+         if Size > size_t (Storage_Count'Last - Max_Align) then
+            raise Storage_Error;
+         end if;
+
+         --  Compute aligned size
+
+         Max_Size :=
+           ((Storage_Count (Size) + Max_Align - 1) / Max_Align) * Max_Align;
       end if;
 
-      if Size = size_t'Last then
-         raise Storage_Error;
-      end if;
+      loop
+         Res := Top;
 
-      Top := Top + Max_Size;
+         --  Detect too large allocation
 
-      if Top > Default_Size then
-         raise Storage_Error;
-      end if;
+         if Max_Size >= Storage_Count (Heap_End'Address - Res) then
+            raise Storage_Error;
+         end if;
 
-      return Mem (Location)'Address;
+         --  Atomically update the top of the heap. Restart in case of
+         --  failure (concurrent allocation).
+
+         exit when Compare_And_Swap
+           (Top'Access,
+            Integer_Address (Res),
+            Integer_Address (Res + Max_Size));
+      end loop;
+
+      return Res;
    end Alloc;
 
    ------------

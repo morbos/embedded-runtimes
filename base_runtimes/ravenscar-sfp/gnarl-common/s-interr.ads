@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  S p e c                                 --
 --                                                                          --
---                     Copyright (C) 2001-2016, AdaCore                     --
+--                     Copyright (C) 2001-2018, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -34,15 +39,11 @@
 --  It is made a child of System to allow visibility of various
 --  runtime system internal data and operations.
 
-with System.Tasking.Protected_Objects.Single_Entry;
-
 with System.OS_Interface;
 --  used for Max_Interrupt
 
 package System.Interrupts is
    pragma Elaborate_Body;
-
-   package ST renames System.Tasking;
 
    -------------------------
    -- Constants and types --
@@ -53,10 +54,10 @@ package System.Interrupts is
    --  Default value used when a pragma Interrupt_Handler or Attach_Handler is
    --  specified without an Interrupt_Priority pragma, see D.3(10).
 
-   type Ada_Interrupt_ID is range 0 .. System.OS_Interface.Max_Interrupt;
+   type Ada_Interrupt_ID is new System.OS_Interface.Interrupt_Range;
    --  Avoid inheritance by Ada.Interrupts.Interrupt_ID of unwanted operations
 
-   type Interrupt_ID is range 0 .. System.OS_Interface.Max_Interrupt;
+   type Interrupt_ID is new System.OS_Interface.Interrupt_Range;
 
    --  The following renaming is introduced so that the type is accessible
    --  through rtsfind, otherwise the name clashes with its homonym in

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 2002-2013, Free Software Foundation, Inc.         --
+--          Copyright (C) 2002-2018, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -289,7 +294,6 @@ package body GNAT.Array_Split is
             exit when K > Count_Sep;
 
             case Mode is
-
                when Single =>
 
                   --  In this mode just set start to character next to the
@@ -308,7 +312,6 @@ package body GNAT.Array_Split is
                      exit when K > Count_Sep
                        or else S.D.Indexes (K) > S.D.Indexes (K - 1) + 1;
                   end loop;
-
             end case;
          end loop;
 

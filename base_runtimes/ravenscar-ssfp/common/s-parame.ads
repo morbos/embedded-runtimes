@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---          Copyright (C) 1992-2014, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2018, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -48,31 +53,20 @@ package System.Parameters is
    -- Task And Stack Allocation Control --
    ---------------------------------------
 
-   type Task_Storage_Size is new Integer;
-   --  Type used in tasking units for task storage size
-
-   type Size_Type is new Task_Storage_Size;
-   --  Type used to provide task storage size to runtime
+   type Size_Type is range
+     -(2 ** (Integer'(Standard'Address_Size) - 1)) ..
+     +(2 ** (Integer'(Standard'Address_Size) - 1)) - 1;
+   --  Type used to provide task stack sizes to the runtime. Sized to permit
+   --  stack sizes of up to half the total addressable memory space. This may
+   --  seem excessively large (even for 32-bit systems), however there are many
+   --  instances of users requiring large stack sizes (for example string
+   --  processing).
 
    Unspecified_Size : constant Size_Type := Size_Type'First;
    --  Value used to indicate that no size type is set
 
-   subtype Percentage is Size_Type range -1 .. 100;
-   Dynamic : constant Size_Type := -1;
-   --  The secondary stack ratio is a constant between 0 and 100 which
-   --  determines the percentage of the allocated task stack that is
-   --  used by the secondary stack (the rest being the primary stack).
-   --  The special value of minus one indicates that the secondary
-   --  stack is to be allocated from the heap instead.
-
-   Sec_Stack_Percentage : constant Percentage := 10;
-   --  This constant defines the handling of the secondary stack, see above
-   --  comment, so the 25 here means a 25% amount.
-
-   Sec_Stack_Dynamic : constant Boolean := Sec_Stack_Percentage = Dynamic;
-   --  Convenient Boolean for testing for dynamic secondary stack
-
-   Default_Stack_Size : constant Size_Type := 4 * 1024;
+   --  Default_Stack_Size : constant Size_Type := 4 * 1024;
+   Default_Stack_Size : constant Size_Type := 1 * 1024;
    --  Default task stack size used if none is specified
 
    Minimum_Stack_Size : constant Size_Type := 512;
@@ -90,6 +84,10 @@ package System.Parameters is
    --  This constant indicates whether the stack grows up (False) or
    --  down (True) in memory as functions are called. It is used for
    --  proper implementation of the stack overflow check.
+
+   Runtime_Default_Sec_Stack_Size : constant Size_Type := 512;
+   --  The run-time chosen default size for secondary stacks that may be
+   --  overridden by the user with the use of binder -D switch.
 
    ----------------------------------------------
    -- Characteristics of types in Interfaces.C --
@@ -170,15 +168,6 @@ package System.Parameters is
 
    Max_Attribute_Count : constant := 0;
    --  Number of task attributes stored in the task control block
-
-   --------------------
-   -- Runtime Traces --
-   --------------------
-
-   Runtime_Traces : constant Boolean := False;
-   --  This constant indicates whether the runtime outputs traces to a
-   --  predefined output or not (True means that traces are output).
-   --  See System.Traces for more details.
 
    -----------------------
    -- Task Image Length --

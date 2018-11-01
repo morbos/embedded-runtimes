@@ -1,0 +1,20 @@
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/i-bit_types.ads': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/mx90393.ali': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-c.ads': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-cerrno.adb': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-cerrno.ads': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-cmallo.adb': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-cmallo.ads': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-cstrle.adb': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-cstrle.ads': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-imgenu.adb': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-imgenu.ads': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-memcom.adb': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-memcom.ads': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-memcop.adb': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-memcop.ads': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-memmov.adb': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-memmov.ads': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-memset.adb': No such file or directory
+cp: cannot stat '/usr/gnat2018/arm-eabi/lib/gnat/ravenscar-full-stm32f4/gnat/s-memset.ads': No such file or directory
+hrainnie@gravitar:/backup/ada/Ada_Drivers_Library/embedded-runtimes/base_runtimes/ravenscar-full/common$

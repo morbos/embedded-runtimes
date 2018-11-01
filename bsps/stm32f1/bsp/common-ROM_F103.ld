@@ -36,7 +36,7 @@
 SEARCH_DIR(.)
 __DYNAMIC  =  0;
 
-_DEFAULT_STACK_SIZE = 2*1024;
+ _DEFAULT_STACK_SIZE = 2*1024;
 
 ENTRY(_start_rom);
 

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---          Copyright (C) 1992-2015, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2018, Free Software Foundation, Inc.         --
 --                                                                          --
 -- This specification is derived from the Ada Reference Manual for use with --
 -- GNAT. The copyright notice above, and the license provisions that follow --
@@ -19,8 +19,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -40,7 +45,7 @@
 --  time (in terms of source lines executed):
 
 --    Expanded_Name, Wide_Expanded_Name, Wide_Wide_Expanded_Name, External_Tag,
---    Is_Descendant_At_Same_Level, Parent_Tag, Type_Is_Abstract
+--    Is_Abstract, Is_Descendant_At_Same_Level, Parent_Tag,
 --    Descendant_Tag (when used with a library-level tagged type),
 --    Internal_Tag (when used with a library-level tagged type).
 
@@ -100,8 +105,8 @@ package Ada.Tags is
    function Interface_Ancestor_Tags (T : Tag) return Tag_Array;
    pragma Ada_05 (Interface_Ancestor_Tags);
 
-   function Type_Is_Abstract (T : Tag) return Boolean;
-   pragma Ada_2012 (Type_Is_Abstract);
+   function Is_Abstract (T : Tag) return Boolean;
+   pragma Ada_2012 (Is_Abstract);
 
    Tag_Error : exception;
 
@@ -133,7 +138,7 @@ private
    --                                    +-------------------+
    --                                    |   transportable   |
    --                                    +-------------------+
-   --                                    |  type_is_abstract |
+   --                                    |    is_abstract    |
    --                                    +-------------------+
    --                                    | needs finalization|
    --                                    +-------------------+
@@ -313,7 +318,7 @@ private
       --  for being used in remote calls as actuals for classwide formals or as
       --  return values for classwide functions.
 
-      Type_Is_Abstract : Boolean;
+      Is_Abstract : Boolean;
       --  True if the type is abstract (Ada 2012: AI05-0173)
 
       Needs_Finalization : Boolean;
@@ -375,12 +380,21 @@ private
       --  Prims_Ptr table.
 
       Offset_To_Top : SSE.Storage_Offset;
-      TSD           : System.Address;
+      --  Offset between the _Tag field and the field that contains the
+      --  reference to this dispatch table. For primary dispatch tables it is
+      --  zero. For secondary dispatch tables: if the parent record type (if
+      --  any) has a compile-time-known size, then Offset_To_Top contains the
+      --  expected value, otherwise it contains SSE.Storage_Offset'Last and the
+      --  actual offset is to be found in the tagged record, right after the
+      --  field that contains the reference to this dispatch table. See the
+      --  implementation of Ada.Tags.Offset_To_Top for the corresponding logic.
+
+      TSD : System.Address;
 
       Prims_Ptr : aliased Address_Array (1 .. Num_Prims);
       --  The size of the Prims_Ptr array actually depends on the tagged type
       --  to which it applies. For each tagged type, the expander computes the
-      --  actual array size, allocates the Dispatch_Table record accordingly.
+      --  actual array size, allocating the Dispatch_Table record accordingly.
    end record;
 
    type Dispatch_Table_Ptr is access all Dispatch_Table_Wrapper;
@@ -522,18 +536,18 @@ private
    --  assumes that _size is always in slot one of the dispatch table.
 
    procedure Register_Interface_Offset
-     (This         : System.Address;
+     (Prim_T       : Tag;
       Interface_T  : Tag;
       Is_Static    : Boolean;
       Offset_Value : SSE.Storage_Offset;
       Offset_Func  : Offset_To_Top_Function_Ptr);
    --  Register in the table of interfaces of the tagged type associated with
-   --  "This" object the offset of the record component associated with the
-   --  progenitor Interface_T (that is, the distance from "This" to the object
-   --  component containing the tag of the secondary dispatch table). In case
-   --  of constant offset, Is_Static is true and Offset_Value has such value.
-   --  In case of variable offset, Is_Static is false and Offset_Func is an
-   --  access to function that must be called to evaluate the offset.
+   --  Prim_T the offset of the record component associated with the progenitor
+   --  Interface_T (that is, the distance from "This" to the object component
+   --  containing the tag of the secondary dispatch table). In case of constant
+   --  offset, Is_Static is true and Offset_Value has such value. In case of
+   --  variable offset, Is_Static is false and Offset_Func is an access to
+   --  function that must be called to evaluate the offset.
 
    procedure Register_Tag (T : Tag);
    --  Insert the Tag and its associated external_tag in a table for the sake
@@ -541,20 +555,24 @@ private
 
    procedure Set_Dynamic_Offset_To_Top
      (This         : System.Address;
+      Prim_T       : Tag;
       Interface_T  : Tag;
       Offset_Value : SSE.Storage_Offset;
       Offset_Func  : Offset_To_Top_Function_Ptr);
    --  Ada 2005 (AI-251): The compiler generates calls to this routine only
-   --  when initializing the Offset_To_Top field of dispatch tables associated
-   --  with tagged type whose parent has variable size components. "This" is
-   --  the object whose dispatch table is being initialized. Interface_T is the
-   --  interface for which the secondary dispatch table is being initialized,
-   --  and Offset_Value is the distance from "This" to the object component
-   --  containing the tag of the secondary dispatch table (a zero value means
-   --  that this interface shares the primary dispatch table). Offset_Func
-   --  references a function that must be called to evaluate the offset at
-   --  runtime. This routine also takes care of registering these values in
-   --  the table of interfaces of the type.
+   --  when initializing the Offset_To_Top field of dispatch tables of tagged
+   --  types that cover interface types whose parent type has variable size
+   --  components.
+   --
+   --  "This" is the object whose dispatch table is being initialized. Prim_T
+   --  is the primary tag of such object. Interface_T is the interface tag for
+   --  which the secondary dispatch table is being initialized. Offset_Value
+   --  is the distance from "This" to the object component containing the tag
+   --  of the secondary dispatch table (a zero value means that this interface
+   --  shares the primary dispatch table). Offset_Func references a function
+   --  that must be called to evaluate the offset at run time. This routine
+   --  also takes care of registering these values in the table of interfaces
+   --  of the type.
 
    procedure Set_Entry_Index (T : Tag; Position : Positive; Value : Positive);
    --  Ada 2005 (AI-345): Set the entry index of a primitive operation in T's

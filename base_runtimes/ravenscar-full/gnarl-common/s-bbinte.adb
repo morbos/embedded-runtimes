@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2005 The European Space Agency            --
---                     Copyright (C) 2003-2016, AdaCore                     --
+--                     Copyright (C) 2003-2017, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -17,8 +17,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -32,8 +37,9 @@
 pragma Restrictions (No_Elaboration_Code);
 
 with System.Storage_Elements;
+with System.Multiprocessors;
 with System.BB.CPU_Primitives;
-with System.BB.CPU_Primitives.Multiprocessors;
+with System.BB.CPU_Specific;
 with System.BB.Threads;
 with System.BB.Threads.Queues;
 with System.BB.Board_Support;
@@ -42,7 +48,7 @@ with System.BB.Time;
 package body System.BB.Interrupts is
 
    use System.Multiprocessors;
-   use System.BB.CPU_Primitives.Multiprocessors;
+   use System.BB.Board_Support.Multiprocessors;
    use System.BB.Threads;
    use System.BB.Time;
 
@@ -52,23 +58,40 @@ package body System.BB.Interrupts is
 
    type Stack_Space is new Storage_Elements.Storage_Array
      (1 .. Storage_Elements.Storage_Offset (Parameters.Interrupt_Stack_Size));
-   for Stack_Space'Alignment use 8;
+   pragma Suppress_Initialization (Stack_Space);
+   for Stack_Space'Alignment use CPU_Specific.Stack_Alignment;
    --  Type used to represent the stack area for each interrupt. The stack must
-   --  be aligned to 8 bytes to allow double word data movements.
+   --  be aligned to the CPU specific alignment to hold the largest registers.
 
    Interrupt_Stacks : array (CPU) of Stack_Space;
    pragma Linker_Section (Interrupt_Stacks, ".interrupt_stacks");
    --  Array that contains the stack used for each interrupt priority on each
-   --  CPU. Note that multiple interrupts with the same priority will share
-   --  the same stack on a given CPU, as they never can both be executing at
-   --  the same time. The interrupt stacks are assigned a special section,
-   --  so the linker script can put them at a specific place and avoid useless
-   --  initialization.
+   --  CPU.
+   --
+   --  The interrupt stacks are assigned a special section so the linker script
+   --  can put them at a specific place and avoid useless initialization.
+   --
+   --  Having a separate interrupt stack (from user tasks stack) helps to
+   --  reduce the memory footprint, as there is no need to reserve space for
+   --  interrupts in user stacks.
+   --
+   --  Because several interrupts can share the same priority and because there
+   --  can be many priorities, we prefer not to have one stack per priority.
+   --  Instead we have one interrupt stack per CPU. Such interrupts cannot be
+   --  executing at the same time.
+   --
+   --  An interrupt handler doesn't need to save non-volatile registers,
+   --  because the interrupt is always completed before the interrupted task is
+   --  resumed. This is obvious for non-interrupt-priority tasks and for
+   --  active tasks at interrupt priority. The idle task (the one activated in
+   --  System.BB.Protection.Leave_Kernel) cannot be at interrupt priority, as
+   --  there is always one task not in the interrupt priority range (the
+   --  environment task), and this one must be active or idle when a higher
+   --  priority task is resumed.
 
    Interrupt_Stack_Table : array (CPU) of System.Address;
    pragma Export (Asm, Interrupt_Stack_Table, "interrupt_stack_table");
-   --  Table that contains a pointer to the top of the stack for each interrupt
-   --  level on each CPU.
+   --  Table that contains a pointer to the top of the stack for each processor
 
    type Handlers_Table is array (Interrupt_ID) of Interrupt_Handler;
    pragma Suppress_Initialization (Handlers_Table);
@@ -79,20 +102,12 @@ package body System.BB.Interrupts is
    Interrupt_Handlers_Table : Handlers_Table;
    --  Table containing handlers attached to the different external interrupts
 
-   Interrupt_Being_Handled : array (CPU) of Interrupt_ID :=
+   Interrupt_Being_Handled : array (CPU) of Any_Interrupt_ID :=
                                (others => No_Interrupt);
    pragma Volatile (Interrupt_Being_Handled);
    --  Interrupt_Being_Handled contains the interrupt currently being handled
    --  by each CPU in the system, if any. It is equal to No_Interrupt when no
    --  interrupt is handled. Its value is updated by the trap handler.
-
-   -----------------------
-   -- Local subprograms --
-   -----------------------
-
-   procedure Interrupt_Wrapper (Vector : CPU_Primitives.Vector_Id);
-   --  This wrapper procedure is in charge of setting the appropriate
-   --  software priorities before calling the user-defined handler.
 
    --------------------
    -- Attach_Handler --
@@ -116,16 +131,16 @@ package body System.BB.Interrupts is
       --  interrupt occurs, and then installs the handler there. This may
       --  include programming the interrupt controller.
 
-      Board_Support.Install_Interrupt_Handler
-        (Interrupt_Wrapper'Address, Id, Prio);
+      Board_Support.Interrupts.Install_Interrupt_Handler (Id, Prio);
    end Attach_Handler;
 
    -----------------------
    -- Current_Interrupt --
    -----------------------
 
-   function Current_Interrupt return Interrupt_ID is
-      Result : constant Interrupt_ID := Interrupt_Being_Handled (Current_CPU);
+   function Current_Interrupt return Any_Interrupt_ID is
+      Result : constant Any_Interrupt_ID :=
+                  Interrupt_Being_Handled (Current_CPU);
 
    begin
       if Threads.Thread_Self.In_Interrupt then
@@ -142,27 +157,17 @@ package body System.BB.Interrupts is
    -- Interrupt_Wrapper --
    -----------------------
 
-   procedure Interrupt_Wrapper (Vector : CPU_Primitives.Vector_Id) is
+   procedure Interrupt_Wrapper (Id : Interrupt_ID) is
       Self_Id         : constant Threads.Thread_Id := Threads.Thread_Self;
-      Caller_Priority : constant Integer :=
-                         Threads.Get_Priority (Self_Id);
-      Interrupt       : constant Interrupt_ID :=
-                          Board_Support.Get_Interrupt_Request (Vector);
+      Caller_Priority : constant Integer := Threads.Get_Priority (Self_Id);
       Int_Priority    : constant Interrupt_Priority :=
-                          Board_Support.Priority_Of_Interrupt (Interrupt);
+                          Board_Support.Interrupts.Priority_Of_Interrupt (Id);
       CPU_Id          : constant CPU          := Current_CPU;
-      Previous_Int    : constant Interrupt_ID :=
+      Previous_Int    : constant Any_Interrupt_ID :=
                           Interrupt_Being_Handled (CPU_Id);
       Prev_In_Interr  : constant Boolean := Self_Id.In_Interrupt;
 
    begin
-      --  Handle spurious interrupts, reported as No_Interrupt. If they must be
-      --  cleared, this should be done in Get_Interrupt_Request.
-
-      if Interrupt = No_Interrupt then
-         return;
-      end if;
-
       --  Update execution time for the interrupted task
 
       if Scheduling_Event_Hook /= null then
@@ -171,7 +176,7 @@ package body System.BB.Interrupts is
 
       --  Store the interrupt being handled
 
-      Interrupt_Being_Handled (CPU_Id) := Interrupt;
+      Interrupt_Being_Handled (CPU_Id) := Id;
 
       --  Then, we must set the appropriate software priority corresponding
       --  to the interrupt being handled. It also deals with the appropriate
@@ -196,7 +201,7 @@ package body System.BB.Interrupts is
 
       --  Call the user handler
 
-      Interrupt_Handlers_Table (Interrupt).all (Interrupt);
+      Interrupt_Handlers_Table (Id).all (Id);
 
       CPU_Primitives.Disable_Interrupts;
 
@@ -218,8 +223,19 @@ package body System.BB.Interrupts is
 
       Interrupt_Being_Handled (CPU_Id) := Previous_Int;
 
+      --  Restore previous interrupt number (which is False unless interrupt
+      --  is nested).
+
       Self_Id.In_Interrupt := Prev_In_Interr;
 
+      --  Switch back to previous priority
+      --
+      --  The priority used (Caller_Priority) may not be correct if a task has
+      --  been unblocked. But in that case, the task was blocked inside the
+      --  kernel (so with interrupt disabled), and the correct priority will
+      --  be set by Leave_Kernel.
+
+      Board_Support.Interrupts.Set_Current_Priority (Caller_Priority);
    end Interrupt_Wrapper;
 
    ----------------------------
@@ -241,7 +257,7 @@ package body System.BB.Interrupts is
    procedure Initialize_Interrupts is
       use type System.Storage_Elements.Storage_Offset;
    begin
-      for Proc in CPU'Range loop
+      for Proc in CPU loop
 
          --  Store the pointer in the last double word
 

@@ -1,0 +1,15 @@
+sfp vs ssfp
+
+common/s-memory.adb
+Default_Size was 20 now 4k
+
+common/s-secsta.ads
+secondary_stack_size 10k now 1k
+
+gnarl-arch-stm32/s-bbpara.ads
+
+APB2_PRE
+enabled => false
+
+gnarl-common/s-bbcppr.adb
+remove floating point

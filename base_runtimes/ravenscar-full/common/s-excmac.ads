@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---            Copyright (C) 2013, Free Software Foundation, Inc.            --
+--          Copyright (C) 2013-2018, Free Software Foundation, Inc.          --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -169,13 +174,7 @@ package System.Exceptions.Machine is
      Ada.Unchecked_Conversion
      (GCC_Exception_Access, GNAT_GCC_Exception_Access);
 
-   function New_Occurrence return GNAT_GCC_Exception_Access is
-      (new GNAT_GCC_Exception'
-         (Header     => (Class   => GNAT_Exception_Class,
-                         Unwinder_Cache => (Reserved1 => 0,
-                                            others => <>),
-                         others => <>),
-          Occurrence => <>));
+   function New_Occurrence return GNAT_GCC_Exception_Access;
    --  Allocate and initialize a machine occurrence
 
 end System.Exceptions.Machine;

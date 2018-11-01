@@ -1,0 +1,181 @@
+.:
+total 32
+drwxr-xr-x 2 hrainnie ftpuser 4096 Jun 10  2017 arch
+drwxr-xr-x 2 hrainnie ftpuser 4096 Jun 28  2018 common
+drwxr-xr-x 2 hrainnie ftpuser 4096 Jun 10  2017 gnarl-arch-cortex_m0plus_common
+drwxr-xr-x 2 hrainnie ftpuser 4096 Jun 10  2017 gnarl-arch-kinetis_k64f
+drwxr-xr-x 2 hrainnie ftpuser 4096 Jun 10  2017 gnarl-arch-kinetis_kl25z
+drwxr-xr-x 2 hrainnie ftpuser 4096 Jun 10  2017 gnarl-arch-sam
+drwxr-xr-x 2 hrainnie ftpuser 4096 Nov 19  2017 gnarl-arch-stm32
+drwxr-xr-x 2 hrainnie ftpuser 4096 Nov 19  2017 gnarl-common
+-rw-r--r-- 1 hrainnie staff      0 Jun 28  2018 index.txt
+
+./arch:
+total 12
+-rw-r--r-- 1 hrainnie ftpuser 2989 Jun 10  2017 s-macres.adb
+-rw-r--r-- 1 hrainnie ftpuser 8111 Jun 10  2017 system.ads
+
+./common:
+total 404
+-rw-r--r-- 1 hrainnie ftpuser  2435 Jun 10  2017 a-assert.adb
+-rw-r--r-- 1 hrainnie ftpuser  3347 Jun 10  2017 a-assert.ads
+-rw-r--r-- 1 hrainnie ftpuser  1183 Jun 10  2017 ada.ads
+-rw-r--r-- 1 hrainnie ftpuser  3402 Jun 10  2017 a-elchha.adb
+-rw-r--r-- 1 hrainnie ftpuser  2294 Jun 10  2017 a-elchha.ads
+-rw-r--r-- 1 hrainnie ftpuser  2492 Jun 10  2017 a-except.adb
+-rw-r--r-- 1 hrainnie ftpuser  3553 Jun 10  2017 a-except.ads
+-rw-r--r-- 1 hrainnie ftpuser  4906 Jun 10  2017 a-tags.adb
+-rw-r--r-- 1 hrainnie ftpuser 12999 Jun 10  2017 a-tags.ads
+-rw-r--r-- 1 hrainnie ftpuser  3067 Jun 10  2017 a-textio.adb
+-rw-r--r-- 1 hrainnie ftpuser  2559 Jun 10  2017 a-textio.ads
+-rw-r--r-- 1 hrainnie ftpuser  1399 Jun 10  2017 a-unccon.ads
+-rw-r--r-- 1 hrainnie ftpuser  1341 Jun 10  2017 a-uncdea.ads
+-rw-r--r-- 1 hrainnie ftpuser  3368 Jun 10  2017 g-io.adb
+-rw-r--r-- 1 hrainnie ftpuser  3157 Jun 10  2017 g-io.ads
+-rw-r--r-- 1 hrainnie ftpuser  2525 Jun 10  2017 g-io-put.adb
+-rw-r--r-- 1 hrainnie ftpuser  2100 Jun 10  2017 gnat.ads
+-rw-r--r-- 1 hrainnie ftpuser  5246 Jun 10  2017 g-souinf.ads
+-rw-r--r-- 1 hrainnie ftpuser  3708 Jun 10  2017 i-bit_types.ads
+-rw-r--r-- 1 hrainnie ftpuser  4225 Jun 10  2017 i-c.ads
+-rw-r--r-- 1 hrainnie ftpuser 12880 Jun 10  2017 i-cexten.ads
+-rw-r--r-- 1 hrainnie ftpuser  6520 Jun 10  2017 interfac.ads
+-rw-r--r-- 1 hrainnie ftpuser  1184 Jun 10  2017 machcode.ads
+-rw-r--r-- 1 hrainnie ftpuser  2323 Jun 10  2017 s-assert.adb
+-rw-r--r-- 1 hrainnie ftpuser  2634 Jun 10  2017 s-assert.ads
+-rw-r--r-- 1 hrainnie ftpuser  2203 Jun 10  2017 s-atacco.adb
+-rw-r--r-- 1 hrainnie ftpuser  3337 Jun 10  2017 s-atacco.ads
+-rw-r--r-- 1 hrainnie ftpuser  5654 Jun 10  2017 s-bb.ads
+-rw-r--r-- 1 hrainnie ftpuser  2501 Jun 10  2017 s-fatflt.ads
+-rw-r--r-- 1 hrainnie ftpuser 26810 Jun 10  2017 s-fatgen.adb
+-rw-r--r-- 1 hrainnie ftpuser  5899 Jun 10  2017 s-fatgen.ads
+-rw-r--r-- 1 hrainnie ftpuser  2518 Jun 10  2017 s-fatlfl.ads
+-rw-r--r-- 1 hrainnie ftpuser  2531 Jun 10  2017 s-fatllf.ads
+-rw-r--r-- 1 hrainnie ftpuser  2521 Jun 10  2017 s-fatsfl.ads
+-rw-r--r-- 1 hrainnie ftpuser  2405 Jun 10  2017 s-imgboo.adb
+-rw-r--r-- 1 hrainnie ftpuser  2361 Jun 10  2017 s-imgboo.ads
+-rw-r--r-- 1 hrainnie ftpuser  3469 Jun 10  2017 s-imgint.adb
+-rw-r--r-- 1 hrainnie ftpuser  3022 Jun 10  2017 s-imgint.ads
+-rw-r--r-- 1 hrainnie ftpuser  3615 Jun 10  2017 s-imglli.adb
+-rw-r--r-- 1 hrainnie ftpuser  3088 Jun 10  2017 s-imglli.ads
+-rw-r--r-- 1 hrainnie ftpuser  3017 Jun 10  2017 s-imgllu.adb
+-rw-r--r-- 1 hrainnie ftpuser  3203 Jun 10  2017 s-imgllu.ads
+-rw-r--r-- 1 hrainnie ftpuser  2877 Jun 10  2017 s-imguns.adb
+-rw-r--r-- 1 hrainnie ftpuser  3115 Jun 10  2017 s-imguns.ads
+-rw-r--r-- 1 hrainnie ftpuser  5170 Jun 10  2017 s-maccod.ads
+-rw-r--r-- 1 hrainnie ftpuser  2279 Jun 10  2017 s-macres.ads
+-rw-r--r-- 1 hrainnie ftpuser  2757 Jun 10  2017 s-memcom.adb
+-rw-r--r-- 1 hrainnie ftpuser  2469 Jun 10  2017 s-memcom.ads
+-rw-r--r-- 1 hrainnie ftpuser  4138 Jun 10  2017 s-memcop.adb
+-rw-r--r-- 1 hrainnie ftpuser  2618 Jun 10  2017 s-memcop.ads
+-rw-r--r-- 1 hrainnie ftpuser  4828 Jun 10  2017 s-memmov.adb
+-rw-r--r-- 1 hrainnie ftpuser  2827 Jun 10  2017 s-memmov.ads
+-rw-r--r-- 1 hrainnie ftpuser  4184 Mar 12 14:55 s-memory.adb
+-rw-r--r-- 1 hrainnie staff    4138 Oct  7  2017 s-memory.adb~
+-rw-r--r-- 1 hrainnie ftpuser  3721 Jun 10  2017 s-memory.ads
+-rw-r--r-- 1 hrainnie ftpuser  2631 Jun 10  2017 s-memset.adb
+-rw-r--r-- 1 hrainnie ftpuser  2446 Jun 10  2017 s-memset.ads
+-rw-r--r-- 1 hrainnie ftpuser  2406 Jun 10  2017 s-parame.adb
+-rw-r--r-- 1 hrainnie ftpuser  8936 Jun 10  2017 s-parame.ads
+-rw-r--r-- 1 hrainnie ftpuser  5264 Jun 10  2017 s-secsta.adb
+-rw-r--r-- 1 hrainnie ftpuser  3569 Mar 12 18:47 s-secsta.ads
+-rw-r--r-- 1 hrainnie staff    3568 Oct  8  2017 s-secsta.ads~
+-rw-r--r-- 1 hrainnie ftpuser  3100 Oct  7  2017 s-sssita.adb
+-rw-r--r-- 1 hrainnie ftpuser  3777 Oct  7  2017 s-sssita.ads
+-rw-r--r-- 1 hrainnie ftpuser  4704 Jun 10  2017 s-stoele.adb
+-rw-r--r-- 1 hrainnie ftpuser  5438 Jun 10  2017 s-stoele.ads
+-rw-r--r-- 1 hrainnie ftpuser  4015 Jun 10  2017 s-textio.ads
+-rw-r--r-- 1 hrainnie ftpuser  8761 Jun 10  2017 s-unstyp.ads
+-rw-r--r-- 1 hrainnie ftpuser  1464 Jun 10  2017 text_io.ads
+-rw-r--r-- 1 hrainnie ftpuser  1339 Jun 10  2017 unchconv.ads
+-rw-r--r-- 1 hrainnie ftpuser  1290 Jun 10  2017 unchdeal.ads
+
+./gnarl-arch-cortex_m0plus_common:
+total 20
+-rw-r--r-- 1 hrainnie ftpuser 18630 Jun 10  2017 s-bbcppr.adb
+
+./gnarl-arch-kinetis_k64f:
+total 8
+-rw-r--r-- 1 hrainnie ftpuser 5337 Jun 10  2017 s-bbpara.ads
+
+./gnarl-arch-kinetis_kl25z:
+total 8
+-rw-r--r-- 1 hrainnie ftpuser 5338 Jun 10  2017 s-bbpara.ads
+
+./gnarl-arch-sam:
+total 8
+-rw-r--r-- 1 hrainnie ftpuser 5049 Jun 10  2017 s-bbpara.ads
+
+./gnarl-arch-stm32:
+total 8
+-rw-r--r-- 1 hrainnie ftpuser 6181 Oct  8  2017 s-bbpara.ads
+
+./gnarl-common:
+total 588
+-rw-r--r-- 1 hrainnie ftpuser  5268 Jun 10  2017 a-exetim.adb
+-rw-r--r-- 1 hrainnie ftpuser  3651 Jun 10  2017 a-exetim.ads
+-rw-r--r-- 1 hrainnie ftpuser  3222 Jun 10  2017 a-extiin.adb
+-rw-r--r-- 1 hrainnie ftpuser  1555 Jun 10  2017 a-extiin.ads
+-rw-r--r-- 1 hrainnie ftpuser  3966 Jun 10  2017 a-interr.adb
+-rw-r--r-- 1 hrainnie ftpuser  4115 Jun 10  2017 a-interr.ads
+-rw-r--r-- 1 hrainnie ftpuser 22310 Jun 10  2017 a-reatim.adb
+-rw-r--r-- 1 hrainnie ftpuser  6764 Jun 10  2017 a-reatim.ads
+-rw-r--r-- 1 hrainnie ftpuser  3186 Jun 10  2017 a-retide.adb
+-rw-r--r-- 1 hrainnie ftpuser  2549 Jun 10  2017 a-retide.ads
+-rw-r--r-- 1 hrainnie ftpuser  5596 Jun 10  2017 a-rttiev.adb
+-rw-r--r-- 1 hrainnie ftpuser  3393 Jun 10  2017 a-rttiev.ads
+-rw-r--r-- 1 hrainnie ftpuser  3562 Jun 10  2017 a-sytaco.adb
+-rw-r--r-- 1 hrainnie ftpuser  3933 Jun 10  2017 a-sytaco.ads
+-rw-r--r-- 1 hrainnie ftpuser  5356 Jun 10  2017 a-taside.adb
+-rw-r--r-- 1 hrainnie ftpuser  3970 Jun 10  2017 a-taside.ads
+-rw-r--r-- 1 hrainnie ftpuser  4558 Jun 10  2017 a-taster.adb
+-rw-r--r-- 1 hrainnie ftpuser  2513 Jun 10  2017 a-taster.ads
+-rw-r--r-- 1 hrainnie ftpuser 14772 Nov 19  2017 s-bbbosu.adb
+-rw-r--r-- 1 hrainnie ftpuser 14772 Oct 23  2017 s-bbbosu.adb~
+-rw-r--r-- 1 hrainnie ftpuser  8293 Jun 10  2017 s-bbbosu.ads
+-rw-r--r-- 1 hrainnie ftpuser 17366 Oct  7  2017 s-bbcppr.adb
+-rw-r--r-- 1 hrainnie ftpuser  6329 Jun 10  2017 s-bbcppr.ads
+-rw-r--r-- 1 hrainnie ftpuser 11375 Jun 10  2017 s-bbexti.adb
+-rw-r--r-- 1 hrainnie ftpuser  2381 Jun 10  2017 s-bbexti.ads
+-rw-r--r-- 1 hrainnie ftpuser 10407 Jun 10  2017 s-bbinte.adb
+-rw-r--r-- 1 hrainnie ftpuser  4438 Jun 10  2017 s-bbinte.ads
+-rw-r--r-- 1 hrainnie ftpuser  4837 Jun 10  2017 s-bbprot.adb
+-rw-r--r-- 1 hrainnie ftpuser  3189 Jun 10  2017 s-bbprot.ads
+-rw-r--r-- 1 hrainnie ftpuser 17030 Jun 10  2017 s-bbthqu.adb
+-rw-r--r-- 1 hrainnie ftpuser 12994 Jun 10  2017 s-bbthqu.ads
+-rw-r--r-- 1 hrainnie ftpuser 14203 Jun 10  2017 s-bbthre.adb
+-rw-r--r-- 1 hrainnie ftpuser 12042 Jun 10  2017 s-bbthre.ads
+-rw-r--r-- 1 hrainnie ftpuser 14129 Jun 10  2017 s-bbtiev.adb
+-rw-r--r-- 1 hrainnie ftpuser  4345 Jun 10  2017 s-bbtiev.ads
+-rw-r--r-- 1 hrainnie ftpuser 18875 Jun 10  2017 s-bbtime.adb
+-rw-r--r-- 1 hrainnie ftpuser  8389 Jun 10  2017 s-bbtime.ads
+-rw-r--r-- 1 hrainnie ftpuser  2557 Jun 10  2017 s-bcprmu.adb
+-rw-r--r-- 1 hrainnie ftpuser  2405 Jun 10  2017 s-bcprmu.ads
+-rw-r--r-- 1 hrainnie ftpuser  6852 Jun 10  2017 s-interr.adb
+-rw-r--r-- 1 hrainnie ftpuser  4936 Jun 10  2017 s-interr.ads
+-rw-r--r-- 1 hrainnie ftpuser  4677 Jun 10  2017 s-mufalo.adb
+-rw-r--r-- 1 hrainnie ftpuser  3139 Jun 10  2017 s-mufalo.ads
+-rw-r--r-- 1 hrainnie ftpuser  2136 Jun 10  2017 s-multip.adb
+-rw-r--r-- 1 hrainnie ftpuser  1527 Jun 10  2017 s-multip.ads
+-rw-r--r-- 1 hrainnie ftpuser  3186 Jun 10  2017 s-musplo.adb
+-rw-r--r-- 1 hrainnie ftpuser  2712 Jun 10  2017 s-musplo.ads
+-rw-r--r-- 1 hrainnie ftpuser  7973 Jun 10  2017 s-osinte.ads
+-rw-r--r-- 1 hrainnie ftpuser  6321 Jun 10  2017 s-taprob.adb
+-rw-r--r-- 1 hrainnie ftpuser  9075 Jun 10  2017 s-taprob.ads
+-rw-r--r-- 1 hrainnie ftpuser 12671 Jun 10  2017 s-taprop.adb
+-rw-r--r-- 1 hrainnie ftpuser  4847 Jun 10  2017 s-taprop.ads
+-rw-r--r-- 1 hrainnie ftpuser 16016 Jun 10  2017 s-tarest.adb
+-rw-r--r-- 1 hrainnie ftpuser 11524 Jun 10  2017 s-tarest.ads
+-rw-r--r-- 1 hrainnie ftpuser  2997 Jun 10  2017 s-tasdeb.adb
+-rw-r--r-- 1 hrainnie ftpuser  2472 Jun 10  2017 s-tasdeb.ads
+-rw-r--r-- 1 hrainnie ftpuser  2420 Jun 10  2017 s-tasinf.adb
+-rw-r--r-- 1 hrainnie ftpuser  4488 Jun 10  2017 s-tasinf.ads
+-rw-r--r-- 1 hrainnie ftpuser  8321 Oct  7  2017 s-taskin.adb
+-rw-r--r-- 1 hrainnie ftpuser 15638 Oct  7  2017 s-taskin.ads
+-rw-r--r-- 1 hrainnie ftpuser  3963 Jun 10  2017 s-taspri.ads
+-rw-r--r-- 1 hrainnie ftpuser  2116 Jun 10  2017 s-tasres.ads
+-rw-r--r-- 1 hrainnie ftpuser  6029 Jun 10  2017 s-tpobmu.adb
+-rw-r--r-- 1 hrainnie ftpuser  2357 Jun 10  2017 s-tpobmu.ads
+-rw-r--r-- 1 hrainnie ftpuser  9922 Jun 10  2017 s-tposen.adb
+-rw-r--r-- 1 hrainnie ftpuser 10279 Jun 10  2017 s-tposen.ads
+-rw-r--r-- 1 hrainnie ftpuser  2652 Jun 10  2017 task_stack_info.adb
+-rw-r--r-- 1 hrainnie ftpuser  1790 Jun 10  2017 task_stack_info.ads

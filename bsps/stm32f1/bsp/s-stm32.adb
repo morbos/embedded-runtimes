@@ -20,9 +20,9 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with Ada.Unchecked_Conversion;
+--  with Ada.Unchecked_Conversion;
 
-with System.BB.Parameters;
+--  with System.BB.Parameters;
 
 with Interfaces;            use Interfaces;
 with Interfaces.Bit_Types;  use Interfaces.Bit_Types;

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                     Copyright (C) 2011-2016, AdaCore                     --
+--                     Copyright (C) 2011-2018, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,15 +15,18 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 ------------------------------------------------------------------------------
 
 with System.BB.Parameters;
-with System.BB.Board_Support;
-with System.BB.Threads.Queues;
 with System.BB.Protection;
 
 with System.Multiprocessors;
@@ -106,6 +109,11 @@ package body System.BB.Execution_Time is
       Sum : System.BB.Time.Time := System.BB.Time.Time'First;
 
    begin
+      --  Protect against interruption the addition of all
+      --  Interrupt_Execution_Time and Elapsed_Time.
+
+      System.BB.Protection.Enter_Kernel;
+
       --  Protect shared access on multiprocessor systems
 
       if System.BB.Parameters.Multiprocessor then
@@ -126,6 +134,8 @@ package body System.BB.Execution_Time is
       if System.BB.Parameters.Multiprocessor then
          Unlock (Interrupt_Exec_Time_Lock);
       end if;
+
+      System.BB.Protection.Leave_Kernel;
 
       return Sum;
    end Global_Interrupt_Clock;

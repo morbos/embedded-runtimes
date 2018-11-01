@@ -50,8 +50,8 @@ project Runtime_Build is
 
   type Build_Type is ("Production", "Debug", "Gnatcov");
 
-  Build : Build_Type := external ("BUILD_RTS", "Production");
---  Build : Build_Type := external ("BUILD_RTS", "Debug");
+--  Build : Build_Type := external ("BUILD_RTS", "Production");
+  Build : Build_Type := external ("BUILD_RTS", "Debug");
 
   package Compiler is
      --  COMFLAGS here is common flags (used for C and Ada).

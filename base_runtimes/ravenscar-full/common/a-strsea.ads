@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---          Copyright (C) 1992-2010, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2018, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -26,10 +31,10 @@
 
 --  This package contains the search functions from Ada.Strings.Fixed. They
 --  are separated out because they are shared by Ada.Strings.Bounded and
---  Ada.Strings.Unbounded, and we don't want to drag other irrelevant stuff
---  from Ada.Strings.Fixed when using the other two packages. We make this
---  a private package, since user programs should access these subprograms
---  via one of the standard string packages.
+--  Ada.Strings.Unbounded, and we don't want to drag in other irrelevant stuff
+--  from Ada.Strings.Fixed when using the other two packages. We make this a
+--  private package, since user programs should access these subprograms via
+--  one of the standard string packages.
 
 with Ada.Strings.Maps;
 

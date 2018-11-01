@@ -206,6 +206,14 @@ procedure Setup_Pll is
       --  Configure low-speed internal clock if enabled
 
       if MSI_Enabled then
+         PWR_Periph.CR1.DBP := 1;  --  This allows writes too vvvvvv
+         --  To ENA MSIPLL we need to get LSE ready
+         RCC_Periph.BDCR.RTCEN := 1;
+         RCC_Periph.BDCR.RTCSEL := 1;
+         RCC_Periph.BDCR.LSEON := 1;
+         loop
+            exit when RCC_Periph.BDCR.LSERDY = 1;
+         end loop;
 
          RCC_Periph.CR.MSIRANGE := 6;  --  Fix this to have symbology. <- 4Mhz
          RCC_Periph.CR.MSIRGSEL := 1;
@@ -215,6 +223,9 @@ procedure Setup_Pll is
          loop
             exit when RCC_Periph.CR.MSIRDY = 1;
          end loop;
+
+         RCC_Periph.CR.MSIPLLEN := 1;
+
       end if;
 
       --  Activate PLL if enabled

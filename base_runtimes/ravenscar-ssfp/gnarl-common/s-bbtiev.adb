@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  B o d y                                 --
 --                                                                          --
---                     Copyright (C) 2011-2016, AdaCore                     --
+--                     Copyright (C) 2011-2018, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,23 +15,27 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with System.BB.CPU_Primitives.Multiprocessors;
 with System.BB.Parameters;
-with System.BB.Protection;
 with System.BB.Threads;
 with System.BB.Threads.Queues;
+with System.BB.Board_Support;
 
 package body System.BB.Timing_Events is
 
    use type System.BB.Time.Time;
    use System.Multiprocessors;
-   use System.BB.CPU_Primitives.Multiprocessors;
+   use System.BB.Board_Support.Multiprocessors;
    use System.BB.Threads;
 
    Events_Table : array (CPU) of Timing_Event_Access := (others => null);
@@ -216,17 +220,6 @@ package body System.BB.Timing_Events is
                and then Event.Timeout = At_Time
                and then Time.Get_Next_Timeout (CPU_Id) <= At_Time));
    end Set_Handler;
-
-   ---------------------
-   -- Current_Handler --
-   ---------------------
-
-   function Current_Handler
-     (Event : Timing_Event) return Timing_Event_Handler
-   is
-   begin
-      return Event.Handler;
-   end Current_Handler;
 
    --------------------
    -- Cancel_Handler --

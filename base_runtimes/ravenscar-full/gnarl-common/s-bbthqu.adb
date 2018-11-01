@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2005 The European Space Agency            --
---                     Copyright (C) 2003-2016, AdaCore                     --
+--                     Copyright (C) 2003-2018, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -17,8 +17,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -34,7 +39,7 @@ pragma Restrictions (No_Elaboration_Code);
 package body System.BB.Threads.Queues is
 
    use System.Multiprocessors;
-   use System.BB.CPU_Primitives.Multiprocessors;
+   use System.BB.Board_Support.Multiprocessors;
 
    ----------------
    -- Local data --
@@ -50,7 +55,7 @@ package body System.BB.Threads.Queues is
 
    procedure Change_Priority (Thread : Thread_Id; Priority : Integer)
    is
-      CPU_Id       : constant CPU := Current_CPU;
+      CPU_Id       : constant CPU := BOSUMU.Current_CPU;
       Head         : Thread_Id;
       Prev_Pointer : Thread_Id;
 
@@ -411,7 +416,6 @@ package body System.BB.Threads.Queues is
       use Time;
 
       CPU_Id        : constant CPU := Current_CPU;
-      Next_Alarm    : Time.Time;
       Wakeup_Thread : Thread_Id;
 
    begin
@@ -433,10 +437,7 @@ package body System.BB.Threads.Queues is
          Insert (Wakeup_Thread);
       end loop;
 
-      --  Set the timer for the next alarm on this CPU
-
-      Next_Alarm := Get_Next_Timeout (CPU_Id);
-      Update_Alarm (Next_Alarm);
+      --  Note: the caller (BB.Time.Alarm_Handler) must set the next alarm
    end Wakeup_Expired_Alarms;
 
    -----------
