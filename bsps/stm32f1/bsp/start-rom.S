@@ -41,9 +41,6 @@ __vectors0:
 	.thumb_func
 	.globl _start_rom
 _start_rom:
-        /* Enable FPU and cache when appropriate */
-        bl _stm32_start_common
-
 	/* Copy .data */
 	movw	r0,#:lower16:__data_start
 	movt	r0,#:upper16:__data_start
@@ -82,12 +79,6 @@ _start_rom:
 
 	@ Setup MPU
 
-	@@ Enable Undefined to not go to Hardfault
-	ldr	r1,=0xe000ed00
-	ldr	r0,[r1,#0x24]
-	orr	r0,#(1 << 18)
-	str	r0,[r1,#0x24]
-
 @ MPU region defines
 
 Region_32B     = 0b00100
@@ -119,27 +110,29 @@ Region_1G      = 0b11101
 Region_2G      = 0b11110
 Region_4G      = 0b11111
 
-XN	= (1 << 28)
+XN	      = (1 << 28)
+Device_Space  = (1 << 17)
 Region_Enable =	1
-Full_Access = 0x3
+No_Access     = 0
+Full_Access   = 0x3
+Read_Only     = 0b110
 
-#if 0
-	@ Region 0 - flash
+	ldr	r1,=0xe000ed00
+	@ Region 0 - No access the entire SoC (low pri)
         mov     r2, #0
 	str	r2,[r1,#0x98]	@ region index0
 	ldr	r2,=0x00000000
 	str	r2,[r1,#0x9c]	@ region base 0x00000000
-	@@ Flash is allowed to exec
-        ldr     r2,=(Full_Access << 24) | (Region_128K << 1) | Region_Enable
+        ldr     r2,=(No_Access << 24) | XN | (Region_4G << 1) | Region_Enable
 	str	r2,[r1,#0xa0]
-#endif
+
 	@ Region 1 - flash
         mov     r2, #1
 	str	r2,[r1,#0x98]	@ region index1
 	ldr	r2,=0x08000000
 	str	r2,[r1,#0x9c]	@ region base 0x08000000
 	@@ Flash is allowed to exec
-        ldr     r2,=(Full_Access << 24) | (Region_128K << 1) | Region_Enable
+        ldr     r2,=(Read_Only << 24) | (Region_128K << 1) | Region_Enable
 	str	r2,[r1,#0xa0]
 
 	@ Region 2 - RAM
@@ -155,15 +148,23 @@ Full_Access = 0x3
 	str	r2,[r1,#0x98]	@ region index3
 	ldr	r2,=0x40000000
 	str	r2,[r1,#0x9c]
-        ldr     r2,=(Full_Access << 24) | XN | (Region_512M << 1) | Region_Enable
+        ldr     r2,=(Full_Access << 24) | Device_Space | (Region_512M << 1) | Region_Enable
 	str	r2,[r1,#0xa0]
 
 	@ Region 4 - Device
         mov     r2, #4
 	str	r2,[r1,#0x98]	@ region index4
+	ldr	r2,=0x50000000
+	str	r2,[r1,#0x9c]
+        ldr     r2,=(Full_Access << 24) | Device_Space | (Region_512K << 1) | Region_Enable
+	str	r2,[r1,#0xa0]
+
+	@ Region 5 - Device
+        mov     r2, #5
+	str	r2,[r1,#0x98]	@ region index5
 	ldr	r2,=0xe0000000
 	str	r2,[r1,#0x9c]
-        ldr     r2,=(Full_Access << 24) | XN | (Region_64K << 1) | Region_Enable
+        ldr     r2,=(Full_Access << 24) | Device_Space | (Region_64K << 1) | Region_Enable
 	str	r2,[r1,#0xa0]
 
 	@@ Enable the MPU

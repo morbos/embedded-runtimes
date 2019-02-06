@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---         Copyright (C) 2014-2015, Free Software Foundation, Inc.          --
+--         Copyright (C) 2014-2018, Free Software Foundation, Inc.          --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -281,10 +286,7 @@ package body System.Libm_Single is
          X := Multiply_Add (-K_Hi, C4, Multiply_Add (-K_Lo, C3, X));
          X := Multiply_Add (-K_Lo, C4, X);
 
-         if abs K < 2.0**62 then
-            Q := Quadrant ((Int_64 (Q) + Int_64 (N)) mod 4);
-
-         elsif abs K_Lo <= 2.0**62 then
+         if abs K < 2.0**62 or else abs K_Lo <= 2.0**62 then
             Q := Quadrant ((Int_64 (Q) + Int_64 (N)) mod 4);
          end if;
 
@@ -654,7 +656,7 @@ package body System.Libm_Single is
       One_Over_Sixteen : constant := 0.0625;
 
       M : constant Integer := F'Exponent (Left);
-      G : constant F       := F'Fraction (Left);
+      G : constant F       := F'Fraction (abs Left);
       Y : constant F       := Right;
       Z : F;
       P : Integer;
@@ -663,6 +665,7 @@ package body System.Libm_Single is
       MM, PP, IW1, I            : Integer;
       Is_Special                : Boolean;
       Special_Result            : F;
+      Negate                    : Boolean := False;
 
    begin
       --  Special values
@@ -672,6 +675,19 @@ package body System.Libm_Single is
       if Is_Special then
          return Special_Result;
       else
+         --  For integral valued Y, negative X is ok but this algorithm
+         --  doesn't handle that case, so we use the absolute value of X
+         --  and then adjust the sign at return.
+
+         if Left < 0.0 then
+            --  Right not integral handled by Pow_Special_Cases
+
+            I := Integer (Right);
+            if I mod 2 = 1 then
+               Negate := True;
+            end if;
+         end if;
+
          --  Left**Right is calculated using the formula
          --  2**(Right * Log2 (Left))
 
@@ -714,7 +730,13 @@ package body System.Libm_Single is
          PP := 16 * MM - IW1;
 
          Z := Approx_Exp2 (W2);
-         return Reconstruct_Pow (Z, PP, MM);
+         W1 := Reconstruct_Pow (Z, PP, MM);
+
+         if Negate then
+            return -W1;
+         else
+            return W1;
+         end if;
       end if;
    end Pow;
 

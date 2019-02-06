@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---                     Copyright (C) 2000-2010, AdaCore                     --
+--                     Copyright (C) 2000-2018, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -52,9 +57,9 @@ package GNAT.Exceptions is
    --  which has the same effect as passing a pointer.
 
    --  This type is not private because keeping it by reference would require
-   --  defining it in a way (e.g a tagged type) that would drag other run time
-   --  files, which is unwanted in the case of e.g ravenscar where we want to
-   --  minimize the number of run time files needed by default.
+   --  defining it in a way (e.g. using a tagged type) that would drag in other
+   --  run-time files, which is unwanted in the case of e.g. Ravenscar where we
+   --  want to minimize the number of run-time files needed by default.
 
    CE : constant Exception_Type;  -- Constraint_Error
    PE : constant Exception_Type;  -- Program_Error

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  B o d y                                 --
 --                                                                          --
---                     Copyright (C) 1999-2014, AdaCore                     --
+--                     Copyright (C) 1999-2018, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -39,24 +44,11 @@ pragma Polling (Off);
 --  tasking operations. It causes infinite loops and other problems.
 
 with System.Task_Primitives.Operations;
---  used for Enter_Task
---           Wakeup
---           Get_Priority
---           Set_Priority
---           Sleep
-
-with System.Secondary_Stack;
---  used for SS_Init
---           Default_Secondary_Stack_Size
-
-with System.Storage_Elements;
---  used for Storage_Array
 
 package body System.Tasking.Restricted.Stages is
 
    use System.Secondary_Stack;
    use System.Task_Primitives.Operations;
-   use System.Task_Info;
 
    Tasks_Activation_Chain : Task_Id;
    --  Chain of all the tasks to activate, when the sequential elaboration
@@ -70,14 +62,16 @@ package body System.Tasking.Restricted.Stages is
    --  Activate the list of tasks started by Chain
 
    procedure Create_Restricted_Task
-     (Priority      : Integer;
-      Stack_Address : System.Address;
-      Size          : System.Parameters.Size_Type;
-      Task_Info     : System.Task_Info.Task_Info_Type;
-      CPU           : Integer;
-      State         : Task_Procedure_Access;
-      Discriminants : System.Address;
-      Created_Task  : Task_Id);
+     (Priority          : Integer;
+      Stack_Address     : System.Address;
+      Size              : System.Parameters.Size_Type;
+      Sec_Stack_Address : System.Secondary_Stack.SS_Stack_Ptr;
+      Sec_Stack_Size    : System.Parameters.Size_Type;
+      Task_Info         : System.Task_Info.Task_Info_Type;
+      CPU               : Integer;
+      State             : Task_Procedure_Access;
+      Discriminants     : System.Address;
+      Created_Task      : Task_Id);
    --  Code shared between Create_Restricted_Task (the concurrent version) and
    --  Create_Restricted_Task_Sequential. See comment of the former in the
    --  specification of this package.
@@ -102,26 +96,9 @@ package body System.Tasking.Restricted.Stages is
    --  from the stack base.
 
    procedure Task_Wrapper (Self_ID : Task_Id) is
-      use type System.Storage_Elements.Storage_Offset;
-
-      Sec_Stack_Size : constant Storage_Elements.Storage_Offset :=
-                         Self_ID.Common.Compiler_Data.Pri_Stack_Info.Size
-                           * SSE.Storage_Offset
-                              (Parameters.Sec_Stack_Percentage)
-                           / 100;
-
-      Secondary_Stack : aliased Storage_Elements.Storage_Array
-                          (1 .. Sec_Stack_Size);
-      for Secondary_Stack'Alignment use Standard'Maximum_Alignment;
-      --  This is the secondary stack data. Note that it is critical that this
-      --  have maximum alignment, since any kind of data can be allocated here.
-
       TH : Termination_Handler := null;
 
    begin
-      Self_ID.Common.Compiler_Data.Sec_Stack_Addr := Secondary_Stack'Address;
-      SS_Init (Secondary_Stack'Address, Integer (Sec_Stack_Size));
-
       --  Initialize low-level TCB components, that cannot be initialized by
       --  the creator.
 
@@ -287,18 +264,20 @@ package body System.Tasking.Restricted.Stages is
    ----------------------------
 
    procedure Create_Restricted_Task
-     (Priority      : Integer;
-      Stack_Address : System.Address;
-      Size          : System.Parameters.Size_Type;
-      Task_Info     : System.Task_Info.Task_Info_Type;
-      CPU           : Integer;
-      State         : Task_Procedure_Access;
-      Discriminants : System.Address;
-      Created_Task  : Task_Id)
+     (Priority          : Integer;
+      Stack_Address     : System.Address;
+      Size              : System.Parameters.Size_Type;
+      Sec_Stack_Address : System.Secondary_Stack.SS_Stack_Ptr;
+      Sec_Stack_Size    : System.Parameters.Size_Type;
+      Task_Info         : System.Task_Info.Task_Info_Type;
+      CPU               : Integer;
+      State             : Task_Procedure_Access;
+      Discriminants     : System.Address;
+      Created_Task      : Task_Id)
    is
-      Base_Priority : System.Any_Priority;
-      Base_CPU      : System.Multiprocessors.CPU_Range;
-      Success       : Boolean;
+      Base_Priority        : System.Any_Priority;
+      Base_CPU             : System.Multiprocessors.CPU_Range;
+      Success              : Boolean;
 
    begin
       Base_Priority :=
@@ -338,28 +317,37 @@ package body System.Tasking.Restricted.Stages is
       --  No need to lock Self_ID here, since only environment task is running
 
       Initialize_ATCB
-        (State, Discriminants, Base_Priority, Base_CPU,
-         Task_Info, Stack_Address, Size, Created_Task, Success);
+        (State, Discriminants, Base_Priority, Base_CPU, Task_Info,
+         Stack_Address, Size, Created_Task, Success);
 
       if not Success then
          raise Program_Error;
       end if;
 
       Created_Task.Entry_Call.Self := Created_Task;
+
+      --  Initialize the secondary stack as early as possible since it may be
+      --  used by Ada code within the task.
+
+      Created_Task.Common.Compiler_Data.Sec_Stack_Ptr := Sec_Stack_Address;
+      SS_Init
+        (Created_Task.Common.Compiler_Data.Sec_Stack_Ptr, Sec_Stack_Size);
    end Create_Restricted_Task;
 
    procedure Create_Restricted_Task
-     (Priority      : Integer;
-      Stack_Address : System.Address;
-      Size          : System.Parameters.Size_Type;
-      Task_Info     : System.Task_Info.Task_Info_Type;
-      CPU           : Integer;
-      State         : Task_Procedure_Access;
-      Discriminants : System.Address;
-      Elaborated    : Access_Boolean;
-      Chain         : in out Activation_Chain;
-      Task_Image    : String;
-      Created_Task  : Task_Id)
+     (Priority          : Integer;
+      Stack_Address     : System.Address;
+      Stack_Size        : System.Parameters.Size_Type;
+      Sec_Stack_Address : System.Secondary_Stack.SS_Stack_Ptr;
+      Sec_Stack_Size    : System.Parameters.Size_Type;
+      Task_Info         : System.Task_Info.Task_Info_Type;
+      CPU               : Integer;
+      State             : Task_Procedure_Access;
+      Discriminants     : System.Address;
+      Elaborated        : Access_Boolean;
+      Chain             : in out Activation_Chain;
+      Task_Image        : String;
+      Created_Task      : Task_Id)
    is
    begin
       if Partition_Elaboration_Policy = 'S' then
@@ -370,13 +358,15 @@ package body System.Tasking.Restricted.Stages is
          --  sequential, activation must be deferred.
 
          Create_Restricted_Task_Sequential
-           (Priority, Stack_Address, Size, Task_Info, CPU, State,
-            Discriminants, Elaborated, Task_Image, Created_Task);
+           (Priority, Stack_Address, Stack_Size, Sec_Stack_Address,
+            Sec_Stack_Size, Task_Info, CPU, State, Discriminants, Elaborated,
+            Task_Image, Created_Task);
 
       else
          Create_Restricted_Task
-           (Priority, Stack_Address, Size, Task_Info, CPU, State,
-            Discriminants, Created_Task);
+           (Priority, Stack_Address, Stack_Size, Sec_Stack_Address,
+             Sec_Stack_Size, Task_Info, CPU, State, Discriminants,
+             Created_Task);
 
          --  Append this task to the activation chain
 
@@ -390,22 +380,25 @@ package body System.Tasking.Restricted.Stages is
    ---------------------------------------
 
    procedure Create_Restricted_Task_Sequential
-     (Priority      : Integer;
-      Stack_Address : System.Address;
-      Size          : System.Parameters.Size_Type;
-      Task_Info     : System.Task_Info.Task_Info_Type;
-      CPU           : Integer;
-      State         : Task_Procedure_Access;
-      Discriminants : System.Address;
-      Elaborated    : Access_Boolean;
-      Task_Image    : String;
-      Created_Task  : Task_Id)
+     (Priority          : Integer;
+      Stack_Address     : System.Address;
+      Stack_Size        : System.Parameters.Size_Type;
+      Sec_Stack_Address : System.Secondary_Stack.SS_Stack_Ptr;
+      Sec_Stack_Size    : System.Parameters.Size_Type;
+      Task_Info         : System.Task_Info.Task_Info_Type;
+      CPU               : Integer;
+      State             : Task_Procedure_Access;
+      Discriminants     : System.Address;
+      Elaborated        : Access_Boolean;
+      Task_Image        : String;
+      Created_Task      : Task_Id)
    is
       pragma Unreferenced (Task_Image, Elaborated);
 
    begin
-      Create_Restricted_Task (Priority, Stack_Address, Size, Task_Info,
-                              CPU, State, Discriminants, Created_Task);
+      Create_Restricted_Task
+        (Priority, Stack_Address, Stack_Size, Sec_Stack_Address,
+         Sec_Stack_Size, Task_Info, CPU, State, Discriminants, Created_Task);
 
       --  Append this task to the activation chain
 

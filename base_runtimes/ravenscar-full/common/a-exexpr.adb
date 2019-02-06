@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 1992-2013, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2018, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -110,7 +115,8 @@ package body Exception_Propagation is
       GCC_Exception : not null GCC_Exception_Access);
    pragma Export
      (C, Set_Exception_Parameter, "__gnat_set_exception_parameter");
-   --  Called inserted by gigi to initialize the exception parameter
+   --  Called inserted by gigi to set the exception choice parameter from the
+   --  gcc occurrence.
 
    procedure Set_Foreign_Occurrence (Excep : EOA; Mo : System.Address);
    --  Utility routine to initialize occurrence Excep from a foreign exception
@@ -343,7 +349,7 @@ package body Exception_Propagation is
    -- Propagate_Exception --
    -------------------------
 
-   procedure Propagate_Exception (Excep : EOA) is
+   procedure Propagate_Exception (Excep : Exception_Occurrence) is
    begin
       Propagate_GCC_Exception (To_GCC_Exception (Excep.Machine_Occurrence));
    end Propagate_Exception;

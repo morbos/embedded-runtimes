@@ -80,9 +80,132 @@ _start_rom:
 	bne	0b
 
 1:
+	@ Setup MPU
+
+	@@ Enable Undefined to not go to Hardfault
+	ldr	r1,=0xe000ed00
+	ldr	r0,[r1,#0x24]
+	orr	r0,#(1 << 18)
+	str	r0,[r1,#0x24]
+
+Region_32B     = 0b00100
+Region_64B     = 0b00101
+Region_128B    = 0b00110
+Region_256B    = 0b00111
+Region_512B    = 0b01000
+Region_1K      = 0b01001
+Region_2K      = 0b01010
+Region_4K      = 0b01011
+Region_8K      = 0b01100
+Region_16K     = 0b01101
+Region_32K     = 0b01110
+Region_64K     = 0b01111
+Region_128K    = 0b10000
+Region_256K    = 0b10001
+Region_512K    = 0b10010
+Region_1M      = 0b10011
+Region_2M      = 0b10100
+Region_4M      = 0b10101
+Region_8M      = 0b10110
+Region_16M     = 0b10111
+Region_32M     = 0b11000
+Region_64M     = 0b11001
+Region_128M    = 0b11010
+Region_256M    = 0b11011
+Region_512M    = 0b11100
+Region_1G      = 0b11101
+Region_2G      = 0b11110
+Region_4G      = 0b11111
+
+XN	      = (1 << 28)
+Device_Space  = (1 << 17)
+Region_Enable =	1
+No_Access     = 0
+Full_Access   = 0x3
+Read_Only     = 0b110
+
+	ldr	r1,=0xe000ed00
+	@ Region 0 - No access the entire SoC (low pri)
+        mov     r2, #0
+	str	r2,[r1,#0x98]	@ region index0
+	ldr	r2,=0x00000000
+	str	r2,[r1,#0x9c]	@ region base 0x00000000
+        ldr     r2,=(No_Access << 24) | (Region_4G << 1) | Region_Enable
+	str	r2,[r1,#0xa0]
+
+	@ Region 1 - flash
+        mov     r2, #1
+	str	r2,[r1,#0x98]	@ region index1
+	ldr	r2,=0x08000000
+	str	r2,[r1,#0x9c]	@ region base 0x08000000
+	@@ Flash is allowed to exec
+        ldr     r2,=(Read_Only << 24) | (Region_1M << 1) | Region_Enable
+	str	r2,[r1,#0xa0]
+
+	@ Region 2 - RAM
+        mov     r2, #2
+	str	r2,[r1,#0x98]	@ region index2
+	ldr	r2,=0x20000000
+	str	r2,[r1,#0x9c]
+	@ vvvv act its 96K but.. its 64k or 128k buckets...
+        ldr     r2,=(Full_Access << 24) | XN | (Region_128K << 1) | Region_Enable
+	str	r2,[r1,#0xa0]
+
+	@ Region 3 - RAM
+        mov     r2, #3
+	str	r2,[r1,#0x98]	@ region index3
+	ldr	r2,=0x10000000
+	str	r2,[r1,#0x9c]
+        ldr     r2,=(Full_Access << 24) | XN | (Region_32K << 1) | Region_Enable
+	str	r2,[r1,#0xa0]
+
+	@ Region 4 - Device
+        mov     r2, #4
+	str	r2,[r1,#0x98]	@ region index4
+	ldr	r2,=0x40000000
+	str	r2,[r1,#0x9c]
+        ldr     r2,=(Full_Access << 24) | Device_Space | (Region_256M << 1) | Region_Enable
+	str	r2,[r1,#0xa0]
+
+	@ Region 5 - Device
+        mov     r2, #5
+	str	r2,[r1,#0x98]	@ region index5
+	ldr	r2,=0x50000000
+	str	r2,[r1,#0x9c]
+        ldr     r2,=(Full_Access << 24) | Device_Space | (Region_512K << 1) | Region_Enable
+	str	r2,[r1,#0xa0]
+
+	@ Region 6 - Device
+        mov     r2, #6
+	str	r2,[r1,#0x98]	@ region index6
+	ldr	r2,=0xe0000000
+	str	r2,[r1,#0x9c]
+        ldr     r2,=(Full_Access << 24) | Device_Space | (Region_64K << 1) | Region_Enable
+	str	r2,[r1,#0xa0]
+
+	@ Region 7 - Device
+        mov     r2, #7
+	str	r2,[r1,#0x98]	@ region index7
+	ldr	r2,=0x1fff0000
+	str	r2,[r1,#0x9c]
+        ldr     r2,=(Full_Access << 24) | Device_Space | (Region_64K << 1) | Region_Enable
+	str	r2,[r1,#0xa0]
+
+	@@ Enable the MPU
+	mov	r2,#1
+        dsb
+	str	r2,[r1,#0x94]
+	isb
+
 	bl	_ada_setup_pll
 	bl	main
 
 	bl	_exit
 
-hang:   b .
+hang:
+	ldr	r0,=0xe000ed00
+	ldr	r1,[r0,#0x28]	/* Configurable Fault SR */
+	ldr	r2,[r0,#0x2C]	/* Hard Fault SR */
+	ldr	r3,[r0,#0x38]   /* Bus Fault Addr Reg*/
+	ldr	r0,[r0,#0x24]   /* System Handler ctl state reg */
+	b .

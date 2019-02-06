@@ -115,24 +115,6 @@ procedure Setup_Pll is
                              when DIV128 => SYSCLK / 128,
                              when DIV256 => SYSCLK / 256,
                              when DIV512 => SYSCLK / 512));
-      PCLK1       : constant Integer :=
-                      (if not APB1_PRE.Enabled
-                       then HCLK
-                       else
-                         (case APB1_PRE.Value is
-                             when DIV2  => HCLK / 2,
-                             when DIV4  => HCLK / 4,
-                             when DIV8  => HCLK / 8,
-                             when DIV16 => HCLK / 16));
-      PCLK2       : constant Integer :=
-                      (if not APB2_PRE.Enabled
-                       then HCLK
-                       else
-                         (case APB2_PRE.Value is
-                             when DIV2  => HCLK / 2,
-                             when DIV4  => HCLK / 4,
-                             when DIV8  => HCLK / 8,
-                             when DIV16 => HCLK / 16));
 
       function To_AHB is new Ada.Unchecked_Conversion
         (AHB_Prescaler, UInt4);

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                     Copyright (C) 1999-2015, AdaCore                     --
+--                     Copyright (C) 1999-2018, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -63,9 +68,9 @@ package body System.Regexp is
       Num_States    : State_Index) is
    record
       Map            : Mapping;
+      Case_Sensitive : Boolean;
       States         : Regexp_Array (1 .. Num_States, 0 .. Alphabet_Size);
       Is_Final       : Boolean_Array (1 .. Num_States);
-      Case_Sensitive : Boolean;
    end record;
    --  Deterministic finite-state machine
 
@@ -546,7 +551,7 @@ package body System.Regexp is
                     ("Incorrect character ']' in regular expression", J);
 
                when '\' =>
-                  if J < S'Last  then
+                  if J < S'Last then
                      J := J + 1;
                      Add_In_Map (S (J));
 
@@ -965,7 +970,10 @@ package body System.Regexp is
                         End_State := Current_State;
                      end if;
 
-                  when '*' | '+' | '?' | Close_Paren | Close_Bracket =>
+                  when Close_Bracket
+                     | Close_Paren
+                     | '*' | '+' | '?'
+                  =>
                      Raise_Exception
                        ("Incorrect character in regular expression :", J);
 
@@ -1015,7 +1023,6 @@ package body System.Regexp is
 
                         End_State := Current_State;
                      end if;
-
                end case;
 
                if Start_State = 0 then
@@ -1154,7 +1161,6 @@ package body System.Regexp is
             J := Start_Index;
             while J <= End_Index loop
                case S (J) is
-
                   when Open_Bracket =>
                      Current_State := Current_State + 1;
 
@@ -1339,7 +1345,6 @@ package body System.Regexp is
                      end if;
 
                      End_State := Current_State;
-
                end case;
 
                if Start_State = 0 then

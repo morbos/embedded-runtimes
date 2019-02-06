@@ -39,6 +39,7 @@ with System.BB.Board_Parameters; use System.BB.Board_Parameters;
 with System.STM32;               use System.STM32;
 
 procedure Setup_Pll is
+
    procedure Initialize_Clocks;
    procedure Reset_Clocks;
 
@@ -75,7 +76,7 @@ procedure Setup_Pll is
       --  Arbitrary fixed to a convenient value
 
       PLLCLKIN    : constant Integer := MSI_Clock_Frequency;
-      PLLM_Value  : constant Integer  := 1;
+      PLLM_Value  : constant Integer  := 6;
 
       PLLN_Value  : constant Integer := 40;
 
@@ -154,6 +155,20 @@ procedure Setup_Pll is
            or else PCLK2 not in PCLK2_Range,
            "Invalid AHB/APB prescalers configuration");
 
+      --  Configure flash
+      --  Must be done before increasing the frequency, otherwise the CPU
+      --  won't be able to fetch new instructions.
+      FLASH_Periph.ACR.ICEN := 0;
+      FLASH_Periph.ACR.DCEN := 0;
+      FLASH_Periph.ACR.ICRST := 1;
+      FLASH_Periph.ACR.DCRST := 1;
+      FLASH_Periph.ACR :=
+        (LATENCY => FLASH_Latency,
+         ICEN    => 1,
+         DCEN    => 1,
+         PRFTEN  => 1,
+         others  => <>);
+
       --  PWR clock enable
 
       RCC_Periph.APB1ENR1.PWREN := 1;
@@ -206,8 +221,16 @@ procedure Setup_Pll is
       --  Configure low-speed internal clock if enabled
 
       if MSI_Enabled then
+         PWR_Periph.CR1.DBP := 1;  --  This allows writes too vvvvvv
+         --  To ENA MSIPLL we need to get LSE ready
+         RCC_Periph.BDCR.RTCEN := 1;
+         RCC_Periph.BDCR.RTCSEL := 1;
+         RCC_Periph.BDCR.LSEON := 1;
+         loop
+            exit when RCC_Periph.BDCR.LSERDY = 1;
+         end loop;
 
-         RCC_Periph.CR.MSIRANGE := 6;  --  Fix this to have symbology. <- 4Mhz
+         RCC_Periph.CR.MSIRANGE := 16#B#;  --  ~48Mhz
          RCC_Periph.CR.MSIRGSEL := 1;
 
          RCC_Periph.CR.MSION := 1;
@@ -215,6 +238,9 @@ procedure Setup_Pll is
          loop
             exit when RCC_Periph.CR.MSIRDY = 1;
          end loop;
+
+         RCC_Periph.CR.MSIPLLEN := 1;
+
       end if;
 
       --  Activate PLL if enabled
@@ -225,41 +251,39 @@ procedure Setup_Pll is
          --  Configure the PLL clock source, multiplication and division
          --  factors
          RCC_Periph.PLLCFGR :=
-           (PLLM   => PLLM,
-            PLLN   => PLLN,
-            PLLP   => PLLP,
-            PLLR   => 0, -- fix this should be a computation
-            PLLREN => 1,
-            PLLPDIV => 7,
-            PLLQ   => PLLQ,
-            PLLSRC => PLL_Source'Enum_Rep (PLL_SRC_MSI), --  Fix this.
-            others => <>);
+              (PLLM   => PLLM,
+               PLLN   => PLLN,
+               PLLP   => PLLP,
+               PLLR   => 1, -- fix this should be a computation
+               PLLREN => 1,
+               PLLPDIV => 7,
+               PLLQ   => PLLQ,
+               PLLSRC => PLL_Source'Enum_Rep (PLL_SRC_MSI), --  Fix this.
+               others => <>);
 
          RCC_Periph.CR.PLLON := 1;
+
          loop
             exit when RCC_Periph.CR.PLLRDY = 1;
          end loop;
+
       end if;
+
+      RCC_Periph.CCIPR.CLK48SEL := 3;
+
+      --  Enable PLLSAI1
+      RCC_Periph.PLLSAI1CFGR.PLLSAI1N := 16#2b#; --  48mhz
+      RCC_Periph.PLLSAI1CFGR.PLLSAI1PEN := 1;
+
+      RCC_Periph.CR.PLLSAI1ON := 1;
+      loop
+         exit when RCC_Periph.CR.PLLSAI1RDY = 1;
+      end loop;
 
       --  Configure OverDrive mode
       if Activate_Overdrive then
          System.BB.MCU_Parameters.PWR_Overdrive_Enable;
       end if;
-
-      --  Configure flash
-      --  Must be done before increasing the frequency, otherwise the CPU
-      --  won't be able to fetch new instructions.
-
-      FLASH_Periph.ACR.ICEN := 0;
-      FLASH_Periph.ACR.DCEN := 0;
-      FLASH_Periph.ACR.ICRST := 1;
-      FLASH_Periph.ACR.DCRST := 1;
-      FLASH_Periph.ACR :=
-        (LATENCY => FLASH_Latency,
-         ICEN    => 1,
-         DCEN    => 1,
-         PRFTEN  => 1,
-         others  => <>);
 
       --  Configure derived clocks
 
@@ -302,6 +326,6 @@ procedure Setup_Pll is
    end Reset_Clocks;
 
 begin
-   Reset_Clocks;
-   Initialize_Clocks;
+      Reset_Clocks;
+      Initialize_Clocks;
 end Setup_Pll;

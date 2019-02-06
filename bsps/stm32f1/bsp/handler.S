@@ -72,7 +72,7 @@ __vectors:
 	.word __gnat_irq_trap        /* 55 USART3 */
 	.word __gnat_irq_trap        /* 56 EXTI15_10 */
 	.word __gnat_irq_trap        /* 57 RTCAlarm */
-	.word __gnat_irq_trap        /* 58 IRQ 42. */
+	.word __gnat_irq_trap        /* 58 USBWakeup_Interrupt */
 	.word __gnat_irq_trap        /* 59 TIM8_BRK */
 	.word __gnat_irq_trap        /* 60 TIM8_UP */
 	.word __gnat_irq_trap        /* 61 TIM8_TRG_COM */
@@ -90,29 +90,6 @@ __vectors:
 	.word __gnat_irq_trap        /* 73 DMA2_Channel2 */
 	.word __gnat_irq_trap        /* 74 DMA2_Channel3 */
 	.word __gnat_irq_trap        /* 75 DMA2_Channel4_5 */
-	.word __gnat_irq_trap        /* 76 IRQ 60. */
-	.word __gnat_irq_trap        /* 77 IRQ 61. */
-	.word __gnat_irq_trap        /* 78 IRQ 62. */
-	.word __gnat_irq_trap        /* 79 IRQ 63. */
-	.word __gnat_irq_trap        /* 80 IRQ 64. */
-	.word __gnat_irq_trap        /* 81 IRQ 65. */
-	.word __gnat_irq_trap        /* 82 IRQ 66. */
-	.word __gnat_irq_trap        /* 83 IRQ 67. */
-	.word __gnat_irq_trap        /* 84 IRQ 68. */
-	.word __gnat_irq_trap        /* 85 IRQ 69. */
-	.word __gnat_irq_trap        /* 86 IRQ 70. */
-	.word __gnat_irq_trap        /* 87 IRQ 71. */
-	.word __gnat_irq_trap        /* 88 IRQ 72. */
-	.word __gnat_irq_trap        /* 89 IRQ 73. */
-	.word __gnat_irq_trap        /* 90 IRQ 74. */
-	.word __gnat_irq_trap        /* 91 IRQ 75. */
-	.word __gnat_irq_trap        /* 92 IRQ 76. */
-	.word __gnat_irq_trap        /* 93 IRQ 77. */
-	.word __gnat_irq_trap        /* 94 IRQ 78. */
-	.word __gnat_irq_trap        /* 95 IRQ 79. */
-	.word __gnat_irq_trap        /* 96 IRQ 80. */
-	.word __gnat_irq_trap        /* 97 FPU */
-
 	.text
 
 	.thumb_func
@@ -144,4 +121,11 @@ __gnat_sys_tick_trap:
 	.size __gnat_sys_tick_trap, . - __gnat_sys_tick_trap
 
 	.thumb_func
-fault:	b fault
+fault:
+	ldr	r0,=0xe000ed00
+	ldr	r1,[r0,#0x28]	/* Configurable Fault SR */
+	ldr	r2,[r0,#0x2C]	/* Hard Fault SR */
+	ldr	r3,[r0,#0x38]   /* Bus Fault Addr Reg*/
+	ldr	r0,[r0,#0x24]   /* System Handler ctl state reg */
+fault_spin:
+	b fault_spin

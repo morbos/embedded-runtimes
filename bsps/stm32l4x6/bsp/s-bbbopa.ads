@@ -47,6 +47,6 @@ package System.BB.Board_Parameters is
 
    MSI_Clock_Frequency : constant := 4_000_000;  -- ~4mhz
 
-   FLASH_Latency : constant := 5;
+   FLASH_Latency : constant := 4;
 
 end System.BB.Board_Parameters;

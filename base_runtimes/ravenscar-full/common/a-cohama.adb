@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 2004-2015, Free Software Foundation, Inc.         --
+--          Copyright (C) 2004-2018, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- This unit was originally developed by Matthew J Heaney.                  --
@@ -258,15 +263,15 @@ package body Ada.Containers.Hashed_Maps is
       C : Count_Type;
 
    begin
-      if Capacity = 0 then
+      if Capacity < Source.Length then
+         if Checks and then Capacity /= 0 then
+            raise Capacity_Error
+              with "Requested capacity is less than Source length";
+         end if;
+
          C := Source.Length;
-
-      elsif Capacity >= Source.Length then
+      else
          C := Capacity;
-
-      elsif Checks then
-         raise Capacity_Error
-           with "Requested capacity is less than Source length";
       end if;
 
       return Target : Map do
@@ -457,7 +462,7 @@ package body Ada.Containers.Hashed_Maps is
          return No_Element;
       end if;
 
-      return Cursor'(Container'Unrestricted_Access, Node);
+      return Cursor'(Container'Unrestricted_Access, Node, Hash_Type'Last);
    end Find;
 
    --------------------
@@ -488,14 +493,14 @@ package body Ada.Containers.Hashed_Maps is
    -----------
 
    function First (Container : Map) return Cursor is
-      Node : constant Node_Access := HT_Ops.First (Container.HT);
-
+      Pos  : Hash_Type;
+      Node : constant Node_Access := HT_Ops.First (Container.HT, Pos);
    begin
       if Node = null then
          return No_Element;
       end if;
 
-      return Cursor'(Container'Unrestricted_Access, Node);
+      return Cursor'(Container'Unrestricted_Access, Node, Pos);
    end First;
 
    function First (Object : Iterator) return Cursor is
@@ -694,18 +699,19 @@ package body Ada.Containers.Hashed_Maps is
      (Container : Map;
       Process   : not null access procedure (Position : Cursor))
    is
-      procedure Process_Node (Node : Node_Access);
+      procedure Process_Node (Node : Node_Access; Position : Hash_Type);
       pragma Inline (Process_Node);
 
-      procedure Local_Iterate is new HT_Ops.Generic_Iteration (Process_Node);
+      procedure Local_Iterate is
+        new HT_Ops.Generic_Iteration_With_Position (Process_Node);
 
       ------------------
       -- Process_Node --
       ------------------
 
-      procedure Process_Node (Node : Node_Access) is
+      procedure Process_Node (Node : Node_Access; Position : Hash_Type) is
       begin
-         Process (Cursor'(Container'Unrestricted_Access, Node));
+         Process (Cursor'(Container'Unrestricted_Access, Node, Position));
       end Process_Node;
 
       Busy : With_Busy (Container.HT.TC'Unrestricted_Access);
@@ -774,6 +780,10 @@ package body Ada.Containers.Hashed_Maps is
    end Next;
 
    function Next (Position : Cursor) return Cursor is
+      Node    : Node_Access := null;
+
+      Pos : Hash_Type;
+      --  Position of cursor's element in the map buckets.
    begin
       if Position.Node = null then
          return No_Element;
@@ -781,17 +791,16 @@ package body Ada.Containers.Hashed_Maps is
 
       pragma Assert (Vet (Position), "bad cursor in function Next");
 
-      declare
-         HT   : Hash_Table_Type renames Position.Container.HT;
-         Node : constant Node_Access := HT_Ops.Next (HT, Position.Node);
+      --  Initialize to current position, so that HT_Ops.Next can use it
+      Pos := Position.Position;
 
-      begin
-         if Node = null then
-            return No_Element;
-         end if;
+      Node := HT_Ops.Next (Position.Container.HT, Position.Node, Pos);
 
-         return Cursor'(Position.Container, Node);
-      end;
+      if Node = null then
+         return No_Element;
+      else
+         return Cursor'(Position.Container, Node, Pos);
+      end if;
    end Next;
 
    procedure Next (Position : in out Cursor) is

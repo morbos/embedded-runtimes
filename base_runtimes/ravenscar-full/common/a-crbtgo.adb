@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 2004-2016, Free Software Foundation, Inc.         --
+--          Copyright (C) 2004-2018, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,8 +15,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- This unit was originally developed by Matthew J Heaney.                  --
@@ -505,9 +510,9 @@ package body Ada.Containers.Red_Black_Trees.Generic_Operations is
    --------------------
 
    procedure Generic_Adjust (Tree : in out Tree_Type) is
-      N    : constant Count_Type := Tree.Length;
+      N    : constant Count_Type  := Tree.Length;
       Root : constant Node_Access := Tree.Root;
-      use type Helpers.Tamper_Counts;
+
    begin
       --  If the counts are nonzero, execution is technically erroneous, but
       --  it seems friendly to allow things like concurrent "=" on shared

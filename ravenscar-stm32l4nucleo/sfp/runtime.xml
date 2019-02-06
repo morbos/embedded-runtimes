@@ -4,13 +4,13 @@
   <configuration>
    <config>
 
-   type Loaders is ("ROM", "RAM", "USER");
+   type Loaders is ("ROM_L432", "ROM_L476", "ROM_L496", "RAM", "USER");
 
-   Loader : Loaders := external ("LOADER", "ROM");
+   Loader : Loaders := external ("LOADER", "ROM_L432");
 
    package Compiler is
       Common_Required_Switches := ("-mlittle-endian", "-mhard-float",
-        "-mcpu=cortex-m4", "-mfpu=fpv4-sp-d16", "-mthumb");
+        "-mcpu=cortex-m4", "-mfpu=fpv4-sp-d16", "-mthumb", "-g");
 
       for Leading_Required_Switches ("Ada") use
          Compiler'Leading_Required_Switches ("Ada") &amp;
@@ -27,6 +27,21 @@
         Compiler.Common_Required_Switches;
 
       case Loader is
+	 when "ROM_L432" =>
+            for Required_Switches use Linker'Required_Switches &amp;
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l4x2/bsp/",
+             "-T", "memory-map_L432.ld",
+             "-T", "common-" &amp; Loader &amp; ".ld");
+	 when "ROM_L476" =>
+            for Required_Switches use Linker'Required_Switches &amp;
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l4x6/bsp/",
+             "-T", "memory-map_L476.ld",
+             "-T", "common-" &amp; Loader &amp; ".ld");
+	 when "ROM_L496" =>
+            for Required_Switches use Linker'Required_Switches &amp;
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l4x6/bsp/",
+             "-T", "memory-map_L496.ld",
+             "-T", "common-" &amp; Loader &amp; ".ld");
          when "USER" =>
          when others =>
             for Required_Switches use Linker'Required_Switches &amp;

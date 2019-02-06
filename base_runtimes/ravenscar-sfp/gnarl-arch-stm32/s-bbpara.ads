@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2005 The European Space Agency            --
---                     Copyright (C) 2003-2016, AdaCore                     --
+--                     Copyright (C) 2003-2017, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -17,8 +17,13 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
--- You should have received a copy of the GNU General Public License along  --
--- with this library; see the file COPYING3. If not, see:                   --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -33,7 +38,6 @@
 
 --  This is the STM32F40x (ARMv7) version of this package
 
-with Interfaces.STM32.RCC;
 with System.STM32;
 with System.BB.Board_Parameters;
 with System.BB.MCU_Parameters;
@@ -72,12 +76,23 @@ package System.BB.Parameters is
 
    HSE_Clock : constant := Board_Parameters.HSE_Clock_Frequency;
 
-   HSI_Clock : constant := 16_000_000;
-
    MSI_Clock : constant :=  4_000_000; --  Default. Can be trimmed.
+
+   HSI_Clock : constant := 16_000_000;
 
    Has_FPU : constant Boolean := True;
    --  Set to true if core has a FPU
+
+   Has_VTOR : constant Boolean := True;
+   --  Set to true if core has a Vector Table Offset Register (VTOR).
+   --  VTOR is implemented in Cortex-M0+, Cortex-M4 and above.
+
+   Has_OS_Extensions : constant Boolean := True;
+   --  Set to true if core has armv6-m OS extensions (PendSV, MSP, PSP,
+   --  etc...). The OS extensions are optional for the Cortex-M1.
+
+   Is_ARMv6m : constant Boolean := False;
+   --  Set to true if core is an armv6-m (Cortex-M0, Cortex-M0+, Cortex-M1)
 
    ----------------
    -- Interrupts --
@@ -86,10 +101,9 @@ package System.BB.Parameters is
    --  These definitions are in this package in order to isolate target
    --  dependencies.
 
-   Number_Of_Interrupt_ID : constant := MCU_Parameters.Number_Of_Interrupts;
-   --  Number of interrupts (for both the interrupt controller and the
-   --  Sys_Tick_Trap). This static constant is used to declare a type, and
-   --  the handler table.
+   subtype Interrupt_Range is Integer
+     range -1 .. MCU_Parameters.Number_Of_Interrupts;
+   --  Number of interrupts for the interrupt controller
 
    Trap_Vectors : constant := 17;
    --  While on this target there is little difference between interrupts

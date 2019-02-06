@@ -8,6 +8,7 @@
 	.thumb
 
 	.text
+	.globl DMA1_CH6_IRQ
 	.globl __vectors
 	.p2align 9
 __vectors:
@@ -46,7 +47,7 @@ __vectors:
 	.word __gnat_irq_trap        /* 29 DMA1_CH3 */
 	.word __gnat_irq_trap        /* 30 DMA1_CH4 */
 	.word __gnat_irq_trap        /* 31 DMA1_CH5 */
-	.word __gnat_irq_trap        /* 32 DMA1_CH6 */
+	.word   DMA1_CH6_IRQ         /* 32 DMA1_CH6 */
 	.word __gnat_irq_trap        /* 33 DMA1_CH7 */
 	.word __gnat_irq_trap        /* 34 ADC1 */
 	.word __gnat_irq_trap        /* 35 CAN1_TX */
@@ -147,4 +148,11 @@ __gnat_sys_tick_trap:
 	.size __gnat_sys_tick_trap, . - __gnat_sys_tick_trap
 
 	.thumb_func
-fault:	b fault
+fault:
+	ldr	r0,=0xe000ed00
+	ldr	r1,[r0,#0x28]	/* Configurable Fault SR */
+	ldr	r2,[r0,#0x2C]	/* Hard Fault SR */
+	ldr	r3,[r0,#0x38]   /* Bus Fault Addr Reg*/
+	ldr	r0,[r0,#0x24]   /* System Handler ctl state reg */
+fault_spin:
+	b fault_spin
