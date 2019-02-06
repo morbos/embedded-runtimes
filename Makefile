@@ -1,4 +1,3 @@
-ssfp = $(wildcard ravenscar-*/ssfp)
 sfp = $(wildcard ravenscar-*/sfp)
 full = $(wildcard ravenscar-*/full)
 
@@ -6,16 +5,6 @@ ROOT = $(shell dirname $(shell dirname $(shell which arm-eabi-gcc)))
 INSTALL = $(ROOT)/arm-eabi/lib/gnat
 
 all:
-	for d in $(ssfp); do \
-	  echo $$d; \
-	  cd $$d/..; \
-	  gprbuild -P ravenscar_build.gpr -XRTS=ravenscar-sfp -j0; \
-	  echo \* > sfp/obj/.gitignore; \
-          echo \* > sfp/adalib/.gitignore; \
-	  git add -f sfp/obj/.gitignore; \
-          git add -f sfp/adalib/.gitignore; \
-	  cd ..; \
-	done
 	for d in $(sfp); do \
 	  echo $$d; \
 	  cd $$d/..; \

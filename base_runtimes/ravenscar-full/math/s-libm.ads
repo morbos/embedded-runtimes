@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---           Copyright (C) 2014-2018, Free Software Foundation, Inc.        --
+--           Copyright (C) 2014-2015, Free Software Foundation, Inc.        --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -37,7 +32,7 @@ package System.Libm is
    pragma Pure;
 
    Ln_2       : constant := 0.69314_71805_59945_30941_72321_21458_17656_80755;
-   Ln_3       : constant := 1.09861_22886_68109_69139_52452_36922_52570_46475;
+   Ln_3       : constant := 1.09861_22886_68109_69139_52452_36922_52570_46474;
    Half_Ln_2  : constant := Ln_2 / 2.0;
    Inv_Ln_2   : constant := 1.0 / Ln_2;
    Half_Pi    : constant := Ada.Numerics.Pi / 2.0;
@@ -61,7 +56,7 @@ package System.Libm is
    Root16_Half : constant := 0.95760_32806_98573_64693_63056_35147_91544;
    --  Sixteenth root of 0.5
 
-   Sqrt_Half : constant := 0.70710_67811_86547_52440_08443_62105;
+   Sqrt_Half : constant := 0.70710_67811_86547_52440_08443_62104;
 
    subtype Quadrant is Integer range 0 .. 3;
 
@@ -74,7 +69,6 @@ package System.Libm is
    generic
       type T is digits <>;
       with function Approx_Atan (X : T) return T is <>;
-      with function Infinity return T is <>;
    function Generic_Atan2 (Y, X : T) return T;
 
    generic

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                     Copyright (C) 1995-2018, AdaCore                     --
+--                     Copyright (C) 1995-2013, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -58,13 +53,6 @@ package body System.Case_Util is
       end loop;
    end To_Lower;
 
-   function To_Lower (A : String) return String is
-      Result : String := A;
-   begin
-      To_Lower (Result);
-      return Result;
-   end To_Lower;
-
    --------------
    -- To_Mixed --
    --------------
@@ -82,13 +70,6 @@ package body System.Case_Util is
 
          Ucase := A (J) = '_';
       end loop;
-   end To_Mixed;
-
-   function To_Mixed (A : String) return String is
-      Result : String := A;
-   begin
-      To_Mixed (Result);
-      return Result;
    end To_Mixed;
 
    --------------
@@ -114,13 +95,6 @@ package body System.Case_Util is
       for J in A'Range loop
          A (J) := To_Upper (A (J));
       end loop;
-   end To_Upper;
-
-   function To_Upper (A : String) return String is
-      Result : String := A;
-   begin
-      To_Upper (Result);
-      return Result;
    end To_Upper;
 
 end System.Case_Util;

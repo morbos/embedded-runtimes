@@ -7,7 +7,7 @@
 --                                                                          --
 --                               B o d y                                    --
 --                                                                          --
---                    Copyright (C) 2010-2018, AdaCore                      --
+--                    Copyright (C) 2010-2015, AdaCore                      --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -16,13 +16,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -38,8 +33,7 @@ with System.Multiprocessors.Spin_Locks;
 with System.OS_Interface;
 
 with System.BB.Protection;
-with System.BB.CPU_Primitives;
-with System.BB.Board_Support;
+with System.BB.CPU_Primitives.Multiprocessors;
 with System.BB.Threads.Queues;
 
 package body System.Tasking.Protected_Objects.Multiprocessors is
@@ -49,6 +43,7 @@ package body System.Tasking.Protected_Objects.Multiprocessors is
    use System.Multiprocessors.Fair_Locks;
 
    package STPO renames System.Task_Primitives.Operations;
+   package BCPRMU renames System.BB.CPU_Primitives.Multiprocessors;
 
    type Entry_Call_List is limited record
       List : Entry_Call_Link;
@@ -92,7 +87,7 @@ package body System.Tasking.Protected_Objects.Multiprocessors is
 
       Unlock (Served_Entry_Call (Caller_CPU).Lock);
 
-      --  Enable interrupts (they were just disabled above)
+      --  Enable interrupts
 
       --  We need to set the hardware interrupt masking level equal to
       --  the software priority of the task that is executing.
@@ -104,7 +99,9 @@ package body System.Tasking.Protected_Objects.Multiprocessors is
          --  hardware interrupt priority.
 
          System.BB.CPU_Primitives.Enable_Interrupts
-           (System.BB.Threads.Queues.Running_Thread.Active_Priority);
+           (System.BB.Threads.Queues.Running_Thread.Active_Priority -
+              System.Interrupt_Priority'First + 1);
+
       else
          --  We are neither within an interrupt handler nor within task
          --  that has a priority in the range of Interrupt_Priority, so
@@ -118,7 +115,7 @@ package body System.Tasking.Protected_Objects.Multiprocessors is
       then
          --  Poke the caller's CPU if the task has a higher priority
 
-         System.BB.Board_Support.Multiprocessors.Poke_CPU (Caller_CPU);
+         System.BB.CPU_Primitives.Multiprocessors.Poke_CPU (Caller_CPU);
       end if;
    end Served;
 
@@ -127,8 +124,7 @@ package body System.Tasking.Protected_Objects.Multiprocessors is
    -------------------------
 
    procedure Wakeup_Served_Entry is
-      CPU_Id     : constant CPU :=
-                      BB.Board_Support.Multiprocessors.Current_CPU;
+      CPU_Id     : constant CPU := BCPRMU.Current_CPU;
       Entry_Call : Entry_Call_Link;
 
    begin
@@ -142,8 +138,6 @@ package body System.Tasking.Protected_Objects.Multiprocessors is
       Unlock (Served_Entry_Call (CPU_Id).Lock);
 
       while Entry_Call /= null loop
-         --  ??? This may insert a task on the ready queue of a different
-         --  processor.
          STPO.Wakeup (Entry_Call.Self, Entry_Caller_Sleep);
          Entry_Call := Entry_Call.Next;
       end loop;

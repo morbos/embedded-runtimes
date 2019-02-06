@@ -4,7 +4,7 @@
 --                                                                          --
 --                       A D A . A S S E R T I O N S                        --
 --                                                                          --
---            Copyright (C) 2015-2018, Free Software Foundation, Inc.       --
+--            Copyright (C) 2015, Free Software Foundation, Inc.            --
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
@@ -19,13 +19,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --

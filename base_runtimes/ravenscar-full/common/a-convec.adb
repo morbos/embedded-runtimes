@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 2004-2018, Free Software Foundation, Inc.         --
+--          Copyright (C) 2004-2016, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- This unit was originally developed by Matthew J Heaney.                  --
@@ -999,12 +994,9 @@ package body Ada.Containers.Vectors is
 
             --  We know that No_Index (the same as Index_Type'First - 1) is
             --  less than 0, so it is safe to compute the following sum without
-            --  fear of overflow. We need to suppress warnings, because
-            --  otherwise we get an error in -gnatwE mode.
+            --  fear of overflow.
 
-            pragma Warnings (Off);
             Index := No_Index + Index_Type'Base (Count_Type'Last);
-            pragma Warnings (On);
 
             if Index <= Index_Type'Last then
 
@@ -1660,12 +1652,9 @@ package body Ada.Containers.Vectors is
 
             --  We know that No_Index (the same as Index_Type'First - 1) is
             --  less than 0, so it is safe to compute the following sum without
-            --  fear of overflow. We need to suppress warnings, because
-            --  otherwise we get an error in -gnatwE mode.
+            --  fear of overflow.
 
-            pragma Warnings (Off);
             Index := No_Index + Index_Type'Base (Count_Type'Last);
-            pragma Warnings (On);
 
             if Index <= Index_Type'Last then
 
@@ -2307,12 +2296,14 @@ package body Ada.Containers.Vectors is
       Process   : not null access procedure (Element : Element_Type))
    is
       Lock : With_Lock (Container.TC'Unrestricted_Access);
+      V : Vector renames Container'Unrestricted_Access.all;
+
    begin
       if Checks and then Index > Container.Last then
          raise Constraint_Error with "Index is out of range";
       end if;
 
-      Process (Container.Elements.EA (Index));
+      Process (V.Elements.EA (Index));
    end Query_Element;
 
    procedure Query_Element

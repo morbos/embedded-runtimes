@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---           Copyright (C) 1992-2018, Free Software Foundation, Inc.        --
+--           Copyright (C) 1992-2015, Free Software Foundation, Inc.        --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -85,11 +80,7 @@ is
    function Activation_Is_Complete (T : Task_Id) return Boolean is
       use type System.Tasking.Task_States;
    begin
-      if T = Null_Task_Id then
-         raise Program_Error;
-      else
-         return T.Common.State /= System.Tasking.Unactivated;
-      end if;
+      return T.Common.State /= System.Tasking.Unactivated;
    end Activation_Is_Complete;
 
    -----------------

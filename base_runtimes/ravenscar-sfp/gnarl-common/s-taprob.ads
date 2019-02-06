@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  S p e c                                 --
 --                                                                          --
---          Copyright (C) 1992-2018, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2016, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -129,7 +124,6 @@ package System.Tasking.Protected_Objects is
 
    type Protected_Entry_Index is new Entry_Index
      range Null_Protected_Entry .. Max_Protected_Entry;
-   --  Index of the entry (and in some cases of the queue)
 
    type Barrier_Function_Pointer is access
      function
@@ -158,6 +152,8 @@ package System.Tasking.Protected_Objects is
    end record;
    --  The compiler-generated code passes objects of this type to the GNARL
    --  to allow it to access the executable code of an entry body.
+
+   type Entry_Body_Access is access all Entry_Body;
 
    type Protection is limited private;
    --  This type contains the GNARL state of a protected object. The

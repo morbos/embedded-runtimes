@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 2004-2018, Free Software Foundation, Inc.         --
+--          Copyright (C) 2004-2015, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- This unit was originally developed by Matthew J Heaney.                  --
@@ -329,15 +324,12 @@ package body Ada.Containers.Bounded_Doubly_Linked_Lists is
       C : Count_Type;
 
    begin
-      if Capacity < Source.Length then
-         if Checks and then Capacity /= 0 then
-            raise Capacity_Error
-              with "Requested capacity is less than Source length";
-         end if;
-
+      if Capacity = 0 then
          C := Source.Length;
-      else
+      elsif Capacity >= Source.Length then
          C := Capacity;
+      elsif Checks then
+         raise Capacity_Error with "Capacity value too small";
       end if;
 
       return Target : List (Capacity => C) do
@@ -1015,14 +1007,9 @@ package body Ada.Containers.Bounded_Doubly_Linked_Lists is
       Position  : out Cursor;
       Count     : Count_Type := 1)
    is
-      pragma Warnings (Off);
-      Default_Initialized_Item : Element_Type;
-      pragma Unmodified (Default_Initialized_Item);
-      --  OK to reference, see below. Note that we need to suppress both the
-      --  front end warning and the back end warning. In addition, pragma
-      --  Unmodified is needed to suppress the warning ``actual type for
-      --  "Element_Type" should be fully initialized type'' on certain
-      --  instantiations.
+      New_Item : Element_Type;
+      pragma Unmodified (New_Item);
+      --  OK to reference, see below
 
    begin
       --  There is no explicit element provided, but in an instance the element
@@ -1031,8 +1018,7 @@ package body Ada.Containers.Bounded_Doubly_Linked_Lists is
       --  initialization, so insert the specified number of possibly
       --  initialized elements at the given position.
 
-      Insert (Container, Before, Default_Initialized_Item, Position, Count);
-      pragma Warnings (On);
+      Insert (Container, Before, New_Item, Position, Count);
    end Insert;
 
    ---------------------

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---          Copyright (C) 2005-2018, Free Software Foundation, Inc.         --
+--          Copyright (C) 2005-2014, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -29,28 +24,40 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  This package provides a simple, default implementation of a function that
---  returns a pointer to a secondary stack for use in single-threaded
---  applications. It is not suitable for multi-threaded applications.
+--  This package provides a default and simple implementation of a function
+--  that returns a pointer to a secondary stack. This function is intended
+--  to be used on single-threaded applications. Multi-threaded applications
+--  require thread-local data.
 --
---  The function defined in this package is used when the following two
+--  The function defined in this package is used when the two following
 --  conditions are met:
 --    1) No user-defined implementation has been provided. That is, the
 --       symbol __gnat_get_sec_stack is not exported by the user's code.
---    2) No tasking is used. When tasking is used, __gnat_get_secondary_stack
---       is resolved by libgnarl.a (that contains a thread-safe implementation
---       of the secondary stack), so that the single-threaded version is not
---       included in the final executable.
+--    2) No tasking is used. When tasking is used, the __gnat_get_sec_stack
+--       reference is resolved by libgnarl.a (that contains a thread-safe
+--       implementation of the secondary stack), so that the single-threaded
+--       version is not included in the final executable.
+--
+--  Note that the problem of providing different implementations for tasking
+--  and not tasking applications is usually solved by using the
+--  System.Soft_Links mechanism. This approach has not been followed because
+--  this mechanism if it not available for the High Integrity Ravenscar run
+--  times.
+--
+--  Another possibility would be to always use the tasking (multi-threaded)
+--  version of this function. However, it forces a dependency on libgnarl in
+--  libgnat, which is not desirable.
 
 pragma Restrictions (No_Elaboration_Code);
---  We want to guarantee the absence of elaboration code because the binder
---  does not handle references to this package.
+--  We want to guarantee the absence of elaboration code because the
+--  binder does not handle references to this package.
 
 package System.Secondary_Stack.Single_Task is
 
-   function Get_Sec_Stack return SS_Stack_Ptr;
+   function Get_Sec_Stack return Address;
    pragma Export (C, Get_Sec_Stack, "__gnat_get_secondary_stack");
-   --  Return the pointer of the secondary stack to be used for single-threaded
-   --  applications, as expected by System.Secondary_Stack.
+   --  Return the address of the secondary stack to be used for
+   --  single-threaded applications, as expected by
+   --  System.Secondary_Stack.
 
 end System.Secondary_Stack.Single_Task;

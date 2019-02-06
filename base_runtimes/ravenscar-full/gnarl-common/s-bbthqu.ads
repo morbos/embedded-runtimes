@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2004 The European Space Agency            --
---                     Copyright (C) 2003-2018, AdaCore                     --
+--                     Copyright (C) 2003-2016, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -17,13 +17,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -35,14 +30,14 @@
 ------------------------------------------------------------------------------
 
 with System.BB.Time;
-with System.BB.Board_Support;
+with System.BB.CPU_Primitives.Multiprocessors;
 with System.Multiprocessors;
 
 package System.BB.Threads.Queues is
    pragma Preelaborate;
 
    use type System.BB.Time.Time;
-   package BOSUMU renames System.BB.Board_Support.Multiprocessors;
+   package CPRMU renames System.BB.CPU_Primitives.Multiprocessors;
 
    ----------------
    -- Ready list --
@@ -241,7 +236,7 @@ package System.BB.Threads.Queues is
 
      Export => True,
      Convention => Asm,
-     External_Name => "__gnat_context_switch_needed";
+     External_Name => "context_switch_needed";
 
    ----------------
    -- Alarm list --
@@ -310,8 +305,8 @@ package System.BB.Threads.Queues is
          --  The extracted thread must be the one with the smallest value of
          --  Alarm_Time.
 
-         and Get_Next_Alarm_Time (BOSUMU.Current_CPU)'Old <=
-             Get_Next_Alarm_Time (BOSUMU.Current_CPU),
+         and Get_Next_Alarm_Time (CPRMU.Current_CPU)'Old <=
+             Get_Next_Alarm_Time (CPRMU.Current_CPU),
 
      Inline => True;
 
@@ -325,7 +320,7 @@ package System.BB.Threads.Queues is
    --  Wakeup all expired alarms and set the alarm timer if needed
 
      Post =>
-       Get_Next_Alarm_Time (BOSUMU.Current_CPU) > Now;
+       Get_Next_Alarm_Time (CPRMU.Current_CPU) > Now;
 
    -----------------
    -- Global_List --

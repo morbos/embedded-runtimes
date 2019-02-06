@@ -7,7 +7,7 @@
 --                                   S p e c                                --
 --                                                                          --
 --             Copyright (C) 1991-1994, Florida State University            --
---          Copyright (C) 1995-2018, Free Software Foundation, Inc.         --
+--          Copyright (C) 1995-2016, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -16,13 +16,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -46,6 +41,7 @@ with System.BB.Time;
 with System.BB.Interrupts;
 with System.BB.Board_Support;
 with System.BB.Parameters;
+with System.BB.CPU_Primitives.Multiprocessors;
 
 package System.OS_Interface is
    pragma Preelaborate;
@@ -54,17 +50,13 @@ package System.OS_Interface is
    -- Interrupts --
    ----------------
 
-   subtype Interrupt_Range is System.BB.Interrupts.Interrupt_ID;
-   --  Range of interrupts identifiers, for s-inter
+   Max_Interrupt : constant := System.BB.Interrupts.Max_Interrupt;
+   --  Number of asynchronous interrupts
 
    subtype Interrupt_ID is System.BB.Interrupts.Interrupt_ID;
    --  Interrupt identifiers
 
-   subtype Any_Interrupt_ID is System.BB.Interrupts.Any_Interrupt_ID;
-   --  Interrupt identifiers plus No_Interrupt
-
-   No_Interrupt : constant Any_Interrupt_ID :=
-                     System.BB.Interrupts.No_Interrupt;
+   No_Interrupt : constant Interrupt_ID := System.BB.Interrupts.No_Interrupt;
    --  Special value indicating no interrupt
 
    subtype Interrupt_Handler is System.BB.Interrupts.Interrupt_Handler;
@@ -74,7 +66,7 @@ package System.OS_Interface is
    -- Interrupt processing --
    --------------------------
 
-   function Current_Interrupt return Any_Interrupt_ID
+   function Current_Interrupt return Interrupt_ID
      renames System.BB.Interrupts.Current_Interrupt;
    --  Function that returns the hardware interrupt currently being
    --  handled (if any). In case no hardware interrupt is being handled
@@ -87,7 +79,7 @@ package System.OS_Interface is
      renames System.BB.Interrupts.Attach_Handler;
    --  Attach a handler to a hardware interrupt
 
-   procedure Power_Down renames System.BB.Board_Support.Interrupts.Power_Down;
+   procedure Power_Down renames System.BB.Board_Support.Power_Down;
    --  Put current CPU in power-down mode
 
    ----------
@@ -204,7 +196,7 @@ package System.OS_Interface is
    --  System.Any_Priority'First if no threads are running.
 
    function Current_CPU return Multiprocessors.CPU
-     renames System.BB.Board_Support.Multiprocessors.Current_CPU;
+     renames System.BB.CPU_Primitives.Multiprocessors.Current_CPU;
    --  Return the id of the current CPU
 
 end System.OS_Interface;

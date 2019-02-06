@@ -7,7 +7,7 @@
 --                                 S p e c                                  --
 --                          (ARM Cortex M4 Version)                         --
 --                                                                          --
---           Copyright (C) 2015-2017, Free Software Foundation, Inc.        --
+--             Copyright (C) 2015, Free Software Foundation, Inc.           --
 --                                                                          --
 -- This specification is derived from the Ada Reference Manual for use with --
 -- GNAT. The copyright notice above, and the license provisions that follow --
@@ -20,13 +20,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -139,7 +134,7 @@ private
    Backend_Overflow_Checks   : constant Boolean := True;
    Command_Line_Args         : constant Boolean := False;
    Configurable_Run_Time     : constant Boolean := True;
-   Denorm                    : constant Boolean := True;
+   Denorm                    : constant Boolean := False;
    Duration_32_Bits          : constant Boolean := False;
    Exit_Status_Supported     : constant Boolean := False;
    Fractional_Fixed_Ops      : constant Boolean := False;

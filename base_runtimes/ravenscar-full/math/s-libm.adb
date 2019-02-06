@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---         Copyright (C) 2014-2018, Free Software Foundation, Inc.          --
+--         Copyright (C) 2014-2015, Free Software Foundation, Inc.          --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -67,9 +62,9 @@ package body System.Libm is
       --     P (X) = P_0 + X * (P_1 + X * (P_2 + X * (... + X * P_n)))
    end Generic_Polynomials;
 
-   -------------------------
-   -- Generic_Polynomials --
-   -------------------------
+   ------------------------
+   -- Generic_Polynomial --
+   ------------------------
 
    package body Generic_Polynomials is
 
@@ -89,9 +84,9 @@ package body System.Libm is
       end Compute_Horner;
    end Generic_Polynomials;
 
-   ----------------------------
-   -- Generic_Approximations --
-   ----------------------------
+   ----------------------------------
+   -- Generic_Float_Approximations --
+   ----------------------------------
 
    package body Generic_Approximations is
 
@@ -640,9 +635,6 @@ package body System.Libm is
    -- Generic_Atan2 --
    -------------------
 
-   --  Ada expected values:
-   --    Atan2 (y, x) returns a result in [-Pi, Pi]
-
    function Generic_Atan2 (Y, X : T) return T is
 
       --  Cody and Waite implementation (page 194)
@@ -656,60 +648,25 @@ package body System.Libm is
       Result : T;
 
    begin
-      if Y = 0.0 and then X = 0.0 then
-
-         --    Atan2 (+-0, -0)     = +-Pi
-         --    Atan2 (+-0, +0)     = +-0
-
+      if Y = 0.0 then
          if T'Copy_Sign (1.0, X) < 0.0 then
             return T'Copy_Sign (Pi, Y);
          else
             return T'Copy_Sign (0.0, Y);
          end if;
 
-      elsif Y = 0.0 and then abs (X) > 0.0 then
-
-         --    Atan2 (+-0, x)      = +-Pi,        if x < 0
-         --    Atan2 (+-0, x)      = +-0,         if x > 0
-
-         if X < 0.0 then
-            return T'Copy_Sign (Pi, Y);
-         else
-            return T'Copy_Sign (0.0, Y);
-         end if;
-
       elsif X = 0.0 then
-
-         --    Atan2 (y, +-0)      = -0.5 * Pi,   if y < 0
-         --    Atan2 (y, +-0)      =  0.5 * Pi,   if y > 0
-
          return T'Copy_Sign (Half_Pi, Y);
 
-      elsif abs (Y) > 0.0 and then abs (Y) <= T'Last
-        and then abs (X) = Infinity
-      then
+      elsif abs (Y) > T'Last * abs (X) then  --  overflow
+         Result := T (Half_Pi);
 
-         --    Atan2 (+-y, -INF)   = +-Pi,        if y > 0 and y is finite
-         --      (tightly approximated)
-         --    Atan2 (+-y, +INF)   = +-0,         if y > 0 and y is finite
+      elsif abs (X) > T'Last * abs (Y) then  --  underflow
+         Result := 0.0;
 
-         if X < 0.0 then
-            Result := T'Copy_Sign (Pi, Y);
-         else
-            Result := T'Copy_Sign (0.0, Y);
-         end if;
+      elsif abs (X) > T'Last and then abs (Y) > T'Last then
 
-      elsif abs (X) <= T'Last and then abs (Y) = Infinity then
-
-         --    Atan2 (+-INF, x)    = +-0.5 * Pi,  if x is finite
-         --      (tightly approximated)
-
-         Result := T'Copy_Sign (Half_Pi, Y);
-
-      elsif abs (X) = Infinity and then abs (Y) = Infinity then
-
-         --    Atan2 (+-INF, -INF) = +-0.75 * Pi (tightly approximated)
-         --    Atan2 (+-INF, +INF) = +-0.25 * Pi (tightly approximated)
+         --  NaN
 
          if X < 0.0 then
             return T'Copy_Sign (3.0 * Pi / 4.0, Y);
@@ -718,13 +675,12 @@ package body System.Libm is
          end if;
 
       else
-         --  Be careful not to divide Y/X until we know it won't overflow
+         F := abs (Y / X);
 
-         if abs (Y) > abs (X) then
-            F := abs (X / Y);
+         if F > 1.0 then
+            F := 1.0 / F;
             N := 2;
          else
-            F := abs (Y / X);
             N := 0;
          end if;
 

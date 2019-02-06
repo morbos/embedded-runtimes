@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2005 The European Space Agency            --
---                     Copyright (C) 2003-2018, AdaCore                     --
+--                     Copyright (C) 2003-2016, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -17,13 +17,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -37,18 +32,24 @@
 pragma Restrictions (No_Elaboration_Code);
 
 with System.Parameters;
-with System.BB.Interrupts;
+with System.BB.Parameters;
+with System.BB.Board_Support;
 with System.BB.Protection;
 with System.BB.Threads.Queues;
+
+with Ada.Unchecked_Conversion;
 
 package body System.BB.Threads is
 
    use System.Multiprocessors;
    use System.BB.CPU_Primitives;
-   use System.BB.Board_Support.Multiprocessors;
+   use System.BB.CPU_Primitives.Multiprocessors;
    use System.BB.Time;
+   use System.BB.Parameters;
    use Board_Support;
 
+   use type System.Address;
+   use type System.Parameters.Size_Type;
    use type System.Storage_Elements.Storage_Offset;
 
    procedure Initialize_Thread

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 1992-2018, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2012, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -349,6 +344,7 @@ package body Ada.Strings.Fixed is
          Target := Source;
 
       elsif Slength > Tlength then
+
          case Drop is
             when Left =>
                Target := Source (Slast - Tlength + 1 .. Slast);
@@ -376,6 +372,7 @@ package body Ada.Strings.Fixed is
                   when Center =>
                      raise Length_Error;
                end case;
+
          end case;
 
       --  Source'Length < Target'Length
@@ -627,61 +624,47 @@ package body Ada.Strings.Fixed is
      (Source : String;
       Side   : Trim_End) return String
    is
+      Low, High : Integer;
+
    begin
-      case Side is
-         when Strings.Left =>
-            declare
-               Low : constant Natural := Index_Non_Blank (Source, Forward);
-            begin
-               --  All blanks case
+      Low := Index_Non_Blank (Source, Forward);
 
-               if Low = 0 then
-                  return "";
-               end if;
+      --  All blanks case
 
+      if Low = 0 then
+         return "";
+
+      --  At least one non-blank
+
+      else
+         High := Index_Non_Blank (Source, Backward);
+
+         case Side is
+            when Strings.Left =>
                declare
                   subtype Result_Type is String (1 .. Source'Last - Low + 1);
+
                begin
                   return Result_Type (Source (Low .. Source'Last));
                end;
-            end;
 
-         when Strings.Right =>
-            declare
-               High : constant Natural := Index_Non_Blank (Source, Backward);
-            begin
-               --  All blanks case
-
-               if High = 0 then
-                  return "";
-               end if;
-
+            when Strings.Right =>
                declare
                   subtype Result_Type is String (1 .. High - Source'First + 1);
+
                begin
                   return Result_Type (Source (Source'First .. High));
                end;
-            end;
 
-         when Strings.Both =>
-            declare
-               Low : constant Natural := Index_Non_Blank (Source, Forward);
-            begin
-               --  All blanks case
-
-               if Low = 0 then
-                  return "";
-               end if;
-
+            when Strings.Both =>
                declare
-                  High : constant Natural :=
-                    Index_Non_Blank (Source, Backward);
                   subtype Result_Type is String (1 .. High - Low + 1);
+
                begin
                   return Result_Type (Source (Low .. High));
                end;
-            end;
-      end case;
+         end case;
+      end if;
    end Trim;
 
    procedure Trim

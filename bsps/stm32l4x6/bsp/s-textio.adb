@@ -36,7 +36,7 @@ with Interfaces.STM32.RCC;   use Interfaces.STM32.RCC;
 with Interfaces.STM32.GPIO;  use Interfaces.STM32.GPIO;
 with Interfaces.STM32.USART; use Interfaces.STM32.USART;
 with System.STM32;           use System.STM32;
---  with System.BB.Parameters;
+with System.BB.Parameters;
 
 package body System.Text_IO is
 
@@ -48,7 +48,7 @@ package body System.Text_IO is
    ----------------
 
    procedure Initialize is
---      use System.BB.Parameters;
+      use System.BB.Parameters;
 
       APB_Clock    : constant Positive := Positive (STM32.System_Clocks.PCLK2);
       Int_Divider  : constant Positive := (25 * APB_Clock) / (4 * Baudrate);

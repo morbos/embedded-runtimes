@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  S p e c                                 --
 --                                                                          --
---                     Copyright (C) 2001-2018, AdaCore                    --
+--                     Copyright (C) 2001-2016, AdaCore                    --
 --                                                                          --
 -- This specification is derived from the Ada Reference Manual for use with --
 -- GNAT. The copyright notice above, and the license provisions that follow --
@@ -19,13 +19,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -40,7 +35,9 @@ pragma Elaborate_All (System.OS_Interface);
 
 package Ada.Real_Time with
   SPARK_Mode,
-  Abstract_State => (Clock_Time with Synchronous),
+  Abstract_State => (Clock_Time with Synchronous,
+                                     External => (Async_Readers,
+                                                  Async_Writers)),
   Initializes    => Clock_Time
 is
    pragma Assert
@@ -52,7 +49,8 @@ is
    Time_First : constant Time;
    Time_Last  : constant Time;
 
-   Time_Unit : constant := 1.0 / System.OS_Interface.Ticks_Per_Second;
+   Time_Unit : constant :=
+                 1.0 / Duration (System.OS_Interface.Ticks_Per_Second);
    --  The BB platforms use a time stamp counter driven by the system clock,
    --  where the duration of the clock tick (Time_Unit) depends on the speed
    --  of the underlying hardware. The system clock frequency is used here to
@@ -69,71 +67,44 @@ is
      Volatile_Function,
      Global => Clock_Time;
 
-   function "+"  (Left : Time; Right : Time_Span) return Time with
-     Global => null;
-   function "-"  (Left : Time; Right : Time_Span) return Time with
-     Global => null;
-   function "-"  (Left : Time; Right : Time)      return Time_Span with
-     Global => null;
+   function "+"  (Left : Time; Right : Time_Span) return Time;
+   function "-"  (Left : Time; Right : Time_Span) return Time;
+   function "-"  (Left : Time; Right : Time)      return Time_Span;
 
    function "+" (Left : Time_Span; Right : Time) return Time is
-     (Right + Left)
-   with Global => null;
+     (Right + Left);
 
-   function "<"  (Left, Right : Time) return Boolean with
-     Global => null;
-   function "<=" (Left, Right : Time) return Boolean with
-     Global => null;
-   function ">"  (Left, Right : Time) return Boolean with
-     Global => null;
-   function ">=" (Left, Right : Time) return Boolean with
-     Global => null;
+   function "<"  (Left, Right : Time) return Boolean;
+   function "<=" (Left, Right : Time) return Boolean;
+   function ">"  (Left, Right : Time) return Boolean;
+   function ">=" (Left, Right : Time) return Boolean;
 
-   function "+"  (Left, Right : Time_Span)             return Time_Span with
-     Global => null;
-   function "-"  (Left, Right : Time_Span)             return Time_Span with
-     Global => null;
-   function "-"  (Right : Time_Span)                   return Time_Span with
-     Global => null;
-   function "*"  (Left : Time_Span; Right : Integer)   return Time_Span with
-     Global => null;
-   function "*"  (Left : Integer;   Right : Time_Span) return Time_Span with
-     Global => null;
-   function "/"  (Left, Right : Time_Span)             return Integer with
-     Global => null;
-   function "/"  (Left : Time_Span; Right : Integer)   return Time_Span with
-     Global => null;
+   function "+"  (Left, Right : Time_Span)             return Time_Span;
+   function "-"  (Left, Right : Time_Span)             return Time_Span;
+   function "-"  (Right : Time_Span)                   return Time_Span;
+   function "*"  (Left : Time_Span; Right : Integer)   return Time_Span;
+   function "*"  (Left : Integer;   Right : Time_Span) return Time_Span;
+   function "/"  (Left, Right : Time_Span)             return Integer;
+   function "/"  (Left : Time_Span; Right : Integer)   return Time_Span;
 
-   function "abs" (Right : Time_Span) return Time_Span with
-     Global => null;
+   function "abs" (Right : Time_Span) return Time_Span;
 
-   function "<"  (Left, Right : Time_Span) return Boolean with
-     Global => null;
-   function "<=" (Left, Right : Time_Span) return Boolean with
-     Global => null;
-   function ">"  (Left, Right : Time_Span) return Boolean with
-     Global => null;
-   function ">=" (Left, Right : Time_Span) return Boolean with
-     Global => null;
+   function "<"  (Left, Right : Time_Span) return Boolean;
+   function "<=" (Left, Right : Time_Span) return Boolean;
+   function ">"  (Left, Right : Time_Span) return Boolean;
+   function ">=" (Left, Right : Time_Span) return Boolean;
 
-   function To_Duration  (TS : Time_Span) return Duration with
-     Global => null;
-   function To_Time_Span (D : Duration)   return Time_Span with
-     Global => null;
+   function To_Duration  (TS : Time_Span) return Duration;
+   function To_Time_Span (D : Duration)   return Time_Span;
 
-   function Nanoseconds  (NS : Integer) return Time_Span with
-     Global => null;
-   function Microseconds (US : Integer) return Time_Span with
-     Global => null;
-   function Milliseconds (MS : Integer) return Time_Span with
-     Global => null;
+   function Nanoseconds  (NS : Integer) return Time_Span;
+   function Microseconds (US : Integer) return Time_Span;
+   function Milliseconds (MS : Integer) return Time_Span;
 
-   function Seconds (S : Integer) return Time_Span with
-     Global => null;
+   function Seconds (S : Integer) return Time_Span;
    pragma Ada_05 (Seconds);
 
-   function Minutes (M : Integer) return Time_Span with
-     Global => null;
+   function Minutes (M : Integer) return Time_Span;
    pragma Ada_05 (Minutes);
 
    --  Seconds_Count needs 64 bits. Time is a 64-bits unsigned integer
@@ -144,10 +115,8 @@ is
 
    type Seconds_Count is range 0 .. 2 ** 63 - 1;
 
-   procedure Split (T : Time; SC : out Seconds_Count; TS : out Time_Span) with
-     Global => null;
-   function Time_Of (SC : Seconds_Count; TS : Time_Span) return Time with
-     Global => null;
+   procedure Split (T : Time; SC : out Seconds_Count; TS : out Time_Span);
+   function Time_Of (SC : Seconds_Count; TS : Time_Span) return Time;
 
 private
    pragma SPARK_Mode (Off);

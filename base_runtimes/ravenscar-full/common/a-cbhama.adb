@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 2004-2018, Free Software Foundation, Inc.         --
+--          Copyright (C) 2004-2016, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- This unit was originally developed by Matthew J Heaney.                  --
@@ -578,9 +573,8 @@ package body Ada.Containers.Bounded_Hashed_Maps is
       -----------------
 
       procedure Assign_Key (Node : in out Node_Type) is
-         pragma Warnings (Off);
-         Default_Initialized_Item : Element_Type;
-         pragma Unmodified (Default_Initialized_Item);
+         New_Item : Element_Type;
+         pragma Unmodified (New_Item);
          --  Default-initialized element (ok to reference, see below)
 
       begin
@@ -592,8 +586,7 @@ package body Ada.Containers.Bounded_Hashed_Maps is
          --  default initialization, so insert a possibly initialized element
          --  under the given key.
 
-         Node.Element := Default_Initialized_Item;
-         pragma Warnings (On);
+         Node.Element := New_Item;
       end Assign_Key;
 
       --------------

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---           Copyright (C) 2006-2018, Free Software Foundation, Inc.        --
+--           Copyright (C) 2006-2014, Free Software Foundation, Inc.        --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -29,14 +24,17 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with System.Memory_Types;
+pragma Restrictions (No_Elaboration_Code);
+
+with Interfaces.C;
 
 package System.Memory_Set is
-   pragma No_Elaboration_Code_All;
+   pragma Preelaborate;
 
-   function memset
-     (M : Address; C : Integer; Size : Memory_Types.size_t) return Address;
-   pragma Export (C, memset, "memset");
+   function Memset
+     (M : Address; C : Interfaces.C.int; Size : Interfaces.C.size_t)
+     return Address;
+   pragma Export (C, Memset, "memset");
    --  This function stores C converted to a Character in each of the elements
    --  of the array of Characters beginning at M, with size Size. It returns a
    --  pointer to M.

@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2004 The European Space Agency            --
---                     Copyright (C) 2003-2018, AdaCore                     --
+--                     Copyright (C) 2003-2013, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -17,13 +17,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNARL was developed by the GNARL team at Florida State University.       --
@@ -41,17 +36,18 @@ pragma Restrictions (No_Elaboration_Code);
 
 with System;
 with System.BB.Parameters;
+with System.Multiprocessors;
 
 package System.BB.Interrupts is
    pragma Preelaborate;
 
-   subtype Interrupt_ID is System.BB.Parameters.Interrupt_Range;
-   --  Interrupt identifiers.
+   Max_Interrupt : constant := System.BB.Parameters.Number_Of_Interrupt_ID;
+   --  Number of interrupts
 
-   subtype Any_Interrupt_ID is Integer
-     range Interrupt_ID'First .. Interrupt_ID'Last + 1;
+   subtype Interrupt_ID is Natural range 0 .. Max_Interrupt;
+   --  Interrupt identifier
 
-   No_Interrupt : constant Any_Interrupt_ID := Any_Interrupt_ID'Last;
+   No_Interrupt : constant Interrupt_ID := 0;
    --  Special value indicating no interrupt
 
    type Interrupt_Handler is access procedure (Id : Interrupt_ID);
@@ -61,21 +57,18 @@ package System.BB.Interrupts is
    --  Initialize table containing the pointers to the different interrupt
    --  stacks. Should be called before any other subprograms in this package.
 
-   procedure Interrupt_Wrapper (Id : Interrupt_ID);
-   --  This wrapper procedure is in charge of setting the appropriate
-   --  software priorities before calling the user-defined handler. It is
-   --  called directly by the Board_Support.
-
    procedure Attach_Handler
      (Handler : not null Interrupt_Handler;
       Id      : Interrupt_ID;
-      Prio    : Interrupt_Priority);
+      Prio    : Interrupt_Priority)
+   with
+     Pre => Id /= No_Interrupt;
    pragma Inline (Attach_Handler);
    --  Attach the procedure Handler as handler of the interrupt Id. Prio is
    --  the priority of the associated protected object. This priority could be
    --  used to program the hardware priority of the interrupt.
 
-   function Current_Interrupt return Any_Interrupt_ID;
+   function Current_Interrupt return Interrupt_ID;
    --  Function that returns the hardware interrupt currently being handled on
    --  the current CPU (if any). If no hardware interrupt is being handled the
    --  returned value is No_Interrupt.

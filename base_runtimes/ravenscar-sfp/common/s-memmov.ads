@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---            Copyright (C) 2006-2018, Free Software Foundation, Inc.       --
+--            Copyright (C) 2006-2014, Free Software Foundation, Inc.       --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -32,14 +27,15 @@
 --  This package provides a general block copy mechanism analogous to that
 --  provided by the C routine memmove allowing for copies with overlap.
 
-with System.Memory_Types;
+pragma Restrictions (No_Elaboration_Code);
+
+with Interfaces.C;
 
 package System.Memory_Move is
-   pragma No_Elaboration_Code_All;
    pragma Preelaborate;
 
    function memmove
-     (Dest : Address; Src : Address; N : Memory_Types.size_t) return Address;
+     (Dest : Address; Src : Address; N : Interfaces.C.size_t) return Address;
    pragma Export (C, memmove, "memmove");
    --  Copies N storage units from area starting at Src to area starting
    --  at Dest without any check for buffer overflow. The difference between

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 2004-2018, Free Software Foundation, Inc.         --
+--          Copyright (C) 2004-2015, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- This unit was originally developed by Matthew J Heaney.                  --
@@ -248,15 +243,15 @@ package body Ada.Containers.Hashed_Sets is
       C : Count_Type;
 
    begin
-      if Capacity < Source.Length then
-         if Checks and then Capacity /= 0 then
-            raise Capacity_Error
-              with "Requested capacity is less than Source length";
-         end if;
-
+      if Capacity = 0 then
          C := Source.Length;
-      else
+
+      elsif Capacity >= Source.Length then
          C := Capacity;
+
+      elsif Checks then
+         raise Capacity_Error
+           with "Requested capacity is less than Source length";
       end if;
 
       return Target : Set do
@@ -595,7 +590,7 @@ package body Ada.Containers.Hashed_Sets is
          return No_Element;
       end if;
 
-      return Cursor'(Container'Unrestricted_Access, Node, Hash_Type'Last);
+      return Cursor'(Container'Unrestricted_Access, Node);
    end Find;
 
    --------------------
@@ -657,14 +652,14 @@ package body Ada.Containers.Hashed_Sets is
    -----------
 
    function First (Container : Set) return Cursor is
-      Pos  : Hash_Type;
-      Node : constant Node_Access := HT_Ops.First (Container.HT, Pos);
+      Node : constant Node_Access := HT_Ops.First (Container.HT);
+
    begin
       if Node = null then
          return No_Element;
       end if;
 
-      return Cursor'(Container'Unrestricted_Access, Node, Pos);
+      return Cursor'(Container'Unrestricted_Access, Node);
    end First;
 
    function First (Object : Iterator) return Cursor is
@@ -977,19 +972,19 @@ package body Ada.Containers.Hashed_Sets is
      (Container : Set;
       Process   : not null access procedure (Position : Cursor))
    is
-      procedure Process_Node (Node : Node_Access; Position : Hash_Type);
+      procedure Process_Node (Node : Node_Access);
       pragma Inline (Process_Node);
 
       procedure Iterate is
-        new HT_Ops.Generic_Iteration_With_Position (Process_Node);
+         new HT_Ops.Generic_Iteration (Process_Node);
 
       ------------------
       -- Process_Node --
       ------------------
 
-      procedure Process_Node (Node : Node_Access; Position : Hash_Type) is
+      procedure Process_Node (Node : Node_Access) is
       begin
-         Process (Cursor'(Container'Unrestricted_Access, Node, Position));
+         Process (Cursor'(Container'Unrestricted_Access, Node));
       end Process_Node;
 
       Busy : With_Busy (Container.HT.TC'Unrestricted_Access);
@@ -1038,8 +1033,6 @@ package body Ada.Containers.Hashed_Sets is
    end Next;
 
    function Next (Position : Cursor) return Cursor is
-      Node : Node_Access;
-      Pos  : Hash_Type;
    begin
       if Position.Node = null then
          return No_Element;
@@ -1047,14 +1040,17 @@ package body Ada.Containers.Hashed_Sets is
 
       pragma Assert (Vet (Position), "bad cursor in Next");
 
-      Pos := Position.Position;
-      Node := HT_Ops.Next (Position.Container.HT, Position.Node, Pos);
+      declare
+         HT   : Hash_Table_Type renames Position.Container.HT;
+         Node : constant Node_Access := HT_Ops.Next (HT, Position.Node);
 
-      if Node = null then
-         return No_Element;
-      end if;
+      begin
+         if Node = null then
+            return No_Element;
+         end if;
 
-      return Cursor'(Position.Container, Node, Pos);
+         return Cursor'(Position.Container, Node);
+      end;
    end Next;
 
    procedure Next (Position : in out Cursor) is
@@ -1956,8 +1952,7 @@ package body Ada.Containers.Hashed_Sets is
          if Node = null then
             return No_Element;
          else
-            return Cursor'
-              (Container'Unrestricted_Access, Node, Hash_Type'Last);
+            return Cursor'(Container'Unrestricted_Access, Node);
          end if;
       end Find;
 

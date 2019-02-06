@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                     Copyright (C) 1999-2018, AdaCore                     --
+--                     Copyright (C) 1999-2015, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -15,13 +15,8 @@
 -- OUT ANY WARRANTY;  without even the  implied warranty of MERCHANTABILITY --
 -- or FITNESS FOR A PARTICULAR PURPOSE.                                     --
 --                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
---                                                                          --
--- You should have received a copy of the GNU General Public License and    --
--- a copy of the GCC Runtime Library Exception along with this program;     --
--- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- You should have received a copy of the GNU General Public License along  --
+-- with this library; see the file COPYING3. If not, see:                   --
 -- <http://www.gnu.org/licenses/>.                                          --
 --                                                                          --
 -- GNAT was originally developed  by the GNAT team at  New York University. --
@@ -41,8 +36,6 @@ with Ada.Exceptions.Traceback; use Ada.Exceptions.Traceback;
 with System.Address_Image;
 
 package body System.Traceback.Symbolic is
-
-   --  Note that Suppress_Hex is ignored in this version of this package.
 
    ------------------------
    -- Symbolic_Traceback --
@@ -65,11 +58,11 @@ package body System.Traceback.Symbolic is
          begin
             for J in Traceback'Range loop
                Img := System.Address_Image (Traceback (J));
-               Result (Last + 1 .. Last + 2)          := "0x";
-               Last                                   := Last + 2;
+               Result (Last + 1 .. Last + 2) := "0x";
+               Last := Last + 2;
                Result (Last + 1 .. Last + Img'Length) := Img;
-               Last                                   := Last + Img'Length + 1;
-               Result (Last)                          := ' ';
+               Last := Last + Img'Length + 1;
+               Result (Last) := ' ';
             end loop;
 
             Result (Last) := ASCII.LF;
@@ -78,35 +71,11 @@ package body System.Traceback.Symbolic is
       end if;
    end Symbolic_Traceback;
 
-   --  "No_Hex" is ignored in this version, because otherwise we have nothing
-   --  at all to print.
-
-   function Symbolic_Traceback_No_Hex
-     (Traceback : System.Traceback_Entries.Tracebacks_Array) return String is
-   begin
-      return Symbolic_Traceback (Traceback);
-   end Symbolic_Traceback_No_Hex;
-
    function Symbolic_Traceback
      (E : Ada.Exceptions.Exception_Occurrence) return String
    is
    begin
       return Symbolic_Traceback (Ada.Exceptions.Traceback.Tracebacks (E));
    end Symbolic_Traceback;
-
-   function Symbolic_Traceback_No_Hex
-     (E : Ada.Exceptions.Exception_Occurrence) return String is
-   begin
-      return Symbolic_Traceback (E);
-   end Symbolic_Traceback_No_Hex;
-
-   ------------------
-   -- Enable_Cache --
-   ------------------
-
-   procedure Enable_Cache (Include_Modules : Boolean := False) is
-   begin
-      null;
-   end Enable_Cache;
 
 end System.Traceback.Symbolic;
