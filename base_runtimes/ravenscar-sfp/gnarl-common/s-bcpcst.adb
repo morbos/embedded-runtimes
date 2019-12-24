@@ -35,6 +35,7 @@
 ------------------------------------------------------------------------------
 
 with System.BB.Parameters;
+with System.BB.Board_Parameters;
 with System.Machine_Code; use System.Machine_Code;
 
 package body System.BB.CPU_Primitives.Context_Switch_Trigger is
@@ -45,8 +46,15 @@ package body System.BB.CPU_Primitives.Context_Switch_Trigger is
    No_Floating_Point : constant Boolean := not System.BB.Parameters.Has_FPU;
    --  Set True iff the FPU should not be used
 
-   Is_ARMv6m : constant Boolean := System.BB.Parameters.Is_ARMv6m;
+   Is_ARMv6m : constant Boolean := System.BB.Board_Parameters.Is_ARMv6m;
    --  Set True iff the core implements the armv6-m architecture
+
+   --  Is_ARMv8m : constant Boolean := System.BB.Board_Parameters.Is_ARMv8m;
+   --  Set True iff the core implements the armv8-m architecture
+
+   --  Has_Main_Extension : constant Boolean :=
+   --  System.BB.Board_Parameters.Has_Main_Extension;
+   --  Set True iff the v8m core has the has the main extension
 
    ICSR : Word with Volatile, Address => 16#E000_ED04#; -- Int. Control/State
 

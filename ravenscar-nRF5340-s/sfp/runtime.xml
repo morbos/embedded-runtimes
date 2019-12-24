@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+
+<gprconfig>
+  <configuration>
+   <config>
+
+   type Loaders is ("RAM", "RAM_S_5340", "RAM_NS_5340", "USER");
+
+   Loader : Loaders := external ("LOADER", "RAM_S_5340");
+
+   package Compiler is
+      Common_Required_Switches := ("-mlittle-endian", "-mhard-float",
+        "-mcpu=cortex-m4", "-mfpu=fpv4-sp-d16", "-mthumb", "-g");
+
+      for Leading_Required_Switches ("Ada") use
+         Compiler'Leading_Required_Switches ("Ada") &amp;
+         Common_Required_Switches;
+
+      for Leading_Required_Switches ("C") use
+         Compiler'Leading_Required_Switches ("C") &amp;
+         Common_Required_Switches;
+   end Compiler;
+
+   package Linker is
+      for Required_Switches use Linker'Required_Switches &amp;
+        ("-L${RUNTIME_DIR(ada)}/adalib", "-nolibc", "-nostartfiles") &amp;
+        Compiler.Common_Required_Switches;
+
+	case Loader is
+	 when "RAM_S_5340" =>
+            for Required_Switches use Linker'Required_Switches &amp;
+            ("-L", "${RUNTIME_DIR(ada)}../../bsps/nRF5340_s/bsp/",
+             "-T", "memory-map-nRF5340.ld",
+             "-T", "common-" &amp; Loader &amp; ".ld");
+         when "USER" =>
+         when others =>
+            for Required_Switches use Linker'Required_Switches &amp;
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/nRF5340/bsp/",
+             "-T", "memory-map-nRF5340.ld",
+             "-T", "common-" &amp; Loader &amp; ".ld");
+     end case;
+   end Linker;
+   </config>
+  </configuration>
+</gprconfig>

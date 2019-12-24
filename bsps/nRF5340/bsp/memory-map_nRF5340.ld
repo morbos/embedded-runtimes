@@ -1,0 +1,1 @@
+memory-map-nRF5340.ld

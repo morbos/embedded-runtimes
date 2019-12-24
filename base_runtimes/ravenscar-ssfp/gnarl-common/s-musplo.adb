@@ -59,14 +59,16 @@ package body System.Multiprocessors.Spin_Locks is
 
    procedure Try_Lock (Slock : in out Spin_Lock; Succeeded : out Boolean) is
 
-      function Lock_Test_And_Set
-        (Ptr   : access Atomic_Flag;
-         Value : Atomic_Flag)
-        return Atomic_Flag;
-      pragma Import (Intrinsic, Lock_Test_And_Set,
-                       "__sync_lock_test_and_set_1");
+--      function Lock_Test_And_Set
+--        (Ptr   : access Atomic_Flag;
+--         Value : Atomic_Flag)
+--        return Atomic_Flag;
+--      pragma Import (Intrinsic, Lock_Test_And_Set,
+--                     "__sync_lock_test_and_set_1");
+      pragma Unreferenced (Slock);
    begin
-      Succeeded := (Lock_Test_And_Set (Slock.Flag'Access, 1) = Unlocked);
+      --   Succeeded := (Lock_Test_And_Set (Slock.Flag'Access, 1) = Unlocked);
+      Succeeded := True;
    end Try_Lock;
 
    ------------

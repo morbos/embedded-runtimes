@@ -198,6 +198,37 @@ procedure Setup_Pll is
       end if;
 
       if HSE_Enabled then
+         --  Need to get the tuning from OTP...
+         declare
+            type Byte_Array is array (Natural range <>) of Byte;
+            type OTP_ID0 is record
+               BDaddr     : Byte_Array (1 .. 6);
+               Hse_Tuning : Byte;
+               Id         : Byte;
+            end record
+              with Pack;
+            type OTP_ID_Array is array (0 .. 127) of OTP_ID0;
+            OTP_AREA_BASE     : constant := 16#1FFF7000#;
+            OTP_ID_A : OTP_ID_Array
+              with Address => System'To_Address (OTP_AREA_BASE);
+            Got : Integer;
+            Found : Boolean := False;
+            X : Word
+              with Address => System'To_Address (16#5800009c#);
+            HSE_CONTROL_UNLOCK_KEY : constant := 16#CAFECAFE#;
+         begin
+            --  Walk back along the OTP area looking for ID = 0
+            for I in reverse 0 .. 127 loop
+               if OTP_ID_A (I).Id = 0 then
+                  Got := I;
+                  Found := True;
+               end if;
+            end loop;
+            if Found then
+               X := HSE_CONTROL_UNLOCK_KEY;
+               RCC_Periph.HSECR.HSETUNE := UInt6 (OTP_ID_A (Got).Hse_Tuning);
+            end if;
+         end;
          --  Configure high-speed external clock, if enabled
 
          RCC_Periph.CR.HSEON := True;

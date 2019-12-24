@@ -89,9 +89,6 @@ package System.BB.Parameters is
    --  Set to true if core has armv6-m OS extensions (PendSV, MSP, PSP,
    --  etc...). The OS extensions are optional for the Cortex-M1.
 
-   Is_ARMv6m : constant Boolean := False;
-   --  Set to true if core is an armv6-m (Cortex-M0, Cortex-M0+, Cortex-M1)
-
    ----------------
    -- Interrupts --
    ----------------

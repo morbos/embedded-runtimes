@@ -39,6 +39,7 @@ with System.BB.Threads;
 with System.BB.Threads.Queues;
 with System.Machine_Code; use System.Machine_Code;
 with System.BB.CPU_Primitives.Context_Switch_Trigger;
+with System.BB.Board_Parameters;
 
 package body System.BB.CPU_Primitives is
    use Board_Support;
@@ -60,6 +61,8 @@ package body System.BB.CPU_Primitives is
 
    Is_ARMv6m : constant Boolean := System.BB.Parameters.Is_ARMv6m;
    --  Set True iff the core implements the armv6-m architecture
+
+   Defer_Context_Switch : Boolean := False;
 
    -----------
    -- Traps --
@@ -245,7 +248,9 @@ package body System.BB.CPU_Primitives is
 
       pragma Assert (PRIMASK = 1);
 
-      Trigger_Context_Switch;
+      if not Defer_Context_Switch then
+         Trigger_Context_Switch;
+      end if;
 
       --  Memory must be clobbered, as task switching causes a task to signal,
       --  which means its memory changes must be visible to all other tasks.
@@ -352,9 +357,29 @@ package body System.BB.CPU_Primitives is
 
    procedure Sys_Tick_Handler is
       Max_Alarm_Interval : constant Timer_Interval := Timer_Interval'Last / 2;
-      Now : constant Timer_Interval := Timer_Interval (Read_Clock);
-
+--      Now : constant Timer_Interval := Timer_Interval (Read_Clock);
+      Now : Timer_Interval;
+      Is_ARMv8M : constant Boolean := System.BB.Board_Parameters.Is_ARMv8m;
    begin
+      if Is_ARMv8M then
+         declare
+            Is_Non_Secure : constant Boolean :=
+              System.BB.Board_Parameters.Is_Non_Secure;
+            R : Word := 0;
+            Secure_Exception : Boolean := False;
+         begin
+            --  An Xor between where we came from and where we are to
+            --  see if a context switch is allowed.
+            --  e.g. if we came from secure and we are exec in non-secure
+            --  then no context switching allowed.
+            Asm ("mov %0,r14",
+                 Outputs => Word'Asm_Output ("=r", R), Volatile => True);
+            Secure_Exception := (R and (2 ** 6)) > 0;
+            Defer_Context_Switch := not (Is_Non_Secure xor Secure_Exception);
+         end;
+      end if;
+
+      Now := Timer_Interval (Read_Clock);
       --  The following allows max. efficiency for "useless" tick interrupts
 
       if Alarm_Time - Now <= Max_Alarm_Interval then

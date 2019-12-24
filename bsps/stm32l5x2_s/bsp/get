@@ -1,0 +1,6 @@
+cp /.share/CACHEDEV1_DATA/Ada/CMSIS-SVD/ARM/STM32/interface/stm32l5x2/i-stm32-rcc.ads .
+cp /.share/CACHEDEV1_DATA/Ada/CMSIS-SVD/ARM/STM32/interface/stm32l5x2/i-stm32-flash.ads .
+cp /.share/CACHEDEV1_DATA/Ada/CMSIS-SVD/ARM/STM32/interface/stm32l5x2/i-stm32-pwr.ads .
+cp /.share/CACHEDEV1_DATA/Ada/CMSIS-SVD/ARM/STM32/interface/stm32l5x2/i-stm32-syscfg.ads .
+cp /.share/CACHEDEV1_DATA/Ada/CMSIS-SVD/ARM/STM32/interface/stm32l5x2/i-stm32-usart.ads .
+cp /.share/CACHEDEV1_DATA/Ada/CMSIS-SVD/ARM/STM32/interface/stm32l5x2/i-stm32.ads .

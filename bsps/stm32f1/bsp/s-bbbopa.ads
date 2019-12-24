@@ -48,4 +48,6 @@ package System.BB.Board_Parameters is
 
    FLASH_Latency : constant := 2; --  2ws 48MHz..72MHz
 
+   Is_ARMv6m : constant Boolean := False;
+
 end System.BB.Board_Parameters;

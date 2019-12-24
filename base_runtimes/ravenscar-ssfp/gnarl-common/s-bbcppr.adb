@@ -39,6 +39,7 @@ with System.BB.Threads;
 with System.BB.Threads.Queues;
 with System.Machine_Code; use System.Machine_Code;
 with System.BB.CPU_Primitives.Context_Switch_Trigger;
+with System.BB.Board_Parameters;
 
 package body System.BB.CPU_Primitives is
    use Board_Support;
@@ -58,7 +59,7 @@ package body System.BB.CPU_Primitives is
      System.BB.Parameters.Has_OS_Extensions;
    --  Set True iff the core implements the armv6-m OS extensions
 
-   Is_ARMv6m : constant Boolean := System.BB.Parameters.Is_ARMv6m;
+   Is_ARMv6m : constant Boolean := System.BB.Board_Parameters.Is_ARMv6m;
    --  Set True iff the core implements the armv6-m architecture
 
    -----------

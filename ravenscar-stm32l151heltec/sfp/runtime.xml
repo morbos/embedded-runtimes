@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+
+<gprconfig>
+  <configuration>
+   <config>
+
+   type Loaders is ("ROM_F103", "RAM", "USER");
+
+   Loader : Loaders := external ("LOADER", "ROM_F103");
+
+   package Compiler is
+      Common_Required_Switches := ("-g", "-mlittle-endian", "-mfloat-abi=soft",
+        "-mcpu=cortex-m3", "-mthumb");
+
+      for Leading_Required_Switches ("Ada") use
+         Compiler'Leading_Required_Switches ("Ada") &amp;
+         Common_Required_Switches;
+
+      for Leading_Required_Switches ("C") use
+         Compiler'Leading_Required_Switches ("C") &amp;
+         Common_Required_Switches;
+   end Compiler;
+
+   package Linker is
+      for Required_Switches use Linker'Required_Switches &amp;
+        ("-L${RUNTIME_DIR(ada)}/adalib", "-nolibc", "-nostartfiles") &amp;
+        Compiler.Common_Required_Switches;
+
+      case Loader is
+         when "USER" =>
+	 when "ROM_F103" =>
+            for Required_Switches use Linker'Required_Switches &amp;
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32f1/bsp/",
+             "-T", "memory-map_F103.ld",
+             "-T", "common-" &amp; Loader &amp; ".ld");
+         when others =>
+            for Required_Switches use Linker'Required_Switches &amp;
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32f1/bsp/",
+             "-T", "memory-map.ld",
+             "-T", "common-" &amp; Loader &amp; ".ld");
+     end case;
+   end Linker;
+   </config>
+  </configuration>
+</gprconfig>

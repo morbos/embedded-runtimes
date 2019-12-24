@@ -47,4 +47,10 @@ package System.BB.Board_Parameters is
 
    FLASH_Latency : constant := 5;
 
+   Is_ARMv8m            : constant Boolean := False;
+
+   Has_Main_Extension   : constant Boolean := False;
+
+   Is_Non_Secure        : constant Boolean := False;
+
 end System.BB.Board_Parameters;

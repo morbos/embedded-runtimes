@@ -34,7 +34,8 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with System.BB.Parameters;
+--  with System.BB.Parameters;
+with System.BB.Board_Parameters;
 with System.Machine_Code; use System.Machine_Code;
 
 package body System.BB.CPU_Primitives.Context_Switch_Trigger is
@@ -42,7 +43,7 @@ package body System.BB.CPU_Primitives.Context_Switch_Trigger is
    NL : constant String := ASCII.LF & ASCII.HT;
    --  New line separator in Asm templates
 
-   Is_ARMv6m : constant Boolean := System.BB.Parameters.Is_ARMv6m;
+   Is_ARMv6m : constant Boolean := System.BB.Board_Parameters.Is_ARMv6m;
    --  Set True iff the core implements the armv6-m architecture
 
    ICSR : Word with Volatile, Address => 16#E000_ED04#; -- Int. Control/State
