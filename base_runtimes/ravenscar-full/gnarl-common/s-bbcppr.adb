@@ -243,13 +243,22 @@ package body System.BB.CPU_Primitives is
    --------------------
 
    procedure Context_Switch is
+      ID : constant System.BB.Threads.Thread_Id :=
+        System.BB.Threads.Queues.First_Thread;
+      use System.BB.Threads;
    begin
       --  Interrupts must be disabled at this point
 
       pragma Assert (PRIMASK = 1);
 
       if not Defer_Context_Switch then
-         Trigger_Context_Switch;
+         --  This vvvv is a hack! For some reason Delay_Until -> Extract
+         --  can produce a first_thread_table with null as the first entry.
+         --  Once a context switch then happens... fault
+         --  This is temporary untill the mech is understood
+         if ID /= System.BB.Threads.Null_Thread_Id then
+            Trigger_Context_Switch;
+         end if;
       end if;
 
       --  Memory must be clobbered, as task switching causes a task to signal,
@@ -294,7 +303,25 @@ package body System.BB.CPU_Primitives is
    ----------------------------------
 
    procedure Interrupt_Request_Handler is
+      Is_ARMv8M : constant Boolean := System.BB.Board_Parameters.Is_ARMv8m;
    begin
+      if Is_ARMv8M then
+         declare
+            Is_Non_Secure : constant Boolean :=
+              System.BB.Board_Parameters.Is_Non_Secure;
+            R : Word := 0;
+            Secure_Exception : Boolean := False;
+         begin
+            --  An Xor between where we came from and where we are to
+            --  see if a context switch is allowed.
+            --  e.g. if we came from secure and we are exec in non-secure
+            --  then no context switching allowed.
+            Asm ("mov %0,r14",
+                 Outputs => Word'Asm_Output ("=r", R), Volatile => True);
+            Secure_Exception := (R and (2 ** 6)) > 0;
+            Defer_Context_Switch := not (Is_Non_Secure xor Secure_Exception);
+         end;
+      end if;
       --  Call the handler (System.BB.Interrupts.Interrupt_Wrapper)
 
       Trap_Handlers (Interrupt_Request_Vector)(Interrupt_Request_Vector);

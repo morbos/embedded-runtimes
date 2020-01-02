@@ -294,7 +294,25 @@ package body System.BB.CPU_Primitives is
    ----------------------------------
 
    procedure Interrupt_Request_Handler is
+      Is_ARMv8M : constant Boolean := System.BB.Board_Parameters.Is_ARMv8m;
    begin
+      if Is_ARMv8M then
+         declare
+            Is_Non_Secure : constant Boolean :=
+              System.BB.Board_Parameters.Is_Non_Secure;
+            R : Word := 0;
+            Secure_Exception : Boolean := False;
+         begin
+            --  An Xor between where we came from and where we are to
+            --  see if a context switch is allowed.
+            --  e.g. if we came from secure and we are exec in non-secure
+            --  then no context switching allowed.
+            Asm ("mov %0,r14",
+                 Outputs => Word'Asm_Output ("=r", R), Volatile => True);
+            Secure_Exception := (R and (2 ** 6)) > 0;
+            Defer_Context_Switch := not (Is_Non_Secure xor Secure_Exception);
+         end;
+      end if;
       --  Call the handler (System.BB.Interrupts.Interrupt_Wrapper)
 
       Trap_Handlers (Interrupt_Request_Vector)(Interrupt_Request_Vector);
