@@ -35,16 +35,19 @@ __vectors0:
 	.word   hang        /* 2 NMI */
 	.word   hang        /* 3 HardFault */
 	.word   hang        /* 4 MemManage */
+	.globl	local_id
+local_id:
+	.word	0xfacefeed  /* ID to be filled in */
 
 	.text
 
 	.thumb_func
 	.globl _start_rom
 _start_rom:
-	movs	r0,#1
-spin:
-	cmp	r0,#0
-	bne	spin
+@	movs	r0,#1
+@spin:
+@	cmp	r0,#0
+@	bne	spin
 	/* Copy .data */
 	ldr	r0,=__data_start
 @	movw	r0,#:lower16:__data_start

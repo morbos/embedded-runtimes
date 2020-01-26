@@ -35,6 +35,9 @@ __vectors0:
 	.word   hang        /* 2 NMI */
 	.word   hang        /* 3 HardFault */
 	.word   hang        /* 4 MemManage */
+	.globl	local_id
+local_id:
+	.word	0xfacefeed  /* ID to be filled in */
 
 	.text
 
@@ -49,7 +52,9 @@ clr:
 	str	r2,[r0],#4
 	subs	r1,#4
 	bne	clr
+#endif
 
+#if 0
 	movs	r0,#1
 spin:
 	cmp	r0,#0

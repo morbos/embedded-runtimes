@@ -54,6 +54,7 @@ procedure Setup_Pll is
    MSI_Enabled     : constant Boolean := False;  -- use med-speed int. clock
    HSE_Enabled     : constant Boolean := False;  -- use high-speed ext. clock
    HSI_Enabled     : constant Boolean := True;  -- use high-speed int. clock
+   HSI48_Enabled   : constant Boolean := True;  -- For RNG
    HSE_Bypass      : constant Boolean := False; -- don't bypass ext. resonator
    LSI_Enabled     : constant Boolean := False;  -- use low-speed internal clk
 
@@ -183,6 +184,28 @@ procedure Setup_Pll is
 
          loop
             exit when SEC_RCC_Periph.CR.HSIRDY;
+         end loop;
+
+      end if;
+
+      if HSE_Enabled then
+         --  Configure high-speed external clock, if enabled
+
+         SEC_RCC_Periph.CR.HSEON := True;
+         SEC_RCC_Periph.CR.HSEBYP := (if HSE_Bypass then True else False);
+
+         loop
+            exit when SEC_RCC_Periph.CR.HSERDY;
+         end loop;
+      end if;
+
+      if HSI48_Enabled then
+         --  Setup internal clock and wait for HSI stabilisation.
+
+         SEC_RCC_Periph.CRRCR.HSI48ON := True;
+
+         loop
+            exit when SEC_RCC_Periph.CRRCR.HSI48RDY;
          end loop;
 
       end if;

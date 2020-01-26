@@ -35,6 +35,9 @@ __vectors0:
 	.word   hang        /* 2 NMI */
 	.word   hang        /* 3 HardFault */
 	.word   hang        /* 4 MemManage */
+	.globl	local_id
+local_id:
+	.word	0xfacefeed  /* ID to be filled in */
 
 	.text
 
