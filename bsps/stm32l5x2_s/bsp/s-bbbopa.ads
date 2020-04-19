@@ -45,7 +45,7 @@ package System.BB.Board_Parameters is
 
    MSI_Clock_Frequency : constant := 4_000_000;  -- ~4mhz
 
-   FLASH_Latency : constant := 6;
+   FLASH_Latency : constant := 5;
 
    Is_ARMv6m            : constant Boolean := False;
 

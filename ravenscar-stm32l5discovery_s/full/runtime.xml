@@ -4,9 +4,9 @@
   <configuration>
    <config>
 
-   type Loaders is ("ROM_NS_L5x2", "RAM_NS_L5x2", "RAM", "USER");
+   type Loaders is ("ROM_S_L5x2", "RAM_S_L5x2", "RAM", "USER");
 
-   Loader : Loaders := external ("LOADER", "RAM_NS_L5x2");
+   Loader : Loaders := external ("LOADER", "RAM_S_L5x2");
 
    package Compiler is
       Common_Required_Switches := ("-mlittle-endian", "-mhard-float",
@@ -26,22 +26,22 @@
         ("-L${RUNTIME_DIR(ada)}/adalib", "-nolibc", "-nostartfiles") &amp;
         Compiler.Common_Required_Switches;
 
-      case Loader is
+	case Loader is
 	 when "ROM_L5x2" =>
             for Required_Switches use Linker'Required_Switches &amp;
-            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2_ns/bsp/",
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2/bsp/",
              "-T", "memory-map_L5x2.ld",
              "-T", "common-" &amp; Loader &amp; ".ld");
 	 when "RAM_L5x2" =>
             for Required_Switches use Linker'Required_Switches &amp;
-            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2_ns/bsp/",
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2/bsp/",
              "-T", "memory-map_L5x2.ld",
              "-T", "common-" &amp; Loader &amp; ".ld");
          when "USER" =>
          when others =>
             for Required_Switches use Linker'Required_Switches &amp;
-            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2_ns/bsp/",
-             "-T", "memory-map.ld",
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2/bsp/",
+             "-T", "memory-map-L5x22.ld",
              "-T", "common-" &amp; Loader &amp; ".ld");
      end case;
    end Linker;

@@ -30,10 +30,8 @@
 
 MEMORY
 {
-  flash   (rx) : ORIGIN = 0x08000000, LENGTH = 512K
+  nsflash (rx) : ORIGIN = 0x08020000, LENGTH = 256K
   sram12 (rwx) : ORIGIN = 0x20000000, LENGTH = 256K
-  sglue  (rwx) : ORIGIN = 0x20010000, LENGTH = 60K
-  nsglue (rwx) : ORIGIN = 0x2001f000, LENGTH = 4K
   ns     (rwx) : ORIGIN = 0x20020000, LENGTH = 128K
 }
 

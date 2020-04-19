@@ -75,7 +75,7 @@ SECTIONS
 
     . = ALIGN(0x4);
     __data_end = .;
-  } > sram_da
+  } > ns_da
   __data_words = (__data_end - __data_start) >> 2;
 /*
   __ccmdata_load = __rom_end + (__data_words << 2);
@@ -117,8 +117,8 @@ SECTIONS
 
    _end = .;
    __heap_start = .;
-   __heap_end = ORIGIN(sram_bs) + LENGTH(sram_bs);
-  } > sram_bs
+   __heap_end = ORIGIN(ns_bs) + LENGTH(ns_bs);
+  } > ns_bs
 
   __bss_words = (__bss_end - __bss_start) >> 2;
 
