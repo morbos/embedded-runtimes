@@ -96,6 +96,7 @@ package System.BB.Board_Support is
    ----------------
 
    package Interrupts is
+
       function Priority_Of_Interrupt
         (Interrupt : System.BB.Interrupts.Interrupt_ID)
         return System.Any_Priority;
@@ -129,7 +130,6 @@ package System.BB.Board_Support is
       --  insufficient priority, this routine will be needed. On other systems,
       --  where the processor has this control, or where only a single
       --  interrupt priority is supported, this may be a null procedure.
-
       procedure Power_Down;
       pragma Inline (Power_Down);
       --  Power-down the current CPU. This procedure is called only by the idle

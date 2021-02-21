@@ -49,4 +49,6 @@ package System.BB.Board_Parameters is
 
    FLASH_Latency : constant := 5;
 
+   Has_FPU       : constant Boolean := True;
+
 end System.BB.Board_Parameters;

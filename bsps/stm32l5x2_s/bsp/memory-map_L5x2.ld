@@ -32,9 +32,9 @@ MEMORY
 {
   sflash  (rx) : ORIGIN = 0x0C000000, LENGTH = 512K
   sram12 (rwx) : ORIGIN = 0x30000000, LENGTH = 256K
-  sglue  (rwx) : ORIGIN = 0x30010000, LENGTH = 60K
-  nsglue (rwx) : ORIGIN = 0x3001f000, LENGTH = 4K
-  ns     (rwx) : ORIGIN = 0x30020000, LENGTH = 128K
+  sglue  (rwx) : ORIGIN = 0x3000a000, LENGTH = 4K
+  nsglue (rwx) : ORIGIN = 0x3000f000, LENGTH = 1K
+  ns     (rwx) : ORIGIN = 0x30010000, LENGTH = 192K
 }
 
 REGION_ALIAS("sram_tx", sram12)

@@ -58,4 +58,6 @@ package System.BB.Board_Parameters is
 
    Is_Non_Secure        : constant Boolean := True;
 
+   Has_FPU              : constant Boolean := True;
+
 end System.BB.Board_Parameters;

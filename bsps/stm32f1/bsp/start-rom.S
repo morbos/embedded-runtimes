@@ -33,8 +33,13 @@ __vectors0:
 	.word   __stack_end /* stack top address */
 	.word   _start_rom  /* 1 Reset */
 	.word   hang        /* 2 NMI */
-	.word   hang        /* 3 HardFault */
+	.word   hf+1        /* 3 HardFault */
 	.word   hang        /* 4 MemManage */
+
+	.word   hang        /* 5 bf */
+	.word   usage+1     /* 6 usage */
+
+
 	.globl	local_id
 local_id:
 	.word	0xfacefeed  /* ID to be filled in */
@@ -121,6 +126,8 @@ Full_Access   = 0x3
 Read_Only     = 0b110
 
 	ldr	r1,=0xe000ed00
+	ldr	r2,=__vectors0
+	str	r2,[r1,#0x8]
 	@ Region 0 - No access the entire SoC (low pri)
         mov     r2, #0
 	str	r2,[r1,#0x98]	@ region index0
@@ -176,9 +183,42 @@ Read_Only     = 0b110
 	str	r2,[r1,#0x94]
 	isb
 
+@
+	@ Enable Undefined to not go to Hardfault
+	ldr	r0,[r1,#0x24]
+	orr	r0,#(1 << 18)
+	str	r0,[r1,#0x24]
+	isb
+	dsb
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+
+	.short	0xde00
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+
+
 	bl	_ada_setup_pll
 	bl	main
 
 	bl	_exit
 
+hf:	b .
+
 hang:   b .
+
+usage:
+	nop
+	nop
+	nop
+	nop
+	nop
+	b	usage

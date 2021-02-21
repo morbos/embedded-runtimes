@@ -32,7 +32,7 @@ MEMORY
 {
   nsflash (rx) : ORIGIN = 0x08020000, LENGTH = 256K
   sram12 (rwx) : ORIGIN = 0x20000000, LENGTH = 256K
-  ns     (rwx) : ORIGIN = 0x20020000, LENGTH = 128K
+  ns     (rwx) : ORIGIN = 0x20010000, LENGTH = 192K
 }
 
 REGION_ALIAS("sram_tx", sram12)

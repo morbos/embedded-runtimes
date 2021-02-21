@@ -1,0 +1,6 @@
+../../bsps/lpc55s69/bsp
+../../base_runtimes/ravenscar-sfp/arch
+../../base_runtimes/ravenscar-sfp/common
+../../bsps/lpc55s69/gnarl-bsp
+../../base_runtimes/ravenscar-sfp/gnarl-common
+../../base_runtimes/ravenscar-sfp/gnarl-arch-lpc55s69

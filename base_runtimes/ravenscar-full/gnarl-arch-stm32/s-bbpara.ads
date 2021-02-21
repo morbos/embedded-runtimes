@@ -80,7 +80,8 @@ package System.BB.Parameters is
 
    HSI_Clock : constant := 16_000_000;
 
-   Has_FPU : constant Boolean := True;
+   --   Has_FPU : constant Boolean := True;
+   Has_FPU :  constant Boolean :=  Board_Parameters.Has_FPU;
    --  Set to true if core has a FPU
 
    Has_VTOR : constant Boolean := True;
