@@ -1,8 +1,8 @@
 --
---  Copyright (C) 2017, AdaCore
+--  Copyright (C) 2019, AdaCore
 --
 
---  This spec has been automatically generated from STM32L4x2.svd
+--  This spec has been automatically generated from STM32L5x2.svd
 
 pragma Ada_2012;
 pragma Style_Checks (Off);
@@ -46,11 +46,8 @@ package Interfaces.STM32.GPIO is
       Arr at 0 range 0 .. 31;
    end record;
 
-   --  OTYPER_OT array element
-   subtype OTYPER_OT_Element is Interfaces.Bit_Types.Bit;
-
    --  OTYPER_OT array
-   type OTYPER_OT_Field_Array is array (0 .. 15) of OTYPER_OT_Element
+   type OTYPER_OT_Field_Array is array (0 .. 15) of Boolean
      with Component_Size => 1, Size => 16;
 
    --  Type definition for OTYPER_OT
@@ -144,11 +141,8 @@ package Interfaces.STM32.GPIO is
       Arr at 0 range 0 .. 31;
    end record;
 
-   --  IDR array element
-   subtype IDR_Element is Interfaces.Bit_Types.Bit;
-
    --  IDR array
-   type IDR_Field_Array is array (0 .. 15) of IDR_Element
+   type IDR_Field_Array is array (0 .. 15) of Boolean
      with Component_Size => 1, Size => 16;
 
    --  Type definition for IDR
@@ -186,11 +180,8 @@ package Interfaces.STM32.GPIO is
       Reserved_16_31 at 0 range 16 .. 31;
    end record;
 
-   --  ODR array element
-   subtype ODR_Element is Interfaces.Bit_Types.Bit;
-
    --  ODR array
-   type ODR_Field_Array is array (0 .. 15) of ODR_Element
+   type ODR_Field_Array is array (0 .. 15) of Boolean
      with Component_Size => 1, Size => 16;
 
    --  Type definition for ODR
@@ -228,11 +219,8 @@ package Interfaces.STM32.GPIO is
       Reserved_16_31 at 0 range 16 .. 31;
    end record;
 
-   --  BSRR_BS array element
-   subtype BSRR_BS_Element is Interfaces.Bit_Types.Bit;
-
    --  BSRR_BS array
-   type BSRR_BS_Field_Array is array (0 .. 15) of BSRR_BS_Element
+   type BSRR_BS_Field_Array is array (0 .. 15) of Boolean
      with Component_Size => 1, Size => 16;
 
    --  Type definition for BSRR_BS
@@ -255,11 +243,8 @@ package Interfaces.STM32.GPIO is
       Arr at 0 range 0 .. 15;
    end record;
 
-   --  BSRR_BR array element
-   subtype BSRR_BR_Element is Interfaces.Bit_Types.Bit;
-
    --  BSRR_BR array
-   type BSRR_BR_Field_Array is array (0 .. 15) of BSRR_BR_Element
+   type BSRR_BR_Field_Array is array (0 .. 15) of Boolean
      with Component_Size => 1, Size => 16;
 
    --  Type definition for BSRR_BR
@@ -297,11 +282,8 @@ package Interfaces.STM32.GPIO is
       BR at 0 range 16 .. 31;
    end record;
 
-   --  LCKR_LCK array element
-   subtype LCKR_LCK_Element is Interfaces.Bit_Types.Bit;
-
    --  LCKR_LCK array
-   type LCKR_LCK_Field_Array is array (0 .. 15) of LCKR_LCK_Element
+   type LCKR_LCK_Field_Array is array (0 .. 15) of Boolean
      with Component_Size => 1, Size => 16;
 
    --  Type definition for LCKR_LCK
@@ -324,14 +306,12 @@ package Interfaces.STM32.GPIO is
       Arr at 0 range 0 .. 15;
    end record;
 
-   subtype LCKR_LCKK_Field is Interfaces.Bit_Types.Bit;
-
    --  GPIO port configuration lock register
    type LCKR_Register is record
       --  Port x lock bit y (y= 0..15)
       LCK            : LCKR_LCK_Field := (As_Array => False, Val => 16#0#);
       --  Port x lock bit y (y= 0..15)
-      LCKK           : LCKR_LCKK_Field := 16#0#;
+      LCKK           : Boolean := False;
       --  unspecified
       Reserved_17_31 : Interfaces.Bit_Types.UInt15 := 16#0#;
    end record
@@ -344,11 +324,11 @@ package Interfaces.STM32.GPIO is
       Reserved_17_31 at 0 range 17 .. 31;
    end record;
 
-   --  AFRL array element
-   subtype AFRL_Element is Interfaces.Bit_Types.UInt4;
+   --  AFRL_AFSEL array element
+   subtype AFRL_AFSEL_Element is Interfaces.Bit_Types.UInt4;
 
-   --  AFRL array
-   type AFRL_Field_Array is array (0 .. 7) of AFRL_Element
+   --  AFRL_AFSEL array
+   type AFRL_AFSEL_Field_Array is array (0 .. 7) of AFRL_AFSEL_Element
      with Component_Size => 4, Size => 32;
 
    --  GPIO alternate function low register
@@ -357,11 +337,11 @@ package Interfaces.STM32.GPIO is
    is record
       case As_Array is
          when False =>
-            --  AFRL as a value
+            --  AFSEL as a value
             Val : Interfaces.Bit_Types.Word;
          when True =>
-            --  AFRL as an array
-            Arr : AFRL_Field_Array;
+            --  AFSEL as an array
+            Arr : AFRL_AFSEL_Field_Array;
       end case;
    end record
      with Unchecked_Union, Size => 32, Volatile_Full_Access,
@@ -372,11 +352,11 @@ package Interfaces.STM32.GPIO is
       Arr at 0 range 0 .. 31;
    end record;
 
-   --  AFRH array element
-   subtype AFRH_Element is Interfaces.Bit_Types.UInt4;
+   --  AFRH_AFSEL array element
+   subtype AFRH_AFSEL_Element is Interfaces.Bit_Types.UInt4;
 
-   --  AFRH array
-   type AFRH_Field_Array is array (8 .. 15) of AFRH_Element
+   --  AFRH_AFSEL array
+   type AFRH_AFSEL_Field_Array is array (8 .. 15) of AFRH_AFSEL_Element
      with Component_Size => 4, Size => 32;
 
    --  GPIO alternate function high register
@@ -385,11 +365,11 @@ package Interfaces.STM32.GPIO is
    is record
       case As_Array is
          when False =>
-            --  AFRH as a value
+            --  AFSEL as a value
             Val : Interfaces.Bit_Types.Word;
          when True =>
-            --  AFRH as an array
-            Arr : AFRH_Field_Array;
+            --  AFSEL as an array
+            Arr : AFRH_AFSEL_Field_Array;
       end case;
    end record
      with Unchecked_Union, Size => 32, Volatile_Full_Access,
@@ -398,6 +378,84 @@ package Interfaces.STM32.GPIO is
    for AFRH_Register use record
       Val at 0 range 0 .. 31;
       Arr at 0 range 0 .. 31;
+   end record;
+
+   --  BRR_BR array
+   type BRR_BR_Field_Array is array (0 .. 15) of Boolean
+     with Component_Size => 1, Size => 16;
+
+   --  Type definition for BRR_BR
+   type BRR_BR_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  BR as a value
+            Val : Interfaces.Bit_Types.Short;
+         when True =>
+            --  BR as an array
+            Arr : BRR_BR_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 16;
+
+   for BRR_BR_Field use record
+      Val at 0 range 0 .. 15;
+      Arr at 0 range 0 .. 15;
+   end record;
+
+   --  GPIO port bit reset register
+   type BRR_Register is record
+      --  Write-only. Port x reset IO pin y
+      BR             : BRR_BR_Field := (As_Array => False, Val => 16#0#);
+      --  unspecified
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
+   end record
+     with Volatile_Full_Access, Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for BRR_Register use record
+      BR             at 0 range 0 .. 15;
+      Reserved_16_31 at 0 range 16 .. 31;
+   end record;
+
+   --  SECCFGR_SEC array
+   type SECCFGR_SEC_Field_Array is array (0 .. 15) of Boolean
+     with Component_Size => 1, Size => 16;
+
+   --  Type definition for SECCFGR_SEC
+   type SECCFGR_SEC_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  SEC as a value
+            Val : Interfaces.Bit_Types.Short;
+         when True =>
+            --  SEC as an array
+            Arr : SECCFGR_SEC_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 16;
+
+   for SECCFGR_SEC_Field use record
+      Val at 0 range 0 .. 15;
+      Arr at 0 range 0 .. 15;
+   end record;
+
+   --  GPIO secure configuration register
+   type SECCFGR_Register is record
+      --  Write-only. I/O pin of Port x secure bit enable
+      SEC            : SECCFGR_SEC_Field := (As_Array => False, Val => 16#0#);
+      --  unspecified
+      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
+   end record
+     with Volatile_Full_Access, Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for SECCFGR_Register use record
+      SEC            at 0 range 0 .. 15;
+      Reserved_16_31 at 0 range 16 .. 31;
    end record;
 
    -----------------
@@ -426,6 +484,10 @@ package Interfaces.STM32.GPIO is
       AFRL    : aliased AFRL_Register;
       --  GPIO alternate function high register
       AFRH    : aliased AFRH_Register;
+      --  GPIO port bit reset register
+      BRR     : aliased BRR_Register;
+      --  GPIO secure configuration register
+      SECCFGR : aliased SECCFGR_Register;
    end record
      with Volatile;
 
@@ -440,30 +502,72 @@ package Interfaces.STM32.GPIO is
       LCKR    at 16#1C# range 0 .. 31;
       AFRL    at 16#20# range 0 .. 31;
       AFRH    at 16#24# range 0 .. 31;
+      BRR     at 16#28# range 0 .. 31;
+      SECCFGR at 16#30# range 0 .. 31;
    end record;
 
    --  General-purpose I/Os
    GPIOA_Periph : aliased GPIO_Peripheral
-     with Import, Address => System'To_Address (16#48000000#);
+     with Import, Address => System'To_Address (16#42020000#);
 
    --  General-purpose I/Os
    GPIOB_Periph : aliased GPIO_Peripheral
-     with Import, Address => System'To_Address (16#48000400#);
+     with Import, Address => System'To_Address (16#42020400#);
 
    --  General-purpose I/Os
    GPIOC_Periph : aliased GPIO_Peripheral
-     with Import, Address => System'To_Address (16#48000800#);
+     with Import, Address => System'To_Address (16#42020800#);
 
    --  General-purpose I/Os
    GPIOD_Periph : aliased GPIO_Peripheral
-     with Import, Address => System'To_Address (16#48000C00#);
+     with Import, Address => System'To_Address (16#42020C00#);
 
    --  General-purpose I/Os
    GPIOE_Periph : aliased GPIO_Peripheral
-     with Import, Address => System'To_Address (16#48001000#);
+     with Import, Address => System'To_Address (16#42021000#);
+
+   --  General-purpose I/Os
+   GPIOF_Periph : aliased GPIO_Peripheral
+     with Import, Address => System'To_Address (16#42021400#);
+
+   --  General-purpose I/Os
+   GPIOG_Periph : aliased GPIO_Peripheral
+     with Import, Address => System'To_Address (16#42021800#);
 
    --  General-purpose I/Os
    GPIOH_Periph : aliased GPIO_Peripheral
-     with Import, Address => System'To_Address (16#48001C00#);
+     with Import, Address => System'To_Address (16#42021C00#);
+
+   --  General-purpose I/Os
+   SEC_GPIOA_Periph : aliased GPIO_Peripheral
+     with Import, Address => System'To_Address (16#5202000#);
+
+   --  General-purpose I/Os
+   SEC_GPIOB_Periph : aliased GPIO_Peripheral
+     with Import, Address => System'To_Address (16#52020400#);
+
+   --  General-purpose I/Os
+   SEC_GPIOC_Periph : aliased GPIO_Peripheral
+     with Import, Address => System'To_Address (16#52020800#);
+
+   --  General-purpose I/Os
+   SEC_GPIOD_Periph : aliased GPIO_Peripheral
+     with Import, Address => System'To_Address (16#52020C00#);
+
+   --  General-purpose I/Os
+   SEC_GPIOE_Periph : aliased GPIO_Peripheral
+     with Import, Address => System'To_Address (16#52021000#);
+
+   --  General-purpose I/Os
+   SEC_GPIOF_Periph : aliased GPIO_Peripheral
+     with Import, Address => System'To_Address (16#52021400#);
+
+   --  General-purpose I/Os
+   SEC_GPIOG_Periph : aliased GPIO_Peripheral
+     with Import, Address => System'To_Address (16#52021800#);
+
+   --  General-purpose I/Os
+   SEC_GPIOH_Periph : aliased GPIO_Peripheral
+     with Import, Address => System'To_Address (16#52021C00#);
 
 end Interfaces.STM32.GPIO;

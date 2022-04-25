@@ -1,8 +1,8 @@
 --
---  Copyright (C) 2017, AdaCore
+--  Copyright (C) 2019, AdaCore
 --
 
---  This spec has been automatically generated from STM32L4x2.svd
+--  This spec has been automatically generated from STM32L5x2.svd
 
 pragma Ada_2012;
 pragma Style_Checks (Off);
@@ -18,82 +18,67 @@ package Interfaces.STM32.SYSCFG is
    -- Registers --
    ---------------
 
-   subtype MEMRMP_MEM_MODE_Field is Interfaces.Bit_Types.UInt3;
-   subtype MEMRMP_QFS_Field is Interfaces.Bit_Types.Bit;
-   subtype MEMRMP_FB_MODE_Field is Interfaces.Bit_Types.Bit;
-
-   --  memory remap register
-   type MEMRMP_Register is record
-      --  Memory mapping selection
-      MEM_MODE      : MEMRMP_MEM_MODE_Field := 16#0#;
-      --  QUADSPI memory mapping swap
-      QFS           : MEMRMP_QFS_Field := 16#0#;
+   --  SYSCFG secure configuration register
+   type SECCFGR_Register is record
+      --  SYSCFG clock control security
+      SYSCFGSEC     : Boolean := False;
+      --  ClassB security
+      CLASSBSEC     : Boolean := False;
+      --  SRAM2 security
+      SRAM2SEC      : Boolean := False;
+      --  FPUSEC
+      FPUSEC        : Boolean := False;
       --  unspecified
-      Reserved_4_7  : Interfaces.Bit_Types.UInt4 := 16#0#;
-      --  Flash Bank mode selection
-      FB_MODE       : MEMRMP_FB_MODE_Field := 16#0#;
-      --  unspecified
-      Reserved_9_31 : Interfaces.Bit_Types.UInt23 := 16#0#;
+      Reserved_4_31 : Interfaces.Bit_Types.UInt28 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
-   for MEMRMP_Register use record
-      MEM_MODE      at 0 range 0 .. 2;
-      QFS           at 0 range 3 .. 3;
-      Reserved_4_7  at 0 range 4 .. 7;
-      FB_MODE       at 0 range 8 .. 8;
-      Reserved_9_31 at 0 range 9 .. 31;
+   for SECCFGR_Register use record
+      SYSCFGSEC     at 0 range 0 .. 0;
+      CLASSBSEC     at 0 range 1 .. 1;
+      SRAM2SEC      at 0 range 2 .. 2;
+      FPUSEC        at 0 range 3 .. 3;
+      Reserved_4_31 at 0 range 4 .. 31;
    end record;
-
-   subtype CFGR1_FWDIS_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR1_BOOSTEN_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR1_I2C_PB6_FMP_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR1_I2C_PB7_FMP_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR1_I2C_PB8_FMP_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR1_I2C_PB9_FMP_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR1_I2C1_FMP_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR1_I2C2_FMP_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR1_I2C3_FMP_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR1_FPU_IE_Field is Interfaces.Bit_Types.UInt6;
 
    --  configuration register 1
    type CFGR1_Register is record
-      --  Firewall disable
-      FWDIS          : CFGR1_FWDIS_Field := 16#1#;
       --  unspecified
-      Reserved_1_7   : Interfaces.Bit_Types.UInt7 := 16#0#;
+      Reserved_0_7   : Interfaces.Bit_Types.Byte := 16#0#;
       --  I/O analog switch voltage booster enable
-      BOOSTEN        : CFGR1_BOOSTEN_Field := 16#0#;
+      BOOSTEN        : Boolean := False;
+      --  GPIO analog switch control voltage selection
+      ANASWVDD       : Boolean := False;
       --  unspecified
-      Reserved_9_15  : Interfaces.Bit_Types.UInt7 := 16#0#;
+      Reserved_10_15 : Interfaces.Bit_Types.UInt6 := 16#0#;
       --  Fast-mode Plus (Fm+) driving capability activation on PB6
-      I2C_PB6_FMP    : CFGR1_I2C_PB6_FMP_Field := 16#0#;
+      I2C_PB6_FMP    : Boolean := False;
       --  Fast-mode Plus (Fm+) driving capability activation on PB7
-      I2C_PB7_FMP    : CFGR1_I2C_PB7_FMP_Field := 16#0#;
+      I2C_PB7_FMP    : Boolean := False;
       --  Fast-mode Plus (Fm+) driving capability activation on PB8
-      I2C_PB8_FMP    : CFGR1_I2C_PB8_FMP_Field := 16#0#;
+      I2C_PB8_FMP    : Boolean := False;
       --  Fast-mode Plus (Fm+) driving capability activation on PB9
-      I2C_PB9_FMP    : CFGR1_I2C_PB9_FMP_Field := 16#0#;
+      I2C_PB9_FMP    : Boolean := False;
       --  I2C1 Fast-mode Plus driving capability activation
-      I2C1_FMP       : CFGR1_I2C1_FMP_Field := 16#0#;
+      I2C1_FMP       : Boolean := False;
       --  I2C2 Fast-mode Plus driving capability activation
-      I2C2_FMP       : CFGR1_I2C2_FMP_Field := 16#0#;
+      I2C2_FMP       : Boolean := False;
       --  I2C3 Fast-mode Plus driving capability activation
-      I2C3_FMP       : CFGR1_I2C3_FMP_Field := 16#0#;
+      I2C3_FMP       : Boolean := False;
+      --  I2C4_FMP
+      I2C4_FMP       : Boolean := False;
       --  unspecified
-      Reserved_23_25 : Interfaces.Bit_Types.UInt3 := 16#0#;
-      --  Floating Point Unit interrupts enable bits
-      FPU_IE         : CFGR1_FPU_IE_Field := 16#1F#;
+      Reserved_24_31 : Interfaces.Bit_Types.Byte := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for CFGR1_Register use record
-      FWDIS          at 0 range 0 .. 0;
-      Reserved_1_7   at 0 range 1 .. 7;
+      Reserved_0_7   at 0 range 0 .. 7;
       BOOSTEN        at 0 range 8 .. 8;
-      Reserved_9_15  at 0 range 9 .. 15;
+      ANASWVDD       at 0 range 9 .. 9;
+      Reserved_10_15 at 0 range 10 .. 15;
       I2C_PB6_FMP    at 0 range 16 .. 16;
       I2C_PB7_FMP    at 0 range 17 .. 17;
       I2C_PB8_FMP    at 0 range 18 .. 18;
@@ -101,203 +86,80 @@ package Interfaces.STM32.SYSCFG is
       I2C1_FMP       at 0 range 20 .. 20;
       I2C2_FMP       at 0 range 21 .. 21;
       I2C3_FMP       at 0 range 22 .. 22;
-      Reserved_23_25 at 0 range 23 .. 25;
-      FPU_IE         at 0 range 26 .. 31;
+      I2C4_FMP       at 0 range 23 .. 23;
+      Reserved_24_31 at 0 range 24 .. 31;
    end record;
 
-   subtype EXTICR1_EXTI0_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR1_EXTI1_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR1_EXTI2_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR1_EXTI3_Field is Interfaces.Bit_Types.UInt3;
+   subtype FPUIMR_FPU_IE_Field is Interfaces.Bit_Types.UInt6;
 
-   --  external interrupt configuration register 1
-   type EXTICR1_Register is record
-      --  EXTI 0 configuration bits
-      EXTI0          : EXTICR1_EXTI0_Field := 16#0#;
+   --  FPU interrupt mask register
+   type FPUIMR_Register is record
+      --  Floating point unit interrupts enable bits
+      FPU_IE        : FPUIMR_FPU_IE_Field := 16#1F#;
       --  unspecified
-      Reserved_3_3   : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI 1 configuration bits
-      EXTI1          : EXTICR1_EXTI1_Field := 16#0#;
-      --  unspecified
-      Reserved_7_7   : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI 2 configuration bits
-      EXTI2          : EXTICR1_EXTI2_Field := 16#0#;
-      --  unspecified
-      Reserved_11_11 : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI 3 configuration bits
-      EXTI3          : EXTICR1_EXTI3_Field := 16#0#;
-      --  unspecified
-      Reserved_15_31 : Interfaces.Bit_Types.UInt17 := 16#0#;
+      Reserved_6_31 : Interfaces.Bit_Types.UInt26 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
-   for EXTICR1_Register use record
-      EXTI0          at 0 range 0 .. 2;
-      Reserved_3_3   at 0 range 3 .. 3;
-      EXTI1          at 0 range 4 .. 6;
-      Reserved_7_7   at 0 range 7 .. 7;
-      EXTI2          at 0 range 8 .. 10;
-      Reserved_11_11 at 0 range 11 .. 11;
-      EXTI3          at 0 range 12 .. 14;
-      Reserved_15_31 at 0 range 15 .. 31;
+   for FPUIMR_Register use record
+      FPU_IE        at 0 range 0 .. 5;
+      Reserved_6_31 at 0 range 6 .. 31;
    end record;
 
-   subtype EXTICR2_EXTI4_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR2_EXTI5_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR2_EXTI6_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR2_EXTI7_Field is Interfaces.Bit_Types.UInt3;
-
-   --  external interrupt configuration register 2
-   type EXTICR2_Register is record
-      --  EXTI 4 configuration bits
-      EXTI4          : EXTICR2_EXTI4_Field := 16#0#;
-      --  unspecified
-      Reserved_3_3   : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI 5 configuration bits
-      EXTI5          : EXTICR2_EXTI5_Field := 16#0#;
-      --  unspecified
-      Reserved_7_7   : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI 6 configuration bits
-      EXTI6          : EXTICR2_EXTI6_Field := 16#0#;
-      --  unspecified
-      Reserved_11_11 : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI 7 configuration bits
-      EXTI7          : EXTICR2_EXTI7_Field := 16#0#;
-      --  unspecified
-      Reserved_15_31 : Interfaces.Bit_Types.UInt17 := 16#0#;
-   end record
-     with Volatile_Full_Access, Size => 32,
-          Bit_Order => System.Low_Order_First;
-
-   for EXTICR2_Register use record
-      EXTI4          at 0 range 0 .. 2;
-      Reserved_3_3   at 0 range 3 .. 3;
-      EXTI5          at 0 range 4 .. 6;
-      Reserved_7_7   at 0 range 7 .. 7;
-      EXTI6          at 0 range 8 .. 10;
-      Reserved_11_11 at 0 range 11 .. 11;
-      EXTI7          at 0 range 12 .. 14;
-      Reserved_15_31 at 0 range 15 .. 31;
-   end record;
-
-   subtype EXTICR3_EXTI8_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR3_EXTI9_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR3_EXTI10_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR3_EXTI11_Field is Interfaces.Bit_Types.UInt3;
-
-   --  external interrupt configuration register 3
-   type EXTICR3_Register is record
-      --  EXTI 8 configuration bits
-      EXTI8          : EXTICR3_EXTI8_Field := 16#0#;
-      --  unspecified
-      Reserved_3_3   : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI 9 configuration bits
-      EXTI9          : EXTICR3_EXTI9_Field := 16#0#;
-      --  unspecified
-      Reserved_7_7   : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI 10 configuration bits
-      EXTI10         : EXTICR3_EXTI10_Field := 16#0#;
-      --  unspecified
-      Reserved_11_11 : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI 11 configuration bits
-      EXTI11         : EXTICR3_EXTI11_Field := 16#0#;
-      --  unspecified
-      Reserved_15_31 : Interfaces.Bit_Types.UInt17 := 16#0#;
-   end record
-     with Volatile_Full_Access, Size => 32,
-          Bit_Order => System.Low_Order_First;
-
-   for EXTICR3_Register use record
-      EXTI8          at 0 range 0 .. 2;
-      Reserved_3_3   at 0 range 3 .. 3;
-      EXTI9          at 0 range 4 .. 6;
-      Reserved_7_7   at 0 range 7 .. 7;
-      EXTI10         at 0 range 8 .. 10;
-      Reserved_11_11 at 0 range 11 .. 11;
-      EXTI11         at 0 range 12 .. 14;
-      Reserved_15_31 at 0 range 15 .. 31;
-   end record;
-
-   subtype EXTICR4_EXTI12_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR4_EXTI13_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR4_EXTI14_Field is Interfaces.Bit_Types.UInt3;
-   subtype EXTICR4_EXTI15_Field is Interfaces.Bit_Types.UInt3;
-
-   --  external interrupt configuration register 4
-   type EXTICR4_Register is record
-      --  EXTI12 configuration bits
-      EXTI12         : EXTICR4_EXTI12_Field := 16#0#;
-      --  unspecified
-      Reserved_3_3   : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI13 configuration bits
-      EXTI13         : EXTICR4_EXTI13_Field := 16#0#;
-      --  unspecified
-      Reserved_7_7   : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI14 configuration bits
-      EXTI14         : EXTICR4_EXTI14_Field := 16#0#;
-      --  unspecified
-      Reserved_11_11 : Interfaces.Bit_Types.Bit := 16#0#;
-      --  EXTI15 configuration bits
-      EXTI15         : EXTICR4_EXTI15_Field := 16#0#;
-      --  unspecified
-      Reserved_15_31 : Interfaces.Bit_Types.UInt17 := 16#0#;
-   end record
-     with Volatile_Full_Access, Size => 32,
-          Bit_Order => System.Low_Order_First;
-
-   for EXTICR4_Register use record
-      EXTI12         at 0 range 0 .. 2;
-      Reserved_3_3   at 0 range 3 .. 3;
-      EXTI13         at 0 range 4 .. 6;
-      Reserved_7_7   at 0 range 7 .. 7;
-      EXTI14         at 0 range 8 .. 10;
-      Reserved_11_11 at 0 range 11 .. 11;
-      EXTI15         at 0 range 12 .. 14;
-      Reserved_15_31 at 0 range 15 .. 31;
-   end record;
-
-   subtype SCSR_SRAM2ER_Field is Interfaces.Bit_Types.Bit;
-   subtype SCSR_SRAM2BSY_Field is Interfaces.Bit_Types.Bit;
-
-   --  SCSR
-   type SCSR_Register is record
-      --  SRAM2 Erase
-      SRAM2ER       : SCSR_SRAM2ER_Field := 16#0#;
-      --  Read-only. SRAM2 busy by erase operation
-      SRAM2BSY      : SCSR_SRAM2BSY_Field := 16#0#;
+   --  SYSCFG CPU non-secure lock register
+   type CNSLCKR_Register is record
+      --  VTOR_NS register lock
+      LOCKNSVTOR    : Boolean := False;
+      --  Non-secure MPU registers lock
+      LOCKNSMPU     : Boolean := False;
       --  unspecified
       Reserved_2_31 : Interfaces.Bit_Types.UInt30 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
-   for SCSR_Register use record
-      SRAM2ER       at 0 range 0 .. 0;
-      SRAM2BSY      at 0 range 1 .. 1;
+   for CNSLCKR_Register use record
+      LOCKNSVTOR    at 0 range 0 .. 0;
+      LOCKNSMPU     at 0 range 1 .. 1;
       Reserved_2_31 at 0 range 2 .. 31;
    end record;
 
-   subtype CFGR2_CLL_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR2_SPL_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR2_PVDL_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR2_ECCL_Field is Interfaces.Bit_Types.Bit;
-   subtype CFGR2_SPF_Field is Interfaces.Bit_Types.Bit;
+   --  SYSCFG CPU secure lock register
+   type CSLOCKR_Register is record
+      --  LOCKSVTAIRCR
+      LOCKSVTAIRCR  : Boolean := False;
+      --  LOCKSMPU
+      LOCKSMPU      : Boolean := False;
+      --  LOCKSAU
+      LOCKSAU       : Boolean := False;
+      --  unspecified
+      Reserved_3_31 : Interfaces.Bit_Types.UInt29 := 16#0#;
+   end record
+     with Volatile_Full_Access, Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for CSLOCKR_Register use record
+      LOCKSVTAIRCR  at 0 range 0 .. 0;
+      LOCKSMPU      at 0 range 1 .. 1;
+      LOCKSAU       at 0 range 2 .. 2;
+      Reserved_3_31 at 0 range 3 .. 31;
+   end record;
 
    --  CFGR2
    type CFGR2_Register is record
-      --  Write-only. OCKUP (Hardfault) output enable bit
-      CLL           : CFGR2_CLL_Field := 16#0#;
+      --  Write-only. LOCKUP (hardfault) output enable bit
+      CLL           : Boolean := False;
       --  Write-only. SRAM2 parity lock bit
-      SPL           : CFGR2_SPL_Field := 16#0#;
+      SPL           : Boolean := False;
       --  Write-only. PVD lock enable bit
-      PVDL          : CFGR2_PVDL_Field := 16#0#;
+      PVDL          : Boolean := False;
       --  Write-only. ECC Lock
-      ECCL          : CFGR2_ECCL_Field := 16#0#;
+      ECCL          : Boolean := False;
       --  unspecified
       Reserved_4_7  : Interfaces.Bit_Types.UInt4 := 16#0#;
       --  SRAM2 parity error flag
-      SPF           : CFGR2_SPF_Field := 16#0#;
+      SPF           : Boolean := False;
       --  unspecified
       Reserved_9_31 : Interfaces.Bit_Types.UInt23 := 16#0#;
    end record
@@ -314,105 +176,107 @@ package Interfaces.STM32.SYSCFG is
       Reserved_9_31 at 0 range 9 .. 31;
    end record;
 
-   subtype SWPR_P0WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P1WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P2WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P3WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P4WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P5WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P6WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P7WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P8WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P9WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P10WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P11WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P12WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P13WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P14WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P15WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P16WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P17WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P18WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P19WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P20WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P21WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P22WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P23WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P24WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P25WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P26WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P27WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P28WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P29WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P30WP_Field is Interfaces.Bit_Types.Bit;
-   subtype SWPR_P31WP_Field is Interfaces.Bit_Types.Bit;
+   --  SCSR
+   type SCSR_Register is record
+      --  SRAM2 Erase
+      SRAM2ER       : Boolean := False;
+      --  Read-only. SRAM2 busy by erase operation
+      SRAM2BSY      : Boolean := False;
+      --  unspecified
+      Reserved_2_31 : Interfaces.Bit_Types.UInt30 := 16#0#;
+   end record
+     with Volatile_Full_Access, Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for SCSR_Register use record
+      SRAM2ER       at 0 range 0 .. 0;
+      SRAM2BSY      at 0 range 1 .. 1;
+      Reserved_2_31 at 0 range 2 .. 31;
+   end record;
+
+   subtype SKR_KEY_Field is Interfaces.Bit_Types.Byte;
+
+   --  SKR
+   type SKR_Register is record
+      --  Write-only. SRAM2 write protection key for software erase
+      KEY           : SKR_KEY_Field := 16#0#;
+      --  unspecified
+      Reserved_8_31 : Interfaces.Bit_Types.UInt24 := 16#0#;
+   end record
+     with Volatile_Full_Access, Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for SKR_Register use record
+      KEY           at 0 range 0 .. 7;
+      Reserved_8_31 at 0 range 8 .. 31;
+   end record;
 
    --  SWPR
    type SWPR_Register is record
       --  Write-only. P0WP
-      P0WP  : SWPR_P0WP_Field := 16#0#;
+      P0WP  : Boolean := False;
       --  Write-only. P1WP
-      P1WP  : SWPR_P1WP_Field := 16#0#;
+      P1WP  : Boolean := False;
       --  Write-only. P2WP
-      P2WP  : SWPR_P2WP_Field := 16#0#;
+      P2WP  : Boolean := False;
       --  Write-only. P3WP
-      P3WP  : SWPR_P3WP_Field := 16#0#;
+      P3WP  : Boolean := False;
       --  Write-only. P4WP
-      P4WP  : SWPR_P4WP_Field := 16#0#;
+      P4WP  : Boolean := False;
       --  Write-only. P5WP
-      P5WP  : SWPR_P5WP_Field := 16#0#;
+      P5WP  : Boolean := False;
       --  Write-only. P6WP
-      P6WP  : SWPR_P6WP_Field := 16#0#;
+      P6WP  : Boolean := False;
       --  Write-only. P7WP
-      P7WP  : SWPR_P7WP_Field := 16#0#;
+      P7WP  : Boolean := False;
       --  Write-only. P8WP
-      P8WP  : SWPR_P8WP_Field := 16#0#;
+      P8WP  : Boolean := False;
       --  Write-only. P9WP
-      P9WP  : SWPR_P9WP_Field := 16#0#;
+      P9WP  : Boolean := False;
       --  Write-only. P10WP
-      P10WP : SWPR_P10WP_Field := 16#0#;
+      P10WP : Boolean := False;
       --  Write-only. P11WP
-      P11WP : SWPR_P11WP_Field := 16#0#;
+      P11WP : Boolean := False;
       --  Write-only. P12WP
-      P12WP : SWPR_P12WP_Field := 16#0#;
+      P12WP : Boolean := False;
       --  Write-only. P13WP
-      P13WP : SWPR_P13WP_Field := 16#0#;
+      P13WP : Boolean := False;
       --  Write-only. P14WP
-      P14WP : SWPR_P14WP_Field := 16#0#;
+      P14WP : Boolean := False;
       --  Write-only. P15WP
-      P15WP : SWPR_P15WP_Field := 16#0#;
+      P15WP : Boolean := False;
       --  Write-only. P16WP
-      P16WP : SWPR_P16WP_Field := 16#0#;
+      P16WP : Boolean := False;
       --  Write-only. P17WP
-      P17WP : SWPR_P17WP_Field := 16#0#;
+      P17WP : Boolean := False;
       --  Write-only. P18WP
-      P18WP : SWPR_P18WP_Field := 16#0#;
+      P18WP : Boolean := False;
       --  Write-only. P19WP
-      P19WP : SWPR_P19WP_Field := 16#0#;
+      P19WP : Boolean := False;
       --  Write-only. P20WP
-      P20WP : SWPR_P20WP_Field := 16#0#;
+      P20WP : Boolean := False;
       --  Write-only. P21WP
-      P21WP : SWPR_P21WP_Field := 16#0#;
+      P21WP : Boolean := False;
       --  Write-only. P22WP
-      P22WP : SWPR_P22WP_Field := 16#0#;
+      P22WP : Boolean := False;
       --  Write-only. P23WP
-      P23WP : SWPR_P23WP_Field := 16#0#;
+      P23WP : Boolean := False;
       --  Write-only. P24WP
-      P24WP : SWPR_P24WP_Field := 16#0#;
+      P24WP : Boolean := False;
       --  Write-only. P25WP
-      P25WP : SWPR_P25WP_Field := 16#0#;
+      P25WP : Boolean := False;
       --  Write-only. P26WP
-      P26WP : SWPR_P26WP_Field := 16#0#;
+      P26WP : Boolean := False;
       --  Write-only. P27WP
-      P27WP : SWPR_P27WP_Field := 16#0#;
+      P27WP : Boolean := False;
       --  Write-only. P28WP
-      P28WP : SWPR_P28WP_Field := 16#0#;
+      P28WP : Boolean := False;
       --  Write-only. P29WP
-      P29WP : SWPR_P29WP_Field := 16#0#;
+      P29WP : Boolean := False;
       --  Write-only. P30WP
-      P30WP : SWPR_P30WP_Field := 16#0#;
+      P30WP : Boolean := False;
       --  Write-only. SRAM2 page 31 write protection
-      P31WP : SWPR_P31WP_Field := 16#0#;
+      P31WP : Boolean := False;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -452,20 +316,125 @@ package Interfaces.STM32.SYSCFG is
       P31WP at 0 range 31 .. 31;
    end record;
 
-   subtype SKR_KEY_Field is Interfaces.Bit_Types.Byte;
+   --  SWPR2
+   type SWPR2_Register is record
+      --  Write-only. P32WP
+      P32WP : Boolean := False;
+      --  Write-only. P33WP
+      P33WP : Boolean := False;
+      --  Write-only. P34WP
+      P34WP : Boolean := False;
+      --  Write-only. P35WP
+      P35WP : Boolean := False;
+      --  Write-only. P36WP
+      P36WP : Boolean := False;
+      --  Write-only. P37WP
+      P37WP : Boolean := False;
+      --  Write-only. P38WP
+      P38WP : Boolean := False;
+      --  Write-only. P39WP
+      P39WP : Boolean := False;
+      --  Write-only. P40WP
+      P40WP : Boolean := False;
+      --  Write-only. P41WP
+      P41WP : Boolean := False;
+      --  Write-only. P42WP
+      P42WP : Boolean := False;
+      --  Write-only. P43WP
+      P43WP : Boolean := False;
+      --  Write-only. P44WP
+      P44WP : Boolean := False;
+      --  Write-only. P45WP
+      P45WP : Boolean := False;
+      --  Write-only. P46WP
+      P46WP : Boolean := False;
+      --  Write-only. P47WP
+      P47WP : Boolean := False;
+      --  Write-only. P48WP
+      P48WP : Boolean := False;
+      --  Write-only. P49WP
+      P49WP : Boolean := False;
+      --  Write-only. P50WP
+      P50WP : Boolean := False;
+      --  Write-only. P51WP
+      P51WP : Boolean := False;
+      --  Write-only. P52WP
+      P52WP : Boolean := False;
+      --  Write-only. P53WP
+      P53WP : Boolean := False;
+      --  Write-only. P54WP
+      P54WP : Boolean := False;
+      --  Write-only. P55WP
+      P55WP : Boolean := False;
+      --  Write-only. P56WP
+      P56WP : Boolean := False;
+      --  Write-only. P57WP
+      P57WP : Boolean := False;
+      --  Write-only. P58WP
+      P58WP : Boolean := False;
+      --  Write-only. P59WP
+      P59WP : Boolean := False;
+      --  Write-only. P60WP
+      P60WP : Boolean := False;
+      --  Write-only. P61WP
+      P61WP : Boolean := False;
+      --  Write-only. P62WP
+      P62WP : Boolean := False;
+      --  Write-only. P63WP
+      P63WP : Boolean := False;
+   end record
+     with Volatile_Full_Access, Size => 32,
+          Bit_Order => System.Low_Order_First;
 
-   --  SKR
-   type SKR_Register is record
-      --  Write-only. SRAM2 write protection key for software erase
-      KEY           : SKR_KEY_Field := 16#0#;
+   for SWPR2_Register use record
+      P32WP at 0 range 0 .. 0;
+      P33WP at 0 range 1 .. 1;
+      P34WP at 0 range 2 .. 2;
+      P35WP at 0 range 3 .. 3;
+      P36WP at 0 range 4 .. 4;
+      P37WP at 0 range 5 .. 5;
+      P38WP at 0 range 6 .. 6;
+      P39WP at 0 range 7 .. 7;
+      P40WP at 0 range 8 .. 8;
+      P41WP at 0 range 9 .. 9;
+      P42WP at 0 range 10 .. 10;
+      P43WP at 0 range 11 .. 11;
+      P44WP at 0 range 12 .. 12;
+      P45WP at 0 range 13 .. 13;
+      P46WP at 0 range 14 .. 14;
+      P47WP at 0 range 15 .. 15;
+      P48WP at 0 range 16 .. 16;
+      P49WP at 0 range 17 .. 17;
+      P50WP at 0 range 18 .. 18;
+      P51WP at 0 range 19 .. 19;
+      P52WP at 0 range 20 .. 20;
+      P53WP at 0 range 21 .. 21;
+      P54WP at 0 range 22 .. 22;
+      P55WP at 0 range 23 .. 23;
+      P56WP at 0 range 24 .. 24;
+      P57WP at 0 range 25 .. 25;
+      P58WP at 0 range 26 .. 26;
+      P59WP at 0 range 27 .. 27;
+      P60WP at 0 range 28 .. 28;
+      P61WP at 0 range 29 .. 29;
+      P62WP at 0 range 30 .. 30;
+      P63WP at 0 range 31 .. 31;
+   end record;
+
+   subtype RSSCMDR_RSSCMD_Field is Interfaces.Bit_Types.Byte;
+
+   --  RSSCMDR
+   type RSSCMDR_Register is record
+      --  RSS commands
+      RSSCMD        : RSSCMDR_RSSCMD_Field := 16#0#;
       --  unspecified
       Reserved_8_31 : Interfaces.Bit_Types.UInt24 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
-   for SKR_Register use record
-      KEY           at 0 range 0 .. 7;
+   for RSSCMDR_Register use record
+      RSSCMD        at 0 range 0 .. 7;
       Reserved_8_31 at 0 range 8 .. 31;
    end record;
 
@@ -475,41 +444,48 @@ package Interfaces.STM32.SYSCFG is
 
    --  System configuration controller
    type SYSCFG_Peripheral is record
-      --  memory remap register
-      MEMRMP  : aliased MEMRMP_Register;
+      --  SYSCFG secure configuration register
+      SECCFGR : aliased SECCFGR_Register;
       --  configuration register 1
       CFGR1   : aliased CFGR1_Register;
-      --  external interrupt configuration register 1
-      EXTICR1 : aliased EXTICR1_Register;
-      --  external interrupt configuration register 2
-      EXTICR2 : aliased EXTICR2_Register;
-      --  external interrupt configuration register 3
-      EXTICR3 : aliased EXTICR3_Register;
-      --  external interrupt configuration register 4
-      EXTICR4 : aliased EXTICR4_Register;
-      --  SCSR
-      SCSR    : aliased SCSR_Register;
+      --  FPU interrupt mask register
+      FPUIMR  : aliased FPUIMR_Register;
+      --  SYSCFG CPU non-secure lock register
+      CNSLCKR : aliased CNSLCKR_Register;
+      --  SYSCFG CPU secure lock register
+      CSLOCKR : aliased CSLOCKR_Register;
       --  CFGR2
       CFGR2   : aliased CFGR2_Register;
-      --  SWPR
-      SWPR    : aliased SWPR_Register;
+      --  SCSR
+      SCSR    : aliased SCSR_Register;
       --  SKR
       SKR     : aliased SKR_Register;
+      --  SWPR
+      SWPR    : aliased SWPR_Register;
+      --  SWPR2
+      SWPR2   : aliased SWPR2_Register;
+      --  RSSCMDR
+      RSSCMDR : aliased RSSCMDR_Register;
    end record
      with Volatile;
 
    for SYSCFG_Peripheral use record
-      MEMRMP  at 16#0# range 0 .. 31;
+      SECCFGR at 16#0# range 0 .. 31;
       CFGR1   at 16#4# range 0 .. 31;
-      EXTICR1 at 16#8# range 0 .. 31;
-      EXTICR2 at 16#C# range 0 .. 31;
-      EXTICR3 at 16#10# range 0 .. 31;
-      EXTICR4 at 16#14# range 0 .. 31;
+      FPUIMR  at 16#8# range 0 .. 31;
+      CNSLCKR at 16#C# range 0 .. 31;
+      CSLOCKR at 16#10# range 0 .. 31;
+      CFGR2   at 16#14# range 0 .. 31;
       SCSR    at 16#18# range 0 .. 31;
-      CFGR2   at 16#1C# range 0 .. 31;
+      SKR     at 16#1C# range 0 .. 31;
       SWPR    at 16#20# range 0 .. 31;
-      SKR     at 16#24# range 0 .. 31;
+      SWPR2   at 16#24# range 0 .. 31;
+      RSSCMDR at 16#2C# range 0 .. 31;
    end record;
+
+   --  System configuration controller
+   SEC_SYSCFG_Periph : aliased SYSCFG_Peripheral
+     with Import, Address => System'To_Address (16#50010000#);
 
    --  System configuration controller
    SYSCFG_Periph : aliased SYSCFG_Peripheral

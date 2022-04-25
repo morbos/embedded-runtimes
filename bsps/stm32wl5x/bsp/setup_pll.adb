@@ -52,7 +52,7 @@ procedure Setup_Pll is
 --  HSE_Bypass      : constant Boolean := False;
 --  don't bypass ext. resonator
    LSI_Enabled     : constant Boolean := False;  -- use low-speed internal clk
-
+   RNG_Enabled     : constant Boolean := True;
    Activate_PLL       : constant Boolean := False;
    Activate_Overdrive : constant Boolean := False;
 --   Activate_PLLI2S    : constant Boolean := False;
@@ -236,6 +236,10 @@ procedure Setup_Pll is
 
       end if;
 
+      if RNG_Enabled then
+         --  vvvvv MSI, need a select for 4 choices
+         RCC_Periph.CCIPR.RNGSEL := 3;
+      end if;
       --  Activate PLL if enabled
 --      if Activate_PLL then
          --  Disable the main PLL before configuring it

@@ -192,18 +192,6 @@ Read_Only     = 0b110
 	dsb
 	nop
 	nop
-	nop
-	nop
-	nop
-	nop
-
-	.short	0xde00
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
 
 
 	bl	_ada_setup_pll

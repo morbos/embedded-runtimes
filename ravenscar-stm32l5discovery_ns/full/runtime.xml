@@ -4,9 +4,10 @@
   <configuration>
    <config>
 
-   type Loaders is ("ROM_NS_L5x2", "RAM_NS_L5x2", "RAM", "USER");
+   type Loaders is ("ROM_NS_L5x2", "RAM_NS_L5x2", "ROM_L5x2", "RAM", "USER");
 
-   Loader : Loaders := external ("LOADER", "RAM_NS_L5x2");
+--   Loader : Loaders := external ("LOADER", "RAM_NS_L5x2");
+   Loader : Loaders := external ("LOADER", "ROM_L5x2");
 
    package Compiler is
       Common_Required_Switches := ("-mlittle-endian", "-mhard-float",
@@ -35,6 +36,11 @@
 	 when "RAM_NS_L5x2" =>
             for Required_Switches use Linker'Required_Switches &amp;
             ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2_ns/bsp/",
+             "-T", "memory-map_L5x2.ld",
+             "-T", "common-" &amp; Loader &amp; ".ld");
+	 when "ROM_L5x2" =>
+            for Required_Switches use Linker'Required_Switches &amp;
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2/bsp/",
              "-T", "memory-map_L5x2.ld",
              "-T", "common-" &amp; Loader &amp; ".ld");
          when "USER" =>

@@ -410,9 +410,7 @@ package body System.BB.CPU_Primitives is
       --  The following allows max. efficiency for "useless" tick interrupts
 
       if Alarm_Time - Now <= Max_Alarm_Interval then
-
          --  Alarm is still in the future, nothing to do, so return quickly
-
          return;
       end if;
 

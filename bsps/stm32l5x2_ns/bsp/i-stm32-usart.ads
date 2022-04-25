@@ -1,8 +1,8 @@
 --
---  Copyright (C) 2017, AdaCore
+--  Copyright (C) 2019, AdaCore
 --
 
---  This spec has been automatically generated from STM32L4x2.svd
+--  This spec has been automatically generated from STM32L5x2.svd
 
 pragma Ada_2012;
 pragma Style_Checks (Off);
@@ -18,121 +18,57 @@ package Interfaces.STM32.USART is
    -- Registers --
    ---------------
 
-   subtype CR1_UE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_UESM_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_RE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_TE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_IDLEIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_RXNEIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_TCIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_TXEIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_PEIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_PS_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_PCE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_WAKE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_M0_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_MME_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_CMIE_Field is Interfaces.Bit_Types.Bit;
-   --  CR1_DEDT array element
-   subtype CR1_DEDT_Element is Interfaces.Bit_Types.Bit;
-
-   --  CR1_DEDT array
-   type CR1_DEDT_Field_Array is array (0 .. 4) of CR1_DEDT_Element
-     with Component_Size => 1, Size => 5;
-
-   --  Type definition for CR1_DEDT
-   type CR1_DEDT_Field
-     (As_Array : Boolean := False)
-   is record
-      case As_Array is
-         when False =>
-            --  DEDT as a value
-            Val : Interfaces.Bit_Types.UInt5;
-         when True =>
-            --  DEDT as an array
-            Arr : CR1_DEDT_Field_Array;
-      end case;
-   end record
-     with Unchecked_Union, Size => 5;
-
-   for CR1_DEDT_Field use record
-      Val at 0 range 0 .. 4;
-      Arr at 0 range 0 .. 4;
-   end record;
-
-   --  CR1_DEAT array element
-   subtype CR1_DEAT_Element is Interfaces.Bit_Types.Bit;
-
-   --  CR1_DEAT array
-   type CR1_DEAT_Field_Array is array (0 .. 4) of CR1_DEAT_Element
-     with Component_Size => 1, Size => 5;
-
-   --  Type definition for CR1_DEAT
-   type CR1_DEAT_Field
-     (As_Array : Boolean := False)
-   is record
-      case As_Array is
-         when False =>
-            --  DEAT as a value
-            Val : Interfaces.Bit_Types.UInt5;
-         when True =>
-            --  DEAT as an array
-            Arr : CR1_DEAT_Field_Array;
-      end case;
-   end record
-     with Unchecked_Union, Size => 5;
-
-   for CR1_DEAT_Field use record
-      Val at 0 range 0 .. 4;
-      Arr at 0 range 0 .. 4;
-   end record;
-
-   subtype CR1_M1_Field is Interfaces.Bit_Types.Bit;
+   subtype CR1_DEDT_Field is Interfaces.Bit_Types.UInt5;
+   subtype CR1_DEAT_Field is Interfaces.Bit_Types.UInt5;
 
    --  Control register 1
    type CR1_Register is record
       --  USART enable
-      UE             : CR1_UE_Field := 16#0#;
+      UE             : Boolean := False;
       --  USART enable in Stop mode
-      UESM           : CR1_UESM_Field := 16#0#;
+      UESM           : Boolean := False;
       --  Receiver enable
-      RE             : CR1_RE_Field := 16#0#;
+      RE             : Boolean := False;
       --  Transmitter enable
-      TE             : CR1_TE_Field := 16#0#;
+      TE             : Boolean := False;
       --  IDLE interrupt enable
-      IDLEIE         : CR1_IDLEIE_Field := 16#0#;
+      IDLEIE         : Boolean := False;
       --  RXNE interrupt enable
-      RXNEIE         : CR1_RXNEIE_Field := 16#0#;
+      RXNEIE         : Boolean := False;
       --  Transmission complete interrupt enable
-      TCIE           : CR1_TCIE_Field := 16#0#;
+      TCIE           : Boolean := False;
       --  interrupt enable
-      TXEIE          : CR1_TXEIE_Field := 16#0#;
+      TXEIE          : Boolean := False;
       --  PE interrupt enable
-      PEIE           : CR1_PEIE_Field := 16#0#;
+      PEIE           : Boolean := False;
       --  Parity selection
-      PS             : CR1_PS_Field := 16#0#;
+      PS             : Boolean := False;
       --  Parity control enable
-      PCE            : CR1_PCE_Field := 16#0#;
+      PCE            : Boolean := False;
       --  Receiver wakeup method
-      WAKE           : CR1_WAKE_Field := 16#0#;
+      WAKE           : Boolean := False;
       --  Word length
-      M0             : CR1_M0_Field := 16#0#;
+      M0             : Boolean := False;
       --  Mute mode enable
-      MME            : CR1_MME_Field := 16#0#;
+      MME            : Boolean := False;
       --  Character match interrupt enable
-      CMIE           : CR1_CMIE_Field := 16#0#;
+      CMIE           : Boolean := False;
       --  unspecified
       Reserved_15_15 : Interfaces.Bit_Types.Bit := 16#0#;
-      --  DEDT0
-      DEDT           : CR1_DEDT_Field := (As_Array => False, Val => 16#0#);
-      --  DEAT0
-      DEAT           : CR1_DEAT_Field := (As_Array => False, Val => 16#0#);
+      --  DEDT
+      DEDT           : CR1_DEDT_Field := 16#0#;
+      --  DEAT
+      DEAT           : CR1_DEAT_Field := 16#0#;
       --  unspecified
       Reserved_26_27 : Interfaces.Bit_Types.UInt2 := 16#0#;
       --  Word length
-      M1             : CR1_M1_Field := 16#0#;
-      --  unspecified
-      Reserved_29_31 : Interfaces.Bit_Types.UInt3 := 16#0#;
+      M1             : Boolean := False;
+      --  FIFOEN
+      FIFOEN         : Boolean := False;
+      --  TXFEIE
+      TXFEIE         : Boolean := False;
+      --  RXFFIE
+      RXFFIE         : Boolean := False;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -158,17 +94,12 @@ package Interfaces.STM32.USART is
       DEAT           at 0 range 21 .. 25;
       Reserved_26_27 at 0 range 26 .. 27;
       M1             at 0 range 28 .. 28;
-      Reserved_29_31 at 0 range 29 .. 31;
+      FIFOEN         at 0 range 29 .. 29;
+      TXFEIE         at 0 range 30 .. 30;
+      RXFFIE         at 0 range 31 .. 31;
    end record;
 
-   subtype CR2_ADDM7_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_CLKEN_Field is Interfaces.Bit_Types.Bit;
    subtype CR2_STOP_Field is Interfaces.Bit_Types.UInt2;
-   subtype CR2_SWAP_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_RXINV_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_TXINV_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_TAINV_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_MSBFIRST_Field is Interfaces.Bit_Types.Bit;
    subtype CR2_ADD0_3_Field is Interfaces.Bit_Types.UInt4;
    subtype CR2_ADD4_7_Field is Interfaces.Bit_Types.UInt4;
 
@@ -177,25 +108,23 @@ package Interfaces.STM32.USART is
       --  unspecified
       Reserved_0_3   : Interfaces.Bit_Types.UInt4 := 16#0#;
       --  7-bit Address Detection/4-bit Address Detection
-      ADDM7          : CR2_ADDM7_Field := 16#0#;
+      ADDM7          : Boolean := False;
       --  unspecified
-      Reserved_5_10  : Interfaces.Bit_Types.UInt6 := 16#0#;
-      --  Clock enable
-      CLKEN          : CR2_CLKEN_Field := 16#0#;
+      Reserved_5_11  : Interfaces.Bit_Types.UInt7 := 16#0#;
       --  STOP bits
       STOP           : CR2_STOP_Field := 16#0#;
       --  unspecified
       Reserved_14_14 : Interfaces.Bit_Types.Bit := 16#0#;
       --  Swap TX/RX pins
-      SWAP           : CR2_SWAP_Field := 16#0#;
+      SWAP           : Boolean := False;
       --  RX pin active level inversion
-      RXINV          : CR2_RXINV_Field := 16#0#;
+      RXINV          : Boolean := False;
       --  TX pin active level inversion
-      TXINV          : CR2_TXINV_Field := 16#0#;
+      TXINV          : Boolean := False;
       --  Binary data inversion
-      TAINV          : CR2_TAINV_Field := 16#0#;
+      TAINV          : Boolean := False;
       --  Most significant bit first
-      MSBFIRST       : CR2_MSBFIRST_Field := 16#0#;
+      MSBFIRST       : Boolean := False;
       --  unspecified
       Reserved_20_23 : Interfaces.Bit_Types.UInt4 := 16#0#;
       --  Address of the USART node
@@ -209,8 +138,7 @@ package Interfaces.STM32.USART is
    for CR2_Register use record
       Reserved_0_3   at 0 range 0 .. 3;
       ADDM7          at 0 range 4 .. 4;
-      Reserved_5_10  at 0 range 5 .. 10;
-      CLKEN          at 0 range 11 .. 11;
+      Reserved_5_11  at 0 range 5 .. 11;
       STOP           at 0 range 12 .. 13;
       Reserved_14_14 at 0 range 14 .. 14;
       SWAP           at 0 range 15 .. 15;
@@ -223,58 +151,56 @@ package Interfaces.STM32.USART is
       ADD4_7         at 0 range 28 .. 31;
    end record;
 
-   subtype CR3_EIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_HDSEL_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_DMAR_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_DMAT_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_RTSE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_CTSE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_CTSIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_OVRDIS_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_DDRE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_DEM_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_DEP_Field is Interfaces.Bit_Types.Bit;
    subtype CR3_WUS_Field is Interfaces.Bit_Types.UInt2;
-   subtype CR3_WUFIE_Field is Interfaces.Bit_Types.Bit;
+   subtype CR3_RXFTCFG_Field is Interfaces.Bit_Types.UInt3;
+   subtype CR3_TXFTCFG_Field is Interfaces.Bit_Types.UInt3;
 
    --  Control register 3
    type CR3_Register is record
       --  Error interrupt enable
-      EIE            : CR3_EIE_Field := 16#0#;
+      EIE            : Boolean := False;
       --  unspecified
       Reserved_1_2   : Interfaces.Bit_Types.UInt2 := 16#0#;
       --  Half-duplex selection
-      HDSEL          : CR3_HDSEL_Field := 16#0#;
+      HDSEL          : Boolean := False;
       --  unspecified
       Reserved_4_5   : Interfaces.Bit_Types.UInt2 := 16#0#;
       --  DMA enable receiver
-      DMAR           : CR3_DMAR_Field := 16#0#;
+      DMAR           : Boolean := False;
       --  DMA enable transmitter
-      DMAT           : CR3_DMAT_Field := 16#0#;
+      DMAT           : Boolean := False;
       --  RTS enable
-      RTSE           : CR3_RTSE_Field := 16#0#;
+      RTSE           : Boolean := False;
       --  CTS enable
-      CTSE           : CR3_CTSE_Field := 16#0#;
+      CTSE           : Boolean := False;
       --  CTS interrupt enable
-      CTSIE          : CR3_CTSIE_Field := 16#0#;
+      CTSIE          : Boolean := False;
       --  unspecified
       Reserved_11_11 : Interfaces.Bit_Types.Bit := 16#0#;
       --  Overrun Disable
-      OVRDIS         : CR3_OVRDIS_Field := 16#0#;
+      OVRDIS         : Boolean := False;
       --  DMA Disable on Reception Error
-      DDRE           : CR3_DDRE_Field := 16#0#;
+      DDRE           : Boolean := False;
       --  Driver enable mode
-      DEM            : CR3_DEM_Field := 16#0#;
+      DEM            : Boolean := False;
       --  Driver enable polarity selection
-      DEP            : CR3_DEP_Field := 16#0#;
+      DEP            : Boolean := False;
       --  unspecified
       Reserved_16_19 : Interfaces.Bit_Types.UInt4 := 16#0#;
       --  Wakeup from Stop mode interrupt flag selection
       WUS            : CR3_WUS_Field := 16#0#;
       --  Wakeup from Stop mode interrupt enable
-      WUFIE          : CR3_WUFIE_Field := 16#0#;
+      WUFIE          : Boolean := False;
+      --  TXFTIE
+      TXFTIE         : Boolean := False;
       --  unspecified
-      Reserved_23_31 : Interfaces.Bit_Types.UInt9 := 16#0#;
+      Reserved_24_24 : Interfaces.Bit_Types.Bit := 16#0#;
+      --  RXFTCFG
+      RXFTCFG        : CR3_RXFTCFG_Field := 16#0#;
+      --  RXFTIE
+      RXFTIE         : Boolean := False;
+      --  TXFTCFG
+      TXFTCFG        : CR3_TXFTCFG_Field := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -297,7 +223,11 @@ package Interfaces.STM32.USART is
       Reserved_16_19 at 0 range 16 .. 19;
       WUS            at 0 range 20 .. 21;
       WUFIE          at 0 range 22 .. 22;
-      Reserved_23_31 at 0 range 23 .. 31;
+      TXFTIE         at 0 range 23 .. 23;
+      Reserved_24_24 at 0 range 24 .. 24;
+      RXFTCFG        at 0 range 25 .. 27;
+      RXFTIE         at 0 range 28 .. 28;
+      TXFTCFG        at 0 range 29 .. 31;
    end record;
 
    subtype BRR_BRR_Field is Interfaces.Bit_Types.UInt20;
@@ -317,22 +247,20 @@ package Interfaces.STM32.USART is
       Reserved_20_31 at 0 range 20 .. 31;
    end record;
 
-   subtype RQR_SBKRQ_Field is Interfaces.Bit_Types.Bit;
-   subtype RQR_MMRQ_Field is Interfaces.Bit_Types.Bit;
-   subtype RQR_RXFRQ_Field is Interfaces.Bit_Types.Bit;
-
    --  Request register
    type RQR_Register is record
       --  unspecified
       Reserved_0_0  : Interfaces.Bit_Types.Bit := 16#0#;
       --  Write-only. Send break request
-      SBKRQ         : RQR_SBKRQ_Field := 16#0#;
+      SBKRQ         : Boolean := False;
       --  Write-only. Mute mode request
-      MMRQ          : RQR_MMRQ_Field := 16#0#;
+      MMRQ          : Boolean := False;
       --  Write-only. Receive data flush request
-      RXFRQ         : RQR_RXFRQ_Field := 16#0#;
+      RXFRQ         : Boolean := False;
+      --  Write-only. TXFRQ
+      TXFRQ         : Boolean := False;
       --  unspecified
-      Reserved_4_31 : Interfaces.Bit_Types.UInt28 := 16#0#;
+      Reserved_5_31 : Interfaces.Bit_Types.UInt27 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -342,69 +270,62 @@ package Interfaces.STM32.USART is
       SBKRQ         at 0 range 1 .. 1;
       MMRQ          at 0 range 2 .. 2;
       RXFRQ         at 0 range 3 .. 3;
-      Reserved_4_31 at 0 range 4 .. 31;
+      TXFRQ         at 0 range 4 .. 4;
+      Reserved_5_31 at 0 range 5 .. 31;
    end record;
-
-   subtype ISR_PE_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_FE_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_NF_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_ORE_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_IDLE_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_RXNE_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_TC_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_TXE_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_CTSIF_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_CTS_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_BUSY_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_CMF_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_SBKF_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_RWU_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_WUF_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_TEACK_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_REACK_Field is Interfaces.Bit_Types.Bit;
 
    --  Interrupt & status register
    type ISR_Register is record
       --  Read-only. PE
-      PE             : ISR_PE_Field;
+      PE             : Boolean;
       --  Read-only. FE
-      FE             : ISR_FE_Field;
+      FE             : Boolean;
       --  Read-only. NF
-      NF             : ISR_NF_Field;
+      NF             : Boolean;
       --  Read-only. ORE
-      ORE            : ISR_ORE_Field;
+      ORE            : Boolean;
       --  Read-only. IDLE
-      IDLE           : ISR_IDLE_Field;
+      IDLE           : Boolean;
       --  Read-only. RXNE
-      RXNE           : ISR_RXNE_Field;
+      RXNE           : Boolean;
       --  Read-only. TC
-      TC             : ISR_TC_Field;
+      TC             : Boolean;
       --  Read-only. TXE
-      TXE            : ISR_TXE_Field;
+      TXE            : Boolean;
       --  unspecified
       Reserved_8_8   : Interfaces.Bit_Types.Bit;
       --  Read-only. CTSIF
-      CTSIF          : ISR_CTSIF_Field;
+      CTSIF          : Boolean;
       --  Read-only. CTS
-      CTS            : ISR_CTS_Field;
+      CTS            : Boolean;
       --  unspecified
       Reserved_11_15 : Interfaces.Bit_Types.UInt5;
       --  Read-only. BUSY
-      BUSY           : ISR_BUSY_Field;
+      BUSY           : Boolean;
       --  Read-only. CMF
-      CMF            : ISR_CMF_Field;
+      CMF            : Boolean;
       --  Read-only. SBKF
-      SBKF           : ISR_SBKF_Field;
+      SBKF           : Boolean;
       --  Read-only. RWU
-      RWU            : ISR_RWU_Field;
+      RWU            : Boolean;
       --  Read-only. WUF
-      WUF            : ISR_WUF_Field;
+      WUF            : Boolean;
       --  Read-only. TEACK
-      TEACK          : ISR_TEACK_Field;
+      TEACK          : Boolean;
       --  Read-only. REACK
-      REACK          : ISR_REACK_Field;
+      REACK          : Boolean;
+      --  Read-only. TXFE
+      TXFE           : Boolean;
+      --  Read-only. RXFF
+      RXFF           : Boolean;
       --  unspecified
-      Reserved_23_31 : Interfaces.Bit_Types.UInt9;
+      Reserved_25_25 : Interfaces.Bit_Types.Bit;
+      --  Read-only. RXFT
+      RXFT           : Boolean;
+      --  Read-only. TXFT
+      TXFT           : Boolean;
+      --  unspecified
+      Reserved_28_31 : Interfaces.Bit_Types.UInt4;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -429,47 +350,42 @@ package Interfaces.STM32.USART is
       WUF            at 0 range 20 .. 20;
       TEACK          at 0 range 21 .. 21;
       REACK          at 0 range 22 .. 22;
-      Reserved_23_31 at 0 range 23 .. 31;
+      TXFE           at 0 range 23 .. 23;
+      RXFF           at 0 range 24 .. 24;
+      Reserved_25_25 at 0 range 25 .. 25;
+      RXFT           at 0 range 26 .. 26;
+      TXFT           at 0 range 27 .. 27;
+      Reserved_28_31 at 0 range 28 .. 31;
    end record;
-
-   subtype ICR_PECF_Field is Interfaces.Bit_Types.Bit;
-   subtype ICR_FECF_Field is Interfaces.Bit_Types.Bit;
-   subtype ICR_NCF_Field is Interfaces.Bit_Types.Bit;
-   subtype ICR_ORECF_Field is Interfaces.Bit_Types.Bit;
-   subtype ICR_IDLECF_Field is Interfaces.Bit_Types.Bit;
-   subtype ICR_TCCF_Field is Interfaces.Bit_Types.Bit;
-   subtype ICR_CTSCF_Field is Interfaces.Bit_Types.Bit;
-   subtype ICR_CMCF_Field is Interfaces.Bit_Types.Bit;
-   subtype ICR_WUCF_Field is Interfaces.Bit_Types.Bit;
 
    --  Interrupt flag clear register
    type ICR_Register is record
       --  Write-only. Parity error clear flag
-      PECF           : ICR_PECF_Field := 16#0#;
+      PECF           : Boolean := False;
       --  Write-only. Framing error clear flag
-      FECF           : ICR_FECF_Field := 16#0#;
+      FECF           : Boolean := False;
       --  Write-only. Noise detected clear flag
-      NCF            : ICR_NCF_Field := 16#0#;
+      NCF            : Boolean := False;
       --  Write-only. Overrun error clear flag
-      ORECF          : ICR_ORECF_Field := 16#0#;
+      ORECF          : Boolean := False;
       --  Write-only. Idle line detected clear flag
-      IDLECF         : ICR_IDLECF_Field := 16#0#;
+      IDLECF         : Boolean := False;
       --  unspecified
       Reserved_5_5   : Interfaces.Bit_Types.Bit := 16#0#;
       --  Write-only. Transmission complete clear flag
-      TCCF           : ICR_TCCF_Field := 16#0#;
+      TCCF           : Boolean := False;
       --  unspecified
       Reserved_7_8   : Interfaces.Bit_Types.UInt2 := 16#0#;
       --  Write-only. CTS clear flag
-      CTSCF          : ICR_CTSCF_Field := 16#0#;
+      CTSCF          : Boolean := False;
       --  unspecified
       Reserved_10_16 : Interfaces.Bit_Types.UInt7 := 16#0#;
       --  Write-only. Character match clear flag
-      CMCF           : ICR_CMCF_Field := 16#0#;
+      CMCF           : Boolean := False;
       --  unspecified
       Reserved_18_19 : Interfaces.Bit_Types.UInt2 := 16#0#;
       --  Write-only. Wakeup from Stop mode clear flag
-      WUCF           : ICR_WUCF_Field := 16#0#;
+      WUCF           : Boolean := False;
       --  unspecified
       Reserved_21_31 : Interfaces.Bit_Types.UInt11 := 16#0#;
    end record
@@ -527,97 +443,154 @@ package Interfaces.STM32.USART is
       Reserved_9_31 at 0 range 9 .. 31;
    end record;
 
-   subtype CR1_OVER8_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_RTOIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_EOBIE_Field is Interfaces.Bit_Types.Bit;
+   subtype PRESC_PRESCALER_Field is Interfaces.Bit_Types.UInt4;
+
+   --  PRESC
+   type PRESC_Register is record
+      --  PRESCALER
+      PRESCALER     : PRESC_PRESCALER_Field := 16#0#;
+      --  unspecified
+      Reserved_4_31 : Interfaces.Bit_Types.UInt28 := 16#0#;
+   end record
+     with Volatile_Full_Access, Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for PRESC_Register use record
+      PRESCALER     at 0 range 0 .. 3;
+      Reserved_4_31 at 0 range 4 .. 31;
+   end record;
+
+   --  CR1_DEDT array
+   type CR1_DEDT_Field_Array is array (0 .. 4) of Boolean
+     with Component_Size => 1, Size => 5;
+
+   --  Type definition for CR1_DEDT
+   type CR1_DEDT_Field_1
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  DEDT as a value
+            Val : Interfaces.Bit_Types.UInt5;
+         when True =>
+            --  DEDT as an array
+            Arr : CR1_DEDT_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 5;
+
+   for CR1_DEDT_Field_1 use record
+      Val at 0 range 0 .. 4;
+      Arr at 0 range 0 .. 4;
+   end record;
+
+   --  CR1_DEAT array
+   type CR1_DEAT_Field_Array is array (0 .. 4) of Boolean
+     with Component_Size => 1, Size => 5;
+
+   --  Type definition for CR1_DEAT
+   type CR1_DEAT_Field_1
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  DEAT as a value
+            Val : Interfaces.Bit_Types.UInt5;
+         when True =>
+            --  DEAT as an array
+            Arr : CR1_DEAT_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 5;
+
+   for CR1_DEAT_Field_1 use record
+      Val at 0 range 0 .. 4;
+      Arr at 0 range 0 .. 4;
+   end record;
 
    --  Control register 1
    type CR1_Register_1 is record
       --  USART enable
-      UE             : CR1_UE_Field := 16#0#;
+      UE     : Boolean := False;
       --  USART enable in Stop mode
-      UESM           : CR1_UESM_Field := 16#0#;
+      UESM   : Boolean := False;
       --  Receiver enable
-      RE             : CR1_RE_Field := 16#0#;
+      RE     : Boolean := False;
       --  Transmitter enable
-      TE             : CR1_TE_Field := 16#0#;
+      TE     : Boolean := False;
       --  IDLE interrupt enable
-      IDLEIE         : CR1_IDLEIE_Field := 16#0#;
+      IDLEIE : Boolean := False;
       --  RXNE interrupt enable
-      RXNEIE         : CR1_RXNEIE_Field := 16#0#;
+      RXNEIE : Boolean := False;
       --  Transmission complete interrupt enable
-      TCIE           : CR1_TCIE_Field := 16#0#;
+      TCIE   : Boolean := False;
       --  interrupt enable
-      TXEIE          : CR1_TXEIE_Field := 16#0#;
+      TXEIE  : Boolean := False;
       --  PE interrupt enable
-      PEIE           : CR1_PEIE_Field := 16#0#;
+      PEIE   : Boolean := False;
       --  Parity selection
-      PS             : CR1_PS_Field := 16#0#;
+      PS     : Boolean := False;
       --  Parity control enable
-      PCE            : CR1_PCE_Field := 16#0#;
+      PCE    : Boolean := False;
       --  Receiver wakeup method
-      WAKE           : CR1_WAKE_Field := 16#0#;
+      WAKE   : Boolean := False;
       --  Word length
-      M0             : CR1_M0_Field := 16#0#;
+      M0     : Boolean := False;
       --  Mute mode enable
-      MME            : CR1_MME_Field := 16#0#;
+      MME    : Boolean := False;
       --  Character match interrupt enable
-      CMIE           : CR1_CMIE_Field := 16#0#;
+      CMIE   : Boolean := False;
       --  Oversampling mode
-      OVER8          : CR1_OVER8_Field := 16#0#;
+      OVER8  : Boolean := False;
       --  DEDT0
-      DEDT           : CR1_DEDT_Field := (As_Array => False, Val => 16#0#);
+      DEDT   : CR1_DEDT_Field_1 := (As_Array => False, Val => 16#0#);
       --  DEAT0
-      DEAT           : CR1_DEAT_Field := (As_Array => False, Val => 16#0#);
+      DEAT   : CR1_DEAT_Field_1 := (As_Array => False, Val => 16#0#);
       --  Receiver timeout interrupt enable
-      RTOIE          : CR1_RTOIE_Field := 16#0#;
+      RTOIE  : Boolean := False;
       --  End of Block interrupt enable
-      EOBIE          : CR1_EOBIE_Field := 16#0#;
+      EOBIE  : Boolean := False;
       --  Word length
-      M1             : CR1_M1_Field := 16#0#;
-      --  unspecified
-      Reserved_29_31 : Interfaces.Bit_Types.UInt3 := 16#0#;
+      M1     : Boolean := False;
+      --  FIFOEN
+      FIFOEN : Boolean := False;
+      --  TXFEIE
+      TXFEIE : Boolean := False;
+      --  RXFFIE
+      RXFFIE : Boolean := False;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for CR1_Register_1 use record
-      UE             at 0 range 0 .. 0;
-      UESM           at 0 range 1 .. 1;
-      RE             at 0 range 2 .. 2;
-      TE             at 0 range 3 .. 3;
-      IDLEIE         at 0 range 4 .. 4;
-      RXNEIE         at 0 range 5 .. 5;
-      TCIE           at 0 range 6 .. 6;
-      TXEIE          at 0 range 7 .. 7;
-      PEIE           at 0 range 8 .. 8;
-      PS             at 0 range 9 .. 9;
-      PCE            at 0 range 10 .. 10;
-      WAKE           at 0 range 11 .. 11;
-      M0             at 0 range 12 .. 12;
-      MME            at 0 range 13 .. 13;
-      CMIE           at 0 range 14 .. 14;
-      OVER8          at 0 range 15 .. 15;
-      DEDT           at 0 range 16 .. 20;
-      DEAT           at 0 range 21 .. 25;
-      RTOIE          at 0 range 26 .. 26;
-      EOBIE          at 0 range 27 .. 27;
-      M1             at 0 range 28 .. 28;
-      Reserved_29_31 at 0 range 29 .. 31;
+      UE     at 0 range 0 .. 0;
+      UESM   at 0 range 1 .. 1;
+      RE     at 0 range 2 .. 2;
+      TE     at 0 range 3 .. 3;
+      IDLEIE at 0 range 4 .. 4;
+      RXNEIE at 0 range 5 .. 5;
+      TCIE   at 0 range 6 .. 6;
+      TXEIE  at 0 range 7 .. 7;
+      PEIE   at 0 range 8 .. 8;
+      PS     at 0 range 9 .. 9;
+      PCE    at 0 range 10 .. 10;
+      WAKE   at 0 range 11 .. 11;
+      M0     at 0 range 12 .. 12;
+      MME    at 0 range 13 .. 13;
+      CMIE   at 0 range 14 .. 14;
+      OVER8  at 0 range 15 .. 15;
+      DEDT   at 0 range 16 .. 20;
+      DEAT   at 0 range 21 .. 25;
+      RTOIE  at 0 range 26 .. 26;
+      EOBIE  at 0 range 27 .. 27;
+      M1     at 0 range 28 .. 28;
+      FIFOEN at 0 range 29 .. 29;
+      TXFEIE at 0 range 30 .. 30;
+      RXFFIE at 0 range 31 .. 31;
    end record;
 
-   subtype CR2_LBDL_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_LBDIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_LBCL_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_CPHA_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_CPOL_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_LINEN_Field is Interfaces.Bit_Types.Bit;
-   subtype CR2_ABREN_Field is Interfaces.Bit_Types.Bit;
-   --  CR2_ABRMOD array element
-   subtype CR2_ABRMOD_Element is Interfaces.Bit_Types.Bit;
-
    --  CR2_ABRMOD array
-   type CR2_ABRMOD_Field_Array is array (0 .. 1) of CR2_ABRMOD_Element
+   type CR2_ABRMOD_Field_Array is array (0 .. 1) of Boolean
      with Component_Size => 1, Size => 2;
 
    --  Type definition for CR2_ABRMOD
@@ -640,48 +613,50 @@ package Interfaces.STM32.USART is
       Arr at 0 range 0 .. 1;
    end record;
 
-   subtype CR2_RTOEN_Field is Interfaces.Bit_Types.Bit;
-
    --  Control register 2
    type CR2_Register_1 is record
+      --  SLVEN
+      SLVEN        : Boolean := False;
       --  unspecified
-      Reserved_0_3 : Interfaces.Bit_Types.UInt4 := 16#0#;
+      Reserved_1_2 : Interfaces.Bit_Types.UInt2 := 16#0#;
+      --  DIS_NSS
+      DIS_NSS      : Boolean := False;
       --  7-bit Address Detection/4-bit Address Detection
-      ADDM7        : CR2_ADDM7_Field := 16#0#;
+      ADDM7        : Boolean := False;
       --  LIN break detection length
-      LBDL         : CR2_LBDL_Field := 16#0#;
+      LBDL         : Boolean := False;
       --  LIN break detection interrupt enable
-      LBDIE        : CR2_LBDIE_Field := 16#0#;
+      LBDIE        : Boolean := False;
       --  unspecified
       Reserved_7_7 : Interfaces.Bit_Types.Bit := 16#0#;
       --  Last bit clock pulse
-      LBCL         : CR2_LBCL_Field := 16#0#;
+      LBCL         : Boolean := False;
       --  Clock phase
-      CPHA         : CR2_CPHA_Field := 16#0#;
+      CPHA         : Boolean := False;
       --  Clock polarity
-      CPOL         : CR2_CPOL_Field := 16#0#;
+      CPOL         : Boolean := False;
       --  Clock enable
-      CLKEN        : CR2_CLKEN_Field := 16#0#;
+      CLKEN        : Boolean := False;
       --  STOP bits
       STOP         : CR2_STOP_Field := 16#0#;
       --  LIN mode enable
-      LINEN        : CR2_LINEN_Field := 16#0#;
+      LINEN        : Boolean := False;
       --  Swap TX/RX pins
-      SWAP         : CR2_SWAP_Field := 16#0#;
+      SWAP         : Boolean := False;
       --  RX pin active level inversion
-      RXINV        : CR2_RXINV_Field := 16#0#;
+      RXINV        : Boolean := False;
       --  TX pin active level inversion
-      TXINV        : CR2_TXINV_Field := 16#0#;
+      TXINV        : Boolean := False;
       --  Binary data inversion
-      TAINV        : CR2_TAINV_Field := 16#0#;
+      DATAINV      : Boolean := False;
       --  Most significant bit first
-      MSBFIRST     : CR2_MSBFIRST_Field := 16#0#;
+      MSBFIRST     : Boolean := False;
       --  Auto baud rate enable
-      ABREN        : CR2_ABREN_Field := 16#0#;
+      ABREN        : Boolean := False;
       --  ABRMOD0
       ABRMOD       : CR2_ABRMOD_Field := (As_Array => False, Val => 16#0#);
       --  Receiver timeout enable
-      RTOEN        : CR2_RTOEN_Field := 16#0#;
+      RTOEN        : Boolean := False;
       --  Address of the USART node
       ADD0_3       : CR2_ADD0_3_Field := 16#0#;
       --  Address of the USART node
@@ -691,7 +666,9 @@ package Interfaces.STM32.USART is
           Bit_Order => System.Low_Order_First;
 
    for CR2_Register_1 use record
-      Reserved_0_3 at 0 range 0 .. 3;
+      SLVEN        at 0 range 0 .. 0;
+      Reserved_1_2 at 0 range 1 .. 2;
+      DIS_NSS      at 0 range 3 .. 3;
       ADDM7        at 0 range 4 .. 4;
       LBDL         at 0 range 5 .. 5;
       LBDIE        at 0 range 6 .. 6;
@@ -705,7 +682,7 @@ package Interfaces.STM32.USART is
       SWAP         at 0 range 15 .. 15;
       RXINV        at 0 range 16 .. 16;
       TXINV        at 0 range 17 .. 17;
-      TAINV        at 0 range 18 .. 18;
+      DATAINV      at 0 range 18 .. 18;
       MSBFIRST     at 0 range 19 .. 19;
       ABREN        at 0 range 20 .. 20;
       ABRMOD       at 0 range 21 .. 22;
@@ -714,47 +691,42 @@ package Interfaces.STM32.USART is
       ADD4_7       at 0 range 28 .. 31;
    end record;
 
-   subtype CR3_IREN_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_IRLP_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_NACK_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_SCEN_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_ONEBIT_Field is Interfaces.Bit_Types.Bit;
    subtype CR3_SCARCNT_Field is Interfaces.Bit_Types.UInt3;
 
    --  Control register 3
    type CR3_Register_1 is record
       --  Error interrupt enable
-      EIE            : CR3_EIE_Field := 16#0#;
+      EIE            : Boolean := False;
       --  Ir mode enable
-      IREN           : CR3_IREN_Field := 16#0#;
+      IREN           : Boolean := False;
       --  Ir low-power
-      IRLP           : CR3_IRLP_Field := 16#0#;
+      IRLP           : Boolean := False;
       --  Half-duplex selection
-      HDSEL          : CR3_HDSEL_Field := 16#0#;
+      HDSEL          : Boolean := False;
       --  Smartcard NACK enable
-      NACK           : CR3_NACK_Field := 16#0#;
+      NACK           : Boolean := False;
       --  Smartcard mode enable
-      SCEN           : CR3_SCEN_Field := 16#0#;
+      SCEN           : Boolean := False;
       --  DMA enable receiver
-      DMAR           : CR3_DMAR_Field := 16#0#;
+      DMAR           : Boolean := False;
       --  DMA enable transmitter
-      DMAT           : CR3_DMAT_Field := 16#0#;
+      DMAT           : Boolean := False;
       --  RTS enable
-      RTSE           : CR3_RTSE_Field := 16#0#;
+      RTSE           : Boolean := False;
       --  CTS enable
-      CTSE           : CR3_CTSE_Field := 16#0#;
+      CTSE           : Boolean := False;
       --  CTS interrupt enable
-      CTSIE          : CR3_CTSIE_Field := 16#0#;
+      CTSIE          : Boolean := False;
       --  One sample bit method enable
-      ONEBIT         : CR3_ONEBIT_Field := 16#0#;
+      ONEBIT         : Boolean := False;
       --  Overrun Disable
-      OVRDIS         : CR3_OVRDIS_Field := 16#0#;
+      OVRDIS         : Boolean := False;
       --  DMA Disable on Reception Error
-      DDRE           : CR3_DDRE_Field := 16#0#;
+      DDRE           : Boolean := False;
       --  Driver enable mode
-      DEM            : CR3_DEM_Field := 16#0#;
+      DEM            : Boolean := False;
       --  Driver enable polarity selection
-      DEP            : CR3_DEP_Field := 16#0#;
+      DEP            : Boolean := False;
       --  unspecified
       Reserved_16_16 : Interfaces.Bit_Types.Bit := 16#0#;
       --  Smartcard auto-retry count
@@ -762,9 +734,17 @@ package Interfaces.STM32.USART is
       --  Wakeup from Stop mode interrupt flag selection
       WUS            : CR3_WUS_Field := 16#0#;
       --  Wakeup from Stop mode interrupt enable
-      WUFIE          : CR3_WUFIE_Field := 16#0#;
-      --  unspecified
-      Reserved_23_31 : Interfaces.Bit_Types.UInt9 := 16#0#;
+      WUFIE          : Boolean := False;
+      --  TXFTIE
+      TXFTIE         : Boolean := False;
+      --  TCBGTIE
+      TCBGTIE        : Boolean := False;
+      --  RXFTCFG
+      RXFTCFG        : CR3_RXFTCFG_Field := 16#0#;
+      --  RXFTIE
+      RXFTIE         : Boolean := False;
+      --  TXFTCFG
+      TXFTCFG        : CR3_TXFTCFG_Field := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -790,18 +770,19 @@ package Interfaces.STM32.USART is
       SCARCNT        at 0 range 17 .. 19;
       WUS            at 0 range 20 .. 21;
       WUFIE          at 0 range 22 .. 22;
-      Reserved_23_31 at 0 range 23 .. 31;
+      TXFTIE         at 0 range 23 .. 23;
+      TCBGTIE        at 0 range 24 .. 24;
+      RXFTCFG        at 0 range 25 .. 27;
+      RXFTIE         at 0 range 28 .. 28;
+      TXFTCFG        at 0 range 29 .. 31;
    end record;
 
-   subtype BRR_DIV_Fraction_Field is Interfaces.Bit_Types.UInt4;
-   subtype BRR_DIV_Mantissa_Field is Interfaces.Bit_Types.UInt12;
+   subtype BRR_BRR_Field_1 is Interfaces.Bit_Types.Short;
 
    --  Baud rate register
    type BRR_Register_1 is record
-      --  DIV_Fraction
-      DIV_Fraction   : BRR_DIV_Fraction_Field := 16#0#;
-      --  DIV_Mantissa
-      DIV_Mantissa   : BRR_DIV_Mantissa_Field := 16#0#;
+      --  BRR
+      BRR            : BRR_BRR_Field_1 := 16#0#;
       --  unspecified
       Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
    end record
@@ -809,8 +790,7 @@ package Interfaces.STM32.USART is
           Bit_Order => System.Low_Order_First;
 
    for BRR_Register_1 use record
-      DIV_Fraction   at 0 range 0 .. 3;
-      DIV_Mantissa   at 0 range 4 .. 15;
+      BRR            at 0 range 0 .. 15;
       Reserved_16_31 at 0 range 16 .. 31;
    end record;
 
@@ -853,21 +833,18 @@ package Interfaces.STM32.USART is
       BLEN at 0 range 24 .. 31;
    end record;
 
-   subtype RQR_ABRRQ_Field is Interfaces.Bit_Types.Bit;
-   subtype RQR_TXFRQ_Field is Interfaces.Bit_Types.Bit;
-
    --  Request register
    type RQR_Register_1 is record
       --  Write-only. Auto baud rate request
-      ABRRQ         : RQR_ABRRQ_Field := 16#0#;
+      ABRRQ         : Boolean := False;
       --  Write-only. Send break request
-      SBKRQ         : RQR_SBKRQ_Field := 16#0#;
+      SBKRQ         : Boolean := False;
       --  Write-only. Mute mode request
-      MMRQ          : RQR_MMRQ_Field := 16#0#;
+      MMRQ          : Boolean := False;
       --  Write-only. Receive data flush request
-      RXFRQ         : RQR_RXFRQ_Field := 16#0#;
+      RXFRQ         : Boolean := False;
       --  Write-only. Transmit data flush request
-      TXFRQ         : RQR_TXFRQ_Field := 16#0#;
+      TXFRQ         : Boolean := False;
       --  unspecified
       Reserved_5_31 : Interfaces.Bit_Types.UInt27 := 16#0#;
    end record
@@ -883,62 +860,66 @@ package Interfaces.STM32.USART is
       Reserved_5_31 at 0 range 5 .. 31;
    end record;
 
-   subtype ISR_LBDF_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_RTOF_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_EOBF_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_ABRE_Field is Interfaces.Bit_Types.Bit;
-   subtype ISR_ABRF_Field is Interfaces.Bit_Types.Bit;
-
    --  Interrupt & status register
    type ISR_Register_1 is record
       --  Read-only. PE
-      PE             : ISR_PE_Field;
+      PE             : Boolean;
       --  Read-only. FE
-      FE             : ISR_FE_Field;
+      FE             : Boolean;
       --  Read-only. NF
-      NF             : ISR_NF_Field;
+      NF             : Boolean;
       --  Read-only. ORE
-      ORE            : ISR_ORE_Field;
+      ORE            : Boolean;
       --  Read-only. IDLE
-      IDLE           : ISR_IDLE_Field;
+      IDLE           : Boolean;
       --  Read-only. RXNE
-      RXNE           : ISR_RXNE_Field;
+      RXNE           : Boolean;
       --  Read-only. TC
-      TC             : ISR_TC_Field;
+      TC             : Boolean;
       --  Read-only. TXE
-      TXE            : ISR_TXE_Field;
+      TXE            : Boolean;
       --  Read-only. LBDF
-      LBDF           : ISR_LBDF_Field;
+      LBDF           : Boolean;
       --  Read-only. CTSIF
-      CTSIF          : ISR_CTSIF_Field;
+      CTSIF          : Boolean;
       --  Read-only. CTS
-      CTS            : ISR_CTS_Field;
+      CTS            : Boolean;
       --  Read-only. RTOF
-      RTOF           : ISR_RTOF_Field;
+      RTOF           : Boolean;
       --  Read-only. EOBF
-      EOBF           : ISR_EOBF_Field;
+      EOBF           : Boolean;
       --  unspecified
       Reserved_13_13 : Interfaces.Bit_Types.Bit;
       --  Read-only. ABRE
-      ABRE           : ISR_ABRE_Field;
+      ABRE           : Boolean;
       --  Read-only. ABRF
-      ABRF           : ISR_ABRF_Field;
+      ABRF           : Boolean;
       --  Read-only. BUSY
-      BUSY           : ISR_BUSY_Field;
+      BUSY           : Boolean;
       --  Read-only. CMF
-      CMF            : ISR_CMF_Field;
+      CMF            : Boolean;
       --  Read-only. SBKF
-      SBKF           : ISR_SBKF_Field;
+      SBKF           : Boolean;
       --  Read-only. RWU
-      RWU            : ISR_RWU_Field;
+      RWU            : Boolean;
       --  Read-only. WUF
-      WUF            : ISR_WUF_Field;
+      WUF            : Boolean;
       --  Read-only. TEACK
-      TEACK          : ISR_TEACK_Field;
+      TEACK          : Boolean;
       --  Read-only. REACK
-      REACK          : ISR_REACK_Field;
+      REACK          : Boolean;
+      --  Read-only. TXFE
+      TXFE           : Boolean;
+      --  Read-only. RXFF
+      RXFF           : Boolean;
+      --  Read-only. TCBGT
+      TCBGT          : Boolean;
+      --  Read-only. RXFT
+      RXFT           : Boolean;
+      --  Read-only. TXFT
+      TXFT           : Boolean;
       --  unspecified
-      Reserved_23_31 : Interfaces.Bit_Types.UInt9;
+      Reserved_28_31 : Interfaces.Bit_Types.UInt4;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -967,49 +948,52 @@ package Interfaces.STM32.USART is
       WUF            at 0 range 20 .. 20;
       TEACK          at 0 range 21 .. 21;
       REACK          at 0 range 22 .. 22;
-      Reserved_23_31 at 0 range 23 .. 31;
+      TXFE           at 0 range 23 .. 23;
+      RXFF           at 0 range 24 .. 24;
+      TCBGT          at 0 range 25 .. 25;
+      RXFT           at 0 range 26 .. 26;
+      TXFT           at 0 range 27 .. 27;
+      Reserved_28_31 at 0 range 28 .. 31;
    end record;
-
-   subtype ICR_LBDCF_Field is Interfaces.Bit_Types.Bit;
-   subtype ICR_RTOCF_Field is Interfaces.Bit_Types.Bit;
-   subtype ICR_EOBCF_Field is Interfaces.Bit_Types.Bit;
 
    --  Interrupt flag clear register
    type ICR_Register_1 is record
       --  Write-only. Parity error clear flag
-      PECF           : ICR_PECF_Field := 16#0#;
+      PECF           : Boolean := False;
       --  Write-only. Framing error clear flag
-      FECF           : ICR_FECF_Field := 16#0#;
+      FECF           : Boolean := False;
       --  Write-only. Noise detected clear flag
-      NCF            : ICR_NCF_Field := 16#0#;
+      NCF            : Boolean := False;
       --  Write-only. Overrun error clear flag
-      ORECF          : ICR_ORECF_Field := 16#0#;
+      ORECF          : Boolean := False;
       --  Write-only. Idle line detected clear flag
-      IDLECF         : ICR_IDLECF_Field := 16#0#;
-      --  unspecified
-      Reserved_5_5   : Interfaces.Bit_Types.Bit := 16#0#;
+      IDLECF         : Boolean := False;
+      --  Write-only. TXFECF
+      TXFECF         : Boolean := False;
       --  Write-only. Transmission complete clear flag
-      TCCF           : ICR_TCCF_Field := 16#0#;
-      --  unspecified
-      Reserved_7_7   : Interfaces.Bit_Types.Bit := 16#0#;
+      TCCF           : Boolean := False;
+      --  Write-only. TCBGTCF
+      TCBGTCF        : Boolean := False;
       --  Write-only. LIN break detection clear flag
-      LBDCF          : ICR_LBDCF_Field := 16#0#;
+      LBDCF          : Boolean := False;
       --  Write-only. CTS clear flag
-      CTSCF          : ICR_CTSCF_Field := 16#0#;
+      CTSCF          : Boolean := False;
       --  unspecified
       Reserved_10_10 : Interfaces.Bit_Types.Bit := 16#0#;
       --  Write-only. Receiver timeout clear flag
-      RTOCF          : ICR_RTOCF_Field := 16#0#;
+      RTOCF          : Boolean := False;
       --  Write-only. End of block clear flag
-      EOBCF          : ICR_EOBCF_Field := 16#0#;
+      EOBCF          : Boolean := False;
+      --  Write-only. UDRCF
+      UDRCF          : Boolean := False;
       --  unspecified
-      Reserved_13_16 : Interfaces.Bit_Types.UInt4 := 16#0#;
+      Reserved_14_16 : Interfaces.Bit_Types.UInt3 := 16#0#;
       --  Write-only. Character match clear flag
-      CMCF           : ICR_CMCF_Field := 16#0#;
+      CMCF           : Boolean := False;
       --  unspecified
       Reserved_18_19 : Interfaces.Bit_Types.UInt2 := 16#0#;
       --  Write-only. Wakeup from Stop mode clear flag
-      WUCF           : ICR_WUCF_Field := 16#0#;
+      WUCF           : Boolean := False;
       --  unspecified
       Reserved_21_31 : Interfaces.Bit_Types.UInt11 := 16#0#;
    end record
@@ -1022,206 +1006,20 @@ package Interfaces.STM32.USART is
       NCF            at 0 range 2 .. 2;
       ORECF          at 0 range 3 .. 3;
       IDLECF         at 0 range 4 .. 4;
-      Reserved_5_5   at 0 range 5 .. 5;
+      TXFECF         at 0 range 5 .. 5;
       TCCF           at 0 range 6 .. 6;
-      Reserved_7_7   at 0 range 7 .. 7;
+      TCBGTCF        at 0 range 7 .. 7;
       LBDCF          at 0 range 8 .. 8;
       CTSCF          at 0 range 9 .. 9;
       Reserved_10_10 at 0 range 10 .. 10;
       RTOCF          at 0 range 11 .. 11;
       EOBCF          at 0 range 12 .. 12;
-      Reserved_13_16 at 0 range 13 .. 16;
+      UDRCF          at 0 range 13 .. 13;
+      Reserved_14_16 at 0 range 14 .. 16;
       CMCF           at 0 range 17 .. 17;
       Reserved_18_19 at 0 range 18 .. 19;
       WUCF           at 0 range 20 .. 20;
       Reserved_21_31 at 0 range 21 .. 31;
-   end record;
-
-   subtype CR3_UCESM_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_TCBGTIE_Field is Interfaces.Bit_Types.Bit;
-
-   --  Control register 3
-   type CR3_Register_2 is record
-      --  Error interrupt enable
-      EIE            : CR3_EIE_Field := 16#0#;
-      --  Ir mode enable
-      IREN           : CR3_IREN_Field := 16#0#;
-      --  Ir low-power
-      IRLP           : CR3_IRLP_Field := 16#0#;
-      --  Half-duplex selection
-      HDSEL          : CR3_HDSEL_Field := 16#0#;
-      --  Smartcard NACK enable
-      NACK           : CR3_NACK_Field := 16#0#;
-      --  Smartcard mode enable
-      SCEN           : CR3_SCEN_Field := 16#0#;
-      --  DMA enable receiver
-      DMAR           : CR3_DMAR_Field := 16#0#;
-      --  DMA enable transmitter
-      DMAT           : CR3_DMAT_Field := 16#0#;
-      --  RTS enable
-      RTSE           : CR3_RTSE_Field := 16#0#;
-      --  CTS enable
-      CTSE           : CR3_CTSE_Field := 16#0#;
-      --  CTS interrupt enable
-      CTSIE          : CR3_CTSIE_Field := 16#0#;
-      --  One sample bit method enable
-      ONEBIT         : CR3_ONEBIT_Field := 16#0#;
-      --  Overrun Disable
-      OVRDIS         : CR3_OVRDIS_Field := 16#0#;
-      --  DMA Disable on Reception Error
-      DDRE           : CR3_DDRE_Field := 16#0#;
-      --  Driver enable mode
-      DEM            : CR3_DEM_Field := 16#0#;
-      --  Driver enable polarity selection
-      DEP            : CR3_DEP_Field := 16#0#;
-      --  unspecified
-      Reserved_16_16 : Interfaces.Bit_Types.Bit := 16#0#;
-      --  Smartcard auto-retry count
-      SCARCNT        : CR3_SCARCNT_Field := 16#0#;
-      --  Wakeup from Stop mode interrupt flag selection
-      WUS            : CR3_WUS_Field := 16#0#;
-      --  Wakeup from Stop mode interrupt enable
-      WUFIE          : CR3_WUFIE_Field := 16#0#;
-      --  USART Clock Enable in Stop mode
-      UCESM          : CR3_UCESM_Field := 16#0#;
-      --  Transmission complete before guard time interrupt enable
-      TCBGTIE        : CR3_TCBGTIE_Field := 16#0#;
-      --  unspecified
-      Reserved_25_31 : Interfaces.Bit_Types.UInt7 := 16#0#;
-   end record
-     with Volatile_Full_Access, Size => 32,
-          Bit_Order => System.Low_Order_First;
-
-   for CR3_Register_2 use record
-      EIE            at 0 range 0 .. 0;
-      IREN           at 0 range 1 .. 1;
-      IRLP           at 0 range 2 .. 2;
-      HDSEL          at 0 range 3 .. 3;
-      NACK           at 0 range 4 .. 4;
-      SCEN           at 0 range 5 .. 5;
-      DMAR           at 0 range 6 .. 6;
-      DMAT           at 0 range 7 .. 7;
-      RTSE           at 0 range 8 .. 8;
-      CTSE           at 0 range 9 .. 9;
-      CTSIE          at 0 range 10 .. 10;
-      ONEBIT         at 0 range 11 .. 11;
-      OVRDIS         at 0 range 12 .. 12;
-      DDRE           at 0 range 13 .. 13;
-      DEM            at 0 range 14 .. 14;
-      DEP            at 0 range 15 .. 15;
-      Reserved_16_16 at 0 range 16 .. 16;
-      SCARCNT        at 0 range 17 .. 19;
-      WUS            at 0 range 20 .. 21;
-      WUFIE          at 0 range 22 .. 22;
-      UCESM          at 0 range 23 .. 23;
-      TCBGTIE        at 0 range 24 .. 24;
-      Reserved_25_31 at 0 range 25 .. 31;
-   end record;
-
-   subtype BRR_BRR_Field_1 is Interfaces.Bit_Types.UInt12;
-
-   --  Baud rate register
-   type BRR_Register_2 is record
-      --  USARTDIV
-      BRR            : BRR_BRR_Field_1 := 16#0#;
-      --  unspecified
-      Reserved_12_31 : Interfaces.Bit_Types.UInt20 := 16#0#;
-   end record
-     with Volatile_Full_Access, Size => 32,
-          Bit_Order => System.Low_Order_First;
-
-   for BRR_Register_2 use record
-      BRR            at 0 range 0 .. 11;
-      Reserved_12_31 at 0 range 12 .. 31;
-   end record;
-
-   subtype ISR_TCBGT_Field is Interfaces.Bit_Types.Bit;
-
-   --  Interrupt & status register
-   type ISR_Register_2 is record
-      --  Read-only. PE
-      PE             : ISR_PE_Field;
-      --  Read-only. FE
-      FE             : ISR_FE_Field;
-      --  Read-only. NF
-      NF             : ISR_NF_Field;
-      --  Read-only. ORE
-      ORE            : ISR_ORE_Field;
-      --  Read-only. IDLE
-      IDLE           : ISR_IDLE_Field;
-      --  Read-only. RXNE
-      RXNE           : ISR_RXNE_Field;
-      --  Read-only. TC
-      TC             : ISR_TC_Field;
-      --  Read-only. TXE
-      TXE            : ISR_TXE_Field;
-      --  Read-only. LBDF
-      LBDF           : ISR_LBDF_Field;
-      --  Read-only. CTSIF
-      CTSIF          : ISR_CTSIF_Field;
-      --  Read-only. CTS
-      CTS            : ISR_CTS_Field;
-      --  Read-only. RTOF
-      RTOF           : ISR_RTOF_Field;
-      --  Read-only. EOBF
-      EOBF           : ISR_EOBF_Field;
-      --  unspecified
-      Reserved_13_13 : Interfaces.Bit_Types.Bit;
-      --  Read-only. ABRE
-      ABRE           : ISR_ABRE_Field;
-      --  Read-only. ABRF
-      ABRF           : ISR_ABRF_Field;
-      --  Read-only. BUSY
-      BUSY           : ISR_BUSY_Field;
-      --  Read-only. CMF
-      CMF            : ISR_CMF_Field;
-      --  Read-only. SBKF
-      SBKF           : ISR_SBKF_Field;
-      --  Read-only. RWU
-      RWU            : ISR_RWU_Field;
-      --  Read-only. WUF
-      WUF            : ISR_WUF_Field;
-      --  Read-only. TEACK
-      TEACK          : ISR_TEACK_Field;
-      --  Read-only. REACK
-      REACK          : ISR_REACK_Field;
-      --  unspecified
-      Reserved_23_24 : Interfaces.Bit_Types.UInt2;
-      --  Read-only. Transmission complete before guard time completion
-      TCBGT          : ISR_TCBGT_Field;
-      --  unspecified
-      Reserved_26_31 : Interfaces.Bit_Types.UInt6;
-   end record
-     with Volatile_Full_Access, Size => 32,
-          Bit_Order => System.Low_Order_First;
-
-   for ISR_Register_2 use record
-      PE             at 0 range 0 .. 0;
-      FE             at 0 range 1 .. 1;
-      NF             at 0 range 2 .. 2;
-      ORE            at 0 range 3 .. 3;
-      IDLE           at 0 range 4 .. 4;
-      RXNE           at 0 range 5 .. 5;
-      TC             at 0 range 6 .. 6;
-      TXE            at 0 range 7 .. 7;
-      LBDF           at 0 range 8 .. 8;
-      CTSIF          at 0 range 9 .. 9;
-      CTS            at 0 range 10 .. 10;
-      RTOF           at 0 range 11 .. 11;
-      EOBF           at 0 range 12 .. 12;
-      Reserved_13_13 at 0 range 13 .. 13;
-      ABRE           at 0 range 14 .. 14;
-      ABRF           at 0 range 15 .. 15;
-      BUSY           at 0 range 16 .. 16;
-      CMF            at 0 range 17 .. 17;
-      SBKF           at 0 range 18 .. 18;
-      RWU            at 0 range 19 .. 19;
-      WUF            at 0 range 20 .. 20;
-      TEACK          at 0 range 21 .. 21;
-      REACK          at 0 range 22 .. 22;
-      Reserved_23_24 at 0 range 23 .. 24;
-      TCBGT          at 0 range 25 .. 25;
-      Reserved_26_31 at 0 range 26 .. 31;
    end record;
 
    -----------------
@@ -1231,36 +1029,39 @@ package Interfaces.STM32.USART is
    --  Universal synchronous asynchronous receiver transmitter
    type LPUART1_Peripheral is record
       --  Control register 1
-      CR1 : aliased CR1_Register;
+      CR1   : aliased CR1_Register;
       --  Control register 2
-      CR2 : aliased CR2_Register;
+      CR2   : aliased CR2_Register;
       --  Control register 3
-      CR3 : aliased CR3_Register;
+      CR3   : aliased CR3_Register;
       --  Baud rate register
-      BRR : aliased BRR_Register;
+      BRR   : aliased BRR_Register;
       --  Request register
-      RQR : aliased RQR_Register;
+      RQR   : aliased RQR_Register;
       --  Interrupt & status register
-      ISR : aliased ISR_Register;
+      ISR   : aliased ISR_Register;
       --  Interrupt flag clear register
-      ICR : aliased ICR_Register;
+      ICR   : aliased ICR_Register;
       --  Receive data register
-      RDR : aliased RDR_Register;
+      RDR   : aliased RDR_Register;
       --  Transmit data register
-      TDR : aliased TDR_Register;
+      TDR   : aliased TDR_Register;
+      --  PRESC
+      PRESC : aliased PRESC_Register;
    end record
      with Volatile;
 
    for LPUART1_Peripheral use record
-      CR1 at 16#0# range 0 .. 31;
-      CR2 at 16#4# range 0 .. 31;
-      CR3 at 16#8# range 0 .. 31;
-      BRR at 16#C# range 0 .. 31;
-      RQR at 16#18# range 0 .. 31;
-      ISR at 16#1C# range 0 .. 31;
-      ICR at 16#20# range 0 .. 31;
-      RDR at 16#24# range 0 .. 31;
-      TDR at 16#28# range 0 .. 31;
+      CR1   at 16#0# range 0 .. 31;
+      CR2   at 16#4# range 0 .. 31;
+      CR3   at 16#8# range 0 .. 31;
+      BRR   at 16#C# range 0 .. 31;
+      RQR   at 16#18# range 0 .. 31;
+      ISR   at 16#1C# range 0 .. 31;
+      ICR   at 16#20# range 0 .. 31;
+      RDR   at 16#24# range 0 .. 31;
+      TDR   at 16#28# range 0 .. 31;
+      PRESC at 16#2C# range 0 .. 31;
    end record;
 
    --  Universal synchronous asynchronous receiver transmitter
@@ -1268,101 +1069,91 @@ package Interfaces.STM32.USART is
      with Import, Address => System'To_Address (16#40008000#);
 
    --  Universal synchronous asynchronous receiver transmitter
-   type UART4_Peripheral is record
+   SEC_LPUART1_Periph : aliased LPUART1_Peripheral
+     with Import, Address => System'To_Address (16#50008000#);
+
+   --  Universal synchronous asynchronous receiver transmitter
+   type SEC_UART4_Peripheral is record
       --  Control register 1
-      CR1  : aliased CR1_Register_1;
+      CR1   : aliased CR1_Register_1;
       --  Control register 2
-      CR2  : aliased CR2_Register_1;
+      CR2   : aliased CR2_Register_1;
       --  Control register 3
-      CR3  : aliased CR3_Register_1;
+      CR3   : aliased CR3_Register_1;
       --  Baud rate register
-      BRR  : aliased BRR_Register_1;
+      BRR   : aliased BRR_Register_1;
       --  Guard time and prescaler register
-      GTPR : aliased GTPR_Register;
+      GTPR  : aliased GTPR_Register;
       --  Receiver timeout register
-      RTOR : aliased RTOR_Register;
+      RTOR  : aliased RTOR_Register;
       --  Request register
-      RQR  : aliased RQR_Register_1;
+      RQR   : aliased RQR_Register_1;
       --  Interrupt & status register
-      ISR  : aliased ISR_Register_1;
+      ISR   : aliased ISR_Register_1;
       --  Interrupt flag clear register
-      ICR  : aliased ICR_Register_1;
+      ICR   : aliased ICR_Register_1;
       --  Receive data register
-      RDR  : aliased RDR_Register;
+      RDR   : aliased RDR_Register;
       --  Transmit data register
-      TDR  : aliased TDR_Register;
+      TDR   : aliased TDR_Register;
+      --  PRESC
+      PRESC : aliased PRESC_Register;
    end record
      with Volatile;
 
-   for UART4_Peripheral use record
-      CR1  at 16#0# range 0 .. 31;
-      CR2  at 16#4# range 0 .. 31;
-      CR3  at 16#8# range 0 .. 31;
-      BRR  at 16#C# range 0 .. 31;
-      GTPR at 16#10# range 0 .. 31;
-      RTOR at 16#14# range 0 .. 31;
-      RQR  at 16#18# range 0 .. 31;
-      ISR  at 16#1C# range 0 .. 31;
-      ICR  at 16#20# range 0 .. 31;
-      RDR  at 16#24# range 0 .. 31;
-      TDR  at 16#28# range 0 .. 31;
+   for SEC_UART4_Peripheral use record
+      CR1   at 16#0# range 0 .. 31;
+      CR2   at 16#4# range 0 .. 31;
+      CR3   at 16#8# range 0 .. 31;
+      BRR   at 16#C# range 0 .. 31;
+      GTPR  at 16#10# range 0 .. 31;
+      RTOR  at 16#14# range 0 .. 31;
+      RQR   at 16#18# range 0 .. 31;
+      ISR   at 16#1C# range 0 .. 31;
+      ICR   at 16#20# range 0 .. 31;
+      RDR   at 16#24# range 0 .. 31;
+      TDR   at 16#28# range 0 .. 31;
+      PRESC at 16#2C# range 0 .. 31;
    end record;
 
    --  Universal synchronous asynchronous receiver transmitter
-   UART4_Periph : aliased UART4_Peripheral
+   SEC_UART4_Periph : aliased SEC_UART4_Peripheral
+     with Import, Address => System'To_Address (16#50004C00#);
+
+   --  Universal synchronous asynchronous receiver transmitter
+   SEC_UART5_Periph : aliased SEC_UART4_Peripheral
+     with Import, Address => System'To_Address (16#50005000#);
+
+   --  Universal synchronous asynchronous receiver transmitter
+   SEC_USART1_Periph : aliased SEC_UART4_Peripheral
+     with Import, Address => System'To_Address (16#50013800#);
+
+   --  Universal synchronous asynchronous receiver transmitter
+   SEC_USART2_Periph : aliased SEC_UART4_Peripheral
+     with Import, Address => System'To_Address (16#50004400#);
+
+   --  Universal synchronous asynchronous receiver transmitter
+   SEC_USART3_Periph : aliased SEC_UART4_Peripheral
+     with Import, Address => System'To_Address (16#50004800#);
+
+   --  Universal synchronous asynchronous receiver transmitter
+   UART4_Periph : aliased SEC_UART4_Peripheral
      with Import, Address => System'To_Address (16#40004C00#);
 
    --  Universal synchronous asynchronous receiver transmitter
-   USART1_Periph : aliased UART4_Peripheral
+   UART5_Periph : aliased SEC_UART4_Peripheral
+     with Import, Address => System'To_Address (16#40005000#);
+
+   --  Universal synchronous asynchronous receiver transmitter
+   USART1_Periph : aliased SEC_UART4_Peripheral
      with Import, Address => System'To_Address (16#40013800#);
 
    --  Universal synchronous asynchronous receiver transmitter
-   USART2_Periph : aliased UART4_Peripheral
+   USART2_Periph : aliased SEC_UART4_Peripheral
      with Import, Address => System'To_Address (16#40004400#);
 
    --  Universal synchronous asynchronous receiver transmitter
-   type USART3_Peripheral is record
-      --  Control register 1
-      CR1  : aliased CR1_Register_1;
-      --  Control register 2
-      CR2  : aliased CR2_Register_1;
-      --  Control register 3
-      CR3  : aliased CR3_Register_2;
-      --  Baud rate register
-      BRR  : aliased BRR_Register_2;
-      --  Guard time and prescaler register
-      GTPR : aliased GTPR_Register;
-      --  Receiver timeout register
-      RTOR : aliased RTOR_Register;
-      --  Request register
-      RQR  : aliased RQR_Register_1;
-      --  Interrupt & status register
-      ISR  : aliased ISR_Register_2;
-      --  Interrupt flag clear register
-      ICR  : aliased ICR_Register_1;
-      --  Receive data register
-      RDR  : aliased RDR_Register;
-      --  Transmit data register
-      TDR  : aliased TDR_Register;
-   end record
-     with Volatile;
-
-   for USART3_Peripheral use record
-      CR1  at 16#0# range 0 .. 31;
-      CR2  at 16#4# range 0 .. 31;
-      CR3  at 16#8# range 0 .. 31;
-      BRR  at 16#C# range 0 .. 31;
-      GTPR at 16#10# range 0 .. 31;
-      RTOR at 16#14# range 0 .. 31;
-      RQR  at 16#18# range 0 .. 31;
-      ISR  at 16#1C# range 0 .. 31;
-      ICR  at 16#20# range 0 .. 31;
-      RDR  at 16#24# range 0 .. 31;
-      TDR  at 16#28# range 0 .. 31;
-   end record;
-
-   --  Universal synchronous asynchronous receiver transmitter
-   USART3_Periph : aliased USART3_Peripheral
+   USART3_Periph : aliased SEC_UART4_Peripheral
      with Import, Address => System'To_Address (16#40004800#);
 
 end Interfaces.STM32.USART;

@@ -31,7 +31,6 @@
 
 with Interfaces; use Interfaces;
 
-with Interfaces.Bit_Types;   use Interfaces.Bit_Types;
 with Interfaces.STM32.RCC;   use Interfaces.STM32.RCC;
 with Interfaces.STM32.GPIO;  use Interfaces.STM32.GPIO;
 with Interfaces.STM32.USART; use Interfaces.STM32.USART;
@@ -40,43 +39,13 @@ with System.STM32;           use System.STM32;
 
 package body System.Text_IO is
 
-   Baudrate : constant := 115_200;
-   --  Bitrate to use
-
    ----------------
    -- Initialize --
    ----------------
 
    procedure Initialize is
---      use System.BB.Parameters;
-
-      APB_Clock    : constant Positive := Positive (STM32.System_Clocks.PCLK2);
-      Int_Divider  : constant Positive := (25 * APB_Clock) / (4 * Baudrate);
-      Frac_Divider : constant Natural := Int_Divider rem 100;
-
    begin
-      Initialized := True;
-
-      RCC_Periph.APB2ENR.USART1EN := 1;
-      RCC_Periph.AHB2ENR.GPIOBEN  := 1;
-
-      GPIOB_Periph.MODER.Arr     (6 .. 7) := (Mode_AF,     Mode_AF);
-      GPIOB_Periph.OSPEEDR.Arr   (6 .. 7) := (Speed_50MHz, Speed_50MHz);
-      GPIOB_Periph.OTYPER.OT.Arr (6 .. 7) := (Push_Pull,   Push_Pull);
-      GPIOB_Periph.PUPDR.Arr     (6 .. 7) := (Pull_Up,     Pull_Up);
-      GPIOB_Periph.AFRL.Arr      (6 .. 7) := (AF_USART1,   AF_USART1);
-
-      USART1_Periph.BRR :=
-        (DIV_Fraction => UInt4  (((Frac_Divider * 16 + 50) / 100) mod 16),
-         DIV_Mantissa => UInt12 (Int_Divider / 100),
-         others => <>);
-      USART1_Periph.CR1 :=
-        (UE => 1,
-         RE => 1,
-         TE => 1,
-         others => <>);
-      USART1_Periph.CR2 := (others => <>);
-      USART1_Periph.CR3 := (others => <>);
+      null;
    end Initialize;
 
    -----------------
@@ -84,14 +53,14 @@ package body System.Text_IO is
    -----------------
 
    function Is_Tx_Ready return Boolean is
-     (USART1_Periph.ISR.TC = 1);
+     (USART1_Periph.ISR.TC);
 
    -----------------
    -- Is_Rx_Ready --
    -----------------
 
    function Is_Rx_Ready return Boolean is
-     (USART1_Periph.ISR.RXNE = 1);
+     (USART1_Periph.ISR.RXNE);
 
    ---------
    -- Get --
