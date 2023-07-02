@@ -53,7 +53,7 @@ procedure Setup_Pll is
 --  don't bypass ext. resonator
    LSI_Enabled     : constant Boolean := False;  -- use low-speed internal clk
    RNG_Enabled     : constant Boolean := True;
-   Activate_PLL       : constant Boolean := False;
+   Activate_PLL       : constant Boolean := True;
    Activate_Overdrive : constant Boolean := False;
 --   Activate_PLLI2S    : constant Boolean := False;
 
@@ -70,32 +70,11 @@ procedure Setup_Pll is
       -- Compute Clock Frequencies --
       -------------------------------
 
---      PLLP_Value  : constant PLLP_Range := 7;
-      --  Arbitrary fixed to a convenient value
-
---      PLLR_Value  : constant PLLR_Range := 2;
-      --  Arbitrary fixed to a convenient value
-
---      PLLCLKIN    : constant Integer := MSI_Clock_Frequency;
---      PLLM_Value  : constant Integer  := 6;
-
---      PLLN_Value  : constant Integer := 40;
-
---      PLLVC0      : constant Integer := PLLCLKIN * PLLN_Value;
---      PLLCLKOUT   : constant Integer := PLLVC0 / PLLR_Value;
-
---      PLLQ_Value  : constant PLLQ_Range := 2;
-      --  Arbitrary fixed
-
---      PLLM        : constant UInt3 := UInt3 (PLLM_Value - 1); --  7 for 8mhz
---      PLLN        : constant UInt7 := UInt7 (PLLN_Value);
---      PLLP        : constant UInt5 := 0; --  check this
---      PLLQ        : constant UInt2 := UInt2 (PLLQ_Value / 2);
-
---      SW_Value    : constant CFGR_SW_Field := 0;
-
+      PLLM_Value  : constant UInt3  := 0;
+      PLLN_Value  : constant UInt7 := 24;
+      PLLP        : constant UInt5 := 1; --  check this
+      PLLQ        : constant UInt3 := 1;
       SYSCLK      : constant Integer := HSICLK;
-
       HCLK        : constant Integer :=
                       (if not AHB_PRE.Enabled
                        then SYSCLK
@@ -223,7 +202,7 @@ procedure Setup_Pll is
             exit when RCC_Periph.BDCR.LSERDY = True;
          end loop;
 
-         RCC_Periph.CR.MSIRANGE := 16#B#;  --  ~48Mhz
+         RCC_Periph.CR.MSIRANGE := 16#6#;  --  ~4Mhz
          RCC_Periph.CR.MSIRGSEL := True;
 
          RCC_Periph.CR.MSION := True;
@@ -241,30 +220,29 @@ procedure Setup_Pll is
          RCC_Periph.CCIPR.RNGSEL := 3;
       end if;
       --  Activate PLL if enabled
---      if Activate_PLL then
+      if Activate_PLL then
          --  Disable the main PLL before configuring it
---         RCC_Periph.CR.PLLON := True;
+         RCC_Periph.CR.PLLON := False;
 
          --  Configure the PLL clock source, multiplication and division
          --  factors
---         RCC_Periph.PLLCFGR :=
---              (PLLM   => PLLM,
---               PLLN   => PLLN,
---               PLLP   => PLLP,
---               PLLR   => 1, -- fix this should be a computation
---               PLLREN => True,
---               PLLPDIV => 7,
---               PLLQ   => PLLQ,
---               PLLSRC => PLL_Source'Enum_Rep (PLL_SRC_MSI), --  Fix this.
---               others => <>);
---
---         RCC_Periph.CR.PLLON := True;
---
---         loop
---            exit when RCC_Periph.CR.PLLRDY;
---         end loop;
---         null;
---      end if;
+         RCC_Periph.PLLCFGR :=
+              (PLLM   => PLLM_Value,
+               PLLN   => PLLN_Value,
+               PLLP   => PLLP,
+               PLLR   => 1, -- fix this should be a computation
+               PLLREN => True,
+               PLLQ   => PLLQ,
+               PLLQEN => True,
+               PLLSRC => PLL_Source'Enum_Rep (PLL_SRC_MSI), --  Fix this.
+               others => <>);
+
+         RCC_Periph.CR.PLLON := True;
+
+         loop
+            exit when RCC_Periph.CR.PLLRDY;
+         end loop;
+      end if;
 
 --      RCC_Periph.CCIPR.CLK48SEL := 3;
 
@@ -292,39 +270,14 @@ procedure Setup_Pll is
          HPREF => True,
          others => <>);
 
---        (SW      => SW_Value,
---         HPRE    => To_AHB (AHB_PRE),
---         PPRE    => (As_Array => True,
---                     Arr      => (1 => 0, -- fix these
---                                  2 => 0)), -- also
---
---      RCC_Periph.CFGR :=
---        (SW      => SW_Value,
---         HPRE    => To_AHB (AHB_PRE),
---         PPRE    => (As_Array => True,
---                     Arr      => (1 => 0, -- fix these
---                                  2 => 0)), -- also
-
---         RTCPRE  => 16#0#,
---         I2SSRC  => I2S_Clock_Selection'Enum_Rep (I2SSEL_PLL),
---         MCO1    => MC01_Clock_Selection'Enum_Rep (MC01SEL_HSI),
---         MCO1PRE => MC0x_Prescaler'Enum_Rep (MC0xPRE_DIV1),
---         MCO2    => MC02_Clock_Selection'Enum_Rep (MC02SEL_SYSCLK),
---         MCO2PRE => MC0x_Prescaler'Enum_Rep (MC0xPRE_DIV5),
---         others  => <>);
-
       if Activate_PLL then
+         RCC_Periph.CFGR.SW := SYSCLK_Source'Enum_Rep (SYSCLK_SRC_PLL);
          loop
             exit when RCC_Periph.CFGR.SWS =
               SYSCLK_Source'Enum_Rep (SYSCLK_SRC_PLL);
          end loop;
-
-         --  Wait until voltage supply scaling has completed
-
---         loop
---            exit when System.BB.MCU_Parameters.Is_PWR_Stabilized;
---         end loop;
       end if;
+
    end Initialize_Clocks;
 
    ------------------

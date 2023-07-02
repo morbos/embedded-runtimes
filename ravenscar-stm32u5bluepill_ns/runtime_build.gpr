@@ -2,16 +2,11 @@ with "target_options.gpr";
 
 project Runtime_Build is
 
-   type Loaders is ("ROM_F103", "ROM_AIRF103", "RAM", "USER");
-   Loader : Loaders := external ("LOADER", "ROM_F103");
+   type RTS_Kind is ("ravenscar-sfp", "ravenscar-full");
+--   RTS : RTS_Kind := External ("RTS", "ravenscar-sfp");
+   RTS : RTS_Kind := External ("RTS", "ravenscar-full");
 
-   type RTS_Kind is ("ravenscar-sfp", "ravenscar-ssfp", "ravenscar-full", "ravenscar-ssfp-air32");
-   RTS : RTS_Kind := External ("RTS", "ravenscar-ssfp");
    case RTS is
-      when "ravenscar-ssfp" =>
-         for Languages use ("Ada", "Asm_Cpp");
-      when "ravenscar-ssfp-air32" =>
-         for Languages use ("Ada", "Asm_Cpp");
       when "ravenscar-sfp" =>
          for Languages use ("Ada", "Asm_Cpp");
       when "ravenscar-full" =>
@@ -29,34 +24,15 @@ project Runtime_Build is
          for Library_Dir use "sfp/adalib";
          for Object_Dir use "sfp/obj";
 
-         for Source_Dirs use ("../bsps/stm32f1/bsp",
+         for Source_Dirs use ("../bsps/stm32u5xx_ns/bsp",
                               "../base_runtimes/ravenscar-sfp/arch",
                               "../base_runtimes/ravenscar-sfp/common");
-         for Runtime ("Ada") use Project'Project_Dir & "sfp";
-      when "ravenscar-ssfp"  =>
-         for Library_Dir use "ssfp/adalib";
-         for Object_Dir use "ssfp/obj";
-
-	 case Loader is
-	 when "ROM_F103" =>
-	          for Source_Dirs use ("../bsps/stm32f1/bsp",
-	                                "../base_runtimes/ravenscar-ssfp/arch",
-   	                                "../base_runtimes/ravenscar-ssfp/common");
-	 when "ROM_AIRF103" =>
-	          for Source_Dirs use ("../bsps/air32f103/bsp",
-	                                "../base_runtimes/ravenscar-ssfp/arch",
-   	                                "../base_runtimes/ravenscar-ssfp/common");
-	 when others =>
-	          for Source_Dirs use ("../bsps/stm32f1/bsp",
-	                                "../base_runtimes/ravenscar-ssfp/arch",
-   	                                "../base_runtimes/ravenscar-ssfp/common");
- 	 end case;
          for Runtime ("Ada") use Project'Project_Dir & "sfp";
       when "ravenscar-full" =>
          for Library_Dir use "full/adalib";
          for Object_Dir use "full/obj";
 
-         for Source_Dirs use ("../bsps/stm32f1/bsp",
+         for Source_Dirs use ("../bsps/stm32u5xx_ns/bsp",
                               "../base_runtimes/ravenscar-full/arch",
                               "../base_runtimes/ravenscar-full/common",
                               "../base_runtimes/ravenscar-full/math");
@@ -65,8 +41,7 @@ project Runtime_Build is
 
   type Build_Type is ("Production", "Debug", "Gnatcov");
 
---  Build : Build_Type := external ("BUILD_RTS", "Production");
-  Build : Build_Type := external ("BUILD_RTS", "Debug");
+  Build : Build_Type := external ("BUILD_RTS", "Production");
 
   package Compiler is
      --  COMFLAGS here is common flags (used for C and Ada).

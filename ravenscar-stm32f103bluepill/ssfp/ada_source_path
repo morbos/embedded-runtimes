@@ -1,4 +1,5 @@
 ../../bsps/stm32f1/bsp
+../../bsps/air32f103/bsp
 ../../base_runtimes/ravenscar-ssfp/arch
 ../../base_runtimes/ravenscar-ssfp/common
 ../../bsps/stm32f1/gnarl-bsp

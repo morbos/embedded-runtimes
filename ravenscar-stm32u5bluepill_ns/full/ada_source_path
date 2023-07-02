@@ -1,0 +1,7 @@
+../../bsps/stm32l5/bsp
+../../base_runtimes/ravenscar-full/arch
+../../base_runtimes/ravenscar-full/common
+../../base_runtimes/ravenscar-full/math
+../../bsps/stm32l5/gnarl-bsp
+../../base_runtimes/ravenscar-full/gnarl-common
+../../base_runtimes/ravenscar-full/gnarl-arch-stm32

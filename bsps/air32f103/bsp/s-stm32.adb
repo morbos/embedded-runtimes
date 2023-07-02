@@ -20,6 +20,10 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
+--  with Ada.Unchecked_Conversion;
+
+--  with System.BB.Parameters;
+
 with Interfaces;            use Interfaces;
 with Interfaces.Bit_Types;  use Interfaces.Bit_Types;
 with Interfaces.STM32.RCC;  use Interfaces.STM32.RCC;
@@ -34,7 +38,11 @@ package body System.STM32 is
    is
       Result       : RCC_System_Clocks;
    begin
-      Result := (SYSCLK => 48_000_000, others => 48_000_000);
+      --  This should be parametered as is the F4 code.
+      Result.HCLK   := 72_000_000;
+      Result.PCLK2  := 72_000_000;
+      Result.PCLK1  := Result.PCLK2 / 2;
+      Result.SYSCLK := 72_000_000;
       return Result;
    end System_Clocks;
 

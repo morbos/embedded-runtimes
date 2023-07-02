@@ -32,8 +32,8 @@ with Interfaces.Bit_Types;       use Interfaces, Interfaces.Bit_Types;
 with Interfaces.STM32.Flash;     use Interfaces.STM32.Flash;
 with Interfaces.STM32.RCC;       use Interfaces.STM32.RCC;
 with Interfaces.STM32.PWR;       use Interfaces.STM32.PWR;
---  with Interfaces.STM32.ICache;    use Interfaces.STM32.ICache;
---  with Interfaces.STM32.DCACHE;    use Interfaces.STM32.DCACHE;
+with Interfaces.STM32.ICache;    use Interfaces.STM32.ICache;
+with Interfaces.STM32.DCACHE;    use Interfaces.STM32.DCACHE;
 
 --  with System.BB.Parameters;       use System.BB.Parameters;
 --  with System.BB.MCU_Parameters;
@@ -130,9 +130,9 @@ procedure Setup_Pll is
          end loop;
 
          --  Enable caches
---         ICache_Periph.ICACHE_CR.CACHEINV := True;
---         ICache_Periph.ICACHE_CR.EN := True;
---         DCACHE_Periph.DCACHE_CR.EN := True;
+         ICache_Periph.ICACHE_CR.CACHEINV := True;
+         ICache_Periph.ICACHE_CR.EN := True;
+         DCACHE_Periph.DCACHE_CR.EN := True;
 
       end if;
 

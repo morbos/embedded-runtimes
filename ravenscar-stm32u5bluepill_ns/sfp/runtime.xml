@@ -4,13 +4,13 @@
   <configuration>
    <config>
 
-   type Loaders is ("ROM_F103", "ROM_AIRF103", "RAM", "USER");
+   type Loaders is ("ROM_NS_L5x2", "RAM_NS_L5x2", "RAM", "USER");
 
-   Loader : Loaders := external ("LOADER", "ROM_F103");
+   Loader : Loaders := external ("LOADER", "RAM_NS_L5x2");
 
    package Compiler is
-      Common_Required_Switches := ("-g", "-mlittle-endian", "-mfloat-abi=soft",
-        "-mcpu=cortex-m3", "-mthumb");
+      Common_Required_Switches := ("-mlittle-endian", "-mhard-float",
+        "-mcpu=cortex-m4", "-mfpu=fpv4-sp-d16", "-mthumb", "-g");
 
       for Leading_Required_Switches ("Ada") use
          Compiler'Leading_Required_Switches ("Ada") &amp;
@@ -23,32 +23,24 @@
 
    package Linker is
       for Required_Switches use Linker'Required_Switches &amp;
-      ("-L${RUNTIME_DIR(ada)}/adalib",
-      "-nolibc",
-      "-nostartfiles",
-      "-Wl,--gc-sections",
-      "-Xlinker",
-      "--cref",
-      "-Xlinker",
-      "-Map=xyzzy.map"
-      ) &amp;
+        ("-L${RUNTIME_DIR(ada)}/adalib", "-nolibc", "-nostartfiles") &amp;
         Compiler.Common_Required_Switches;
 
       case Loader is
+	 when "ROM_L5x2" =>
+            for Required_Switches use Linker'Required_Switches &amp;
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2_ns/bsp/",
+             "-T", "memory-map_L5x2.ld",
+             "-T", "common-" &amp; Loader &amp; ".ld");
+	 when "RAM_L5x2" =>
+            for Required_Switches use Linker'Required_Switches &amp;
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2_ns/bsp/",
+             "-T", "memory-map_L5x2.ld",
+             "-T", "common-" &amp; Loader &amp; ".ld");
          when "USER" =>
-	 when "ROM_F103" =>
-            for Required_Switches use Linker'Required_Switches &amp;
-            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32f1/bsp/",
-             "-T", "memory-map_F103.ld",
-             "-T", "common-" &amp; Loader &amp; ".ld");
-	 when "ROM_AIRF103" =>
-            for Required_Switches use Linker'Required_Switches &amp;
-            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/air32f103/bsp/",
-             "-T", "memory-map_AIRF103.ld",
-             "-T", "common-" &amp; Loader &amp; ".ld");
          when others =>
             for Required_Switches use Linker'Required_Switches &amp;
-            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32f1/bsp/",
+            ("-L", "${RUNTIME_DIR(ada)}/../../bsps/stm32l5x2_ns/bsp/",
              "-T", "memory-map.ld",
              "-T", "common-" &amp; Loader &amp; ".ld");
      end case;

@@ -1,8 +1,12 @@
 ------------------------------------------------------------------------------
 --                                                                          --
---                         GNAT RUN-TIME COMPONENTS                         --
+--                  GNAT RUN-TIME LIBRARY (GNARL) COMPONENTS                --
 --                                                                          --
---          Copyright (C) 2012-2016, Free Software Foundation, Inc.         --
+--              S Y S T E M . B B . M C U _ P A R A M E T E R S             --
+--                                                                          --
+--                                  B o d y                                 --
+--                                                                          --
+--                      Copyright (C) 2016, AdaCore                         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -18,24 +22,35 @@
 -- GNAT was originally developed  by the GNAT team at  New York University. --
 -- Extensive contributions were provided by Ada Core Technologies Inc.      --
 --                                                                          --
+-- The port of GNARL to bare board targets was initially developed by the   --
+-- Real-Time Systems Group at the Technical University of Madrid.           --
+--                                                                          --
 ------------------------------------------------------------------------------
 
-with Interfaces;            use Interfaces;
-with Interfaces.Bit_Types;  use Interfaces.Bit_Types;
-with Interfaces.STM32.RCC;  use Interfaces.STM32.RCC;
+with Interfaces.STM32.PWR; use Interfaces.STM32.PWR;
 
-package body System.STM32 is
+package body System.BB.MCU_Parameters is
 
-   -------------------
-   -- System_Clocks --
-   -------------------
+   --------------------
+   -- PWR_Initialize --
+   --------------------
 
-   function System_Clocks return RCC_System_Clocks
+   procedure PWR_Initialize
    is
-      Result       : RCC_System_Clocks;
    begin
-      Result := (SYSCLK => 48_000_000, others => 48_000_000);
-      return Result;
-   end System_Clocks;
+      --  Set the PWR to Scale 1 mode to stabilize the MCU when in high
+      --  performance mode.
+      PWR_Periph.CR.VOS := 1;
+   end PWR_Initialize;
 
-end System.STM32;
+   --------------------------
+   -- PWR_Overdrive_Enable --
+   --------------------------
+
+   procedure PWR_Overdrive_Enable
+   is
+   begin
+      null;
+   end PWR_Overdrive_Enable;
+
+end System.BB.MCU_Parameters;
