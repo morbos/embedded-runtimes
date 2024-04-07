@@ -76,7 +76,6 @@ procedure Setup_Pll is
         (APB_Prescaler, UInt3);
 
    begin
-
       RCC_Periph.APB2ENR.IOPDEN := 1;
       RCC_Periph.APB2ENR.AFIOEN := 1;
 
